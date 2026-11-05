@@ -1,0 +1,172 @@
+<head>
+    <script>
+        problem_sets = {
+            "APCalcAB": {
+                "Unit4": [
+                    "Linearization"
+                ]
+            }
+        }
+
+        var problem_set = ""
+        var category = ""
+        var problem_display
+        var problem_answer
+        var problem_explanation
+        var problems_json
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            Object.entries(problem_sets).forEach(set => {
+                Object.entries(set[1]).forEach(category => {
+                    console.log(document.getElementsByClassName(set[0] + category[0])[0])
+                    document.getElementsByClassName(set[0] + category[0])[0].addEventListener('change', (event) => {
+                        if(event.target.checked){
+                            select_all_box()
+                        }
+                    })
+                })
+            });
+            problem_display = document.getElementById("problem_display")
+            problem_answer = document.getElementById("problem_answer")
+            problem_explanation = document.getElementById("problem_explanation")
+        })
+
+        problem_types_selected = []
+
+
+        function select_all_box(){
+            elements = document.getElementsByClassName(problem_set + category)
+            for (var el of elements){
+                el.checked = true
+            }
+        }
+
+        function select_menu(from_id, to_id){
+            var from = document.getElementById(from_id)
+            var to = document.getElementById(to_id)
+
+            from.hidden = true
+            to.hidden = false
+        }
+        function select_category(problem_set, category){
+            select_menu(problem_set, problem_set + category)
+
+            this.problem_set = problem_set
+            this.category = category
+        }
+        function set_element(element, hidden){
+            document.getElementById(element).hidden = hidden
+        }
+        function generate_problem(){
+            problem_explanation.hidden = true
+            document.getElementById("answer_div").hidden = true 
+
+            problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
+
+            switch (problem_type) {
+                case "Linearization":
+                    problems = problems_json.Linearization
+
+                    problem = problems[Math.floor(Math.random() * problems.length)]
+                    inner = ""
+                    for(var line of problem.Problem){
+                        inner += `<p>${line}</p>`
+                    }
+                    problem_display.innerHTML = inner
+
+                    inner = ""
+                    for(var line of problem.Answer){
+                        inner += `${line}<br>`
+                    }
+                    problem_answer.innerHTML = inner
+
+                    inner = ""
+                    for(var line of problem.Explanation){
+                        inner += `${line}<br>`
+                    }
+                    problem_explanation.innerHTML = inner
+                    break;
+            
+                default:
+                    break;
+            }
+        }
+
+        function begin(){
+            select_menu(problem_set + category, "problems")
+
+            elements = document.getElementsByClassName(problem_set + category)
+            all = false
+            for(el of elements){
+                if(el.value == "All"){
+                    all = true
+                }
+                else if(el.checked || all){
+                    problem_types_selected.push(el.value)
+                }
+            }
+
+            generate_problem()
+        }
+        
+        async function load_json() {
+            const problems_file = await fetch("./problems.json")
+            problems_json = await problems_file.json()
+        }
+        load_json()
+    </script>
+    <style>
+        .title {
+            width:100%;
+            text-align: center;
+            font-family: monospace;
+        }
+        #problem_display {
+            font-family: monospace;
+        }
+        #problem_explanation {
+            font-family: monospace;
+        }
+    </style>
+    <title>Math Study App</title>
+</head>
+<body>
+    <h1 class="title">Math Study App</h1>
+    <div id="initial">
+        <button onclick='select_menu("initial", "APCalcAB")'>AP Calc AB</button>
+    </div>
+    <div id="selection">
+        <div id="APCalcAB" hidden="true">
+            <button onclick='select_category("APCalcAB", "Unit4")'>Unit 4</button>
+            <button onclick='select_menu("APCalcAB", "initial")'>Back</button>
+        </div>
+        <div id="APCalcABUnit4" hidden="true">
+            <!-- <select>
+                <option value="All">All</option>
+                <option value="Linearization">Linearization</option>
+            </select> -->
+            <fieldset>
+                <legend>Choose</legend>
+
+                <input type="checkbox" value="All" class="APCalcABUnit4">
+                <label>All</label>
+
+                <input type="checkbox" value="Linearization" class="APCalcABUnit4">
+                <label>Linearization</label>
+            </fieldset>
+            <button onclick="begin()">Begin</button>
+        </div>
+    </div>
+    <div id="problems" hidden="true">
+        <div id="problem_display"></div>
+        <button onclick='set_element("answer_div", false)'>Reveal Answer</button>
+        <div id="answer_div" hidden="true">
+            <p id="problem_answer"></p>
+            <p>Different answer? Check explanation</p>
+            <button onclick='select_menu("answer_div", "problem_explanation")'>Check explanation</button>
+        </div>
+        <div id="problem_explanation" hidden="true"></div>
+        <button onclick='generate_problem()'>Next</button>
+        <button onclick='select_menu("problems", problem_set + category)'>Back</button>
+    </div>
+</body>
