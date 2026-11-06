@@ -1,9 +1,12 @@
 <head>
+    <script src="https://unpkg.com/function-plot/dist/function-plot.js"></script>
+
     <script>
         problem_sets = {
             "APCalcAB": {
                 "Unit4": [
-                    "Linearization"
+                    "Linearization",
+                    "RelatedRates"
                 ]
             }
         }
@@ -13,12 +16,11 @@
         var problem_display
         var problem_answer
         var problem_explanation
-        var problems_json
+        var problems_json_files = {}
 
         document.addEventListener('DOMContentLoaded', (event) => {
             Object.entries(problem_sets).forEach(set => {
                 Object.entries(set[1]).forEach(category => {
-                    console.log(document.getElementsByClassName(set[0] + category[0])[0])
                     document.getElementsByClassName(set[0] + category[0])[0].addEventListener('change', (event) => {
                         if(event.target.checked){
                             select_all_box()
@@ -62,58 +64,81 @@
             document.getElementById("answer_div").hidden = true 
 
             problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
-
             switch (problem_type) {
                 case "Linearization":
-                    problems = problems_json.Linearization
-
-                    problem = problems[Math.floor(Math.random() * problems.length)]
-                    inner = ""
-                    for(var line of problem.Problem){
-                        inner += `<p>${line}</p>`
-                    }
-                    problem_display.innerHTML = inner
-
-                    inner = ""
-                    for(var line of problem.Answer){
-                        inner += `${line}<br>`
-                    }
-                    problem_answer.innerHTML = inner
-
-                    inner = ""
-                    for(var line of problem.Explanation){
-                        inner += `${line}<br>`
-                    }
-                    problem_explanation.innerHTML = inner
+                    problems = problems_json_files[problem_type].Linearization
                     break;
-            
+                case "RelatedRates":
+                    problems = problems_json_files[problem_type].RelatedRates
+                    break;
                 default:
                     break;
             }
+            problem = problems[Math.floor(Math.random() * problems.length)]
+            problem = problems[6]
+            inner = ""
+            for(var line of problem.Problem){
+                inner += `${line}<br>`
+            }
+            problem_display.innerHTML = inner
+
+            inner = ""
+            for(var line of problem.Answer){
+                inner += `${line}<br>`
+            }
+            problem_answer.innerHTML = inner
+
+            inner = ""
+            for(var line of problem.Explanation){
+                inner += `${line}<br>`
+            }
+            problem_explanation.innerHTML = inner
         }
 
-        function begin(){
+        async function begin(){
             select_menu(problem_set + category, "problems")
 
             elements = document.getElementsByClassName(problem_set + category)
             all = false
+            problems_json_files = {}
             for(el of elements){
-                if(el.value == "All"){
+                if(el.value == "All" && el.checked){
                     all = true
                 }
                 else if(el.checked || all){
                     problem_types_selected.push(el.value)
+                    problems_json_files[el.value] = await load_json(el.value)
                 }
             }
 
             generate_problem()
         }
-        
-        async function load_json() {
-            const problems_file = await fetch("./problems.json")
-            problems_json = await problems_file.json()
+
+        function draw_graph(xaxis, yaxis, funcs){
+            data = []
+            for(func of funcs){
+                data.push({
+                    fn: func,
+                    color: '#0071e3',
+                    graphType: 'polyline'
+                })
+            }
+
+            functionPlot({
+                target: '#graph',
+                width: 400,
+                height: 400,
+                grid: true,
+                xAxis: xaxis,
+                yAxis: yaxis,
+                data: data
+            })
         }
-        load_json()
+        
+        async function load_json(problem_set) {
+            const problems_file = await fetch(`./${problem_set}.json`)
+            return await problems_file.json()
+        }
     </script>
     <style>
         .title {
@@ -121,11 +146,9 @@
             text-align: center;
             font-family: monospace;
         }
-        #problem_display {
+        div {
             font-family: monospace;
-        }
-        #problem_explanation {
-            font-family: monospace;
+            font-size: large;
         }
     </style>
     <title>Math Study App</title>
@@ -153,6 +176,9 @@
 
                 <input type="checkbox" value="Linearization" class="APCalcABUnit4">
                 <label>Linearization</label>
+
+                <input type="checkbox" value="RelatedRates" class="APCalcABUnit4">
+                <label>Related Rates</label>
             </fieldset>
             <button onclick="begin()">Begin</button>
         </div>

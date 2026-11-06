@@ -1,0 +1,432 @@
+{
+    "Linearization": [
+        {
+            "Problem": [
+                "f(x) = x^(1/2)<br>",
+                "a) Find L(x) of f(x) at x = 101"
+            ],
+            "Answer": ["a) 10.05"],
+            "Explanation": [
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = x^(1/2)",
+                "f'(x) = (1/2)x^(-1/2)",
+                "A value near 101 where we can find f(x) is 100, so a = 100",
+                "The formula for L(x) = f(a) + f'(a)(x - a), so we must find f(a) and f'(a)",
+                "f(100) = 10",
+                "f'(100) = 1/(2 * 100^(1/2)) => 1/20",
+                "Plugging into formula: L(101) = 10 + (1/20)(101 - 100)",
+                "Simplifying:",
+                "10 + (1/20)(1)",
+                "10 + (1/20)",
+                "10.05"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = x^(1/2)<br>",
+                "a) Find L(x) of f(x) at x = 27"
+            ],
+            "Answer": ["a) 5.2"],
+            "Explanation": [
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = x^(1/2)",
+                "f'(x) = (1/2)x^(-1/2)",
+                "A value near 27 where we can find f(x) is 25, so a = 25",
+                "The formula for L(x) = f(a) + f'(a)(x - a), so we must find f(a) and f'(a)",
+                "f(25) = 5",
+                "f'(25) = 1/(2 * 25^(1/2)) => 1/10",
+                "Plugging into formula: L(27) = 5 + (1/10)(27 - 25)",
+                "Simplifying:",
+                "5 + (1/10)(2)",
+                "5 + (1/5)",
+                "5.2"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = x^(1/2)<br>",
+                "a) Find L(x) of f(x) at x = 118"
+            ],
+            "Answer": ["a) 10.86363636"],
+            "Explanation": [
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = x^(1/2)",
+                "f'(x) = (1/2)x^(-1/2)",
+                "A value near 118 where we can find f(x) is 121, so a = 121",
+                "The formula for L(x) = f(a) + f'(a)(x - a), so we must find f(a) and f'(a)",
+                "f(121) = 11",
+                "f'(121) = 1/(2 * 121^(1/2)) => 1/22",
+                "Plugging into formula: L(118) = 11 + (1/22)(118 - 121)",
+                "Simplifying:",
+                "11 + (1/22)(-3)",
+                "11 - (3/22)",
+                "10.86363636"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = x^(1/2)<br>",
+                "a) Find L(x) of f(x) at x = 10"
+            ],
+            "Answer": ["a) 3.166666667"],
+            "Explanation": [
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = x^(1/2)",
+                "f'(x) = (1/2)x^(-1/2)",
+                "A value near 10 where we can find f(x) is 9, so a = 9",
+                "The formula for L(x) = f(a) + f'(a)(x - a), so we must find f(a) and f'(a)",
+                "f(9) = 3",
+                "f'(9) = 1/(2 * 9^(1/2)) => 1/6",
+                "Plugging into formula: L(10) = 3 + (1/6)(10 - 9)",
+                "Simplifying:",
+                "3 + (1/6)(1)",
+                "3 + (1/6)",
+                "3.166666667"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = x^(1/2)<br>",
+                "a) Find L(x) of f(x) at x = 200"
+            ],
+            "Answer": ["a) 14.14285714"],
+            "Explanation": [
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = x^(1/2)",
+                "f'(x) = (1/2)x^(-1/2)",
+                "A value near 200 where we can find f(x) is 196, so a = 196",
+                "The formula for L(x) = f(a) + f'(a)(x - a), so we must find f(a) and f'(a)",
+                "f(196) = 14",
+                "f'(196) = 1/(2 * 196^(1/2)) => 1/28",
+                "Plugging into formula: L(200) = 14 + (1/28)(200 - 196)",
+                "Simplifying:",
+                "14 + (1/28)(4)",
+                "14 + (1/7)",
+                "14.14285714"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = x^(1/2)<br>",
+                "a) Find L(x) of f(x) at x = 180"
+            ],
+            "Answer": ["a) 13.42307692"],
+            "Explanation": [
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = x^(1/2)",
+                "f'(x) = (1/2)x^(-1/2)",
+                "A value near 180 where we can find f(x) is 169, so a = 169",
+                "The formula for L(x) = f(a) + f'(a)(x - a), so we must find f(a) and f'(a)",
+                "f(169) = 13",
+                "f'(169) = 1/(2 * 169^(1/2)) => 1/26",
+                "Plugging into formula: L(169) = 13 + (1/26)(180 - 169)",
+                "Simplifying:",
+                "13 + (1/26)(11)",
+                "13 + (11/26)",
+                "13.42307692"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = x^(1/2)<br>",
+                "a) Find L(x) of f(x) at x = 66"
+            ],
+            "Answer": ["a) 8.125"],
+            "Explanation": [
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = x^(1/2)",
+                "f'(x) = (1/2)x^(-1/2)",
+                "A value near 66 where we can find f(x) is 64, so a = 64",
+                "The formula for L(x) = f(a) + f'(a)(x - a), so we must find f(a) and f'(a)",
+                "f(64) = 8",
+                "f'(64) = 1/(2 * 64^(1/2)) => 1/16",
+                "Plugging into formula: L(66) = 8 + (1/16)(66 - 64)",
+                "Simplifying:",
+                "8 + (1/16)(2)",
+                "8 + (1/8)",
+                "8.125"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = x^(1/2)<br>",
+                "a) Find L(x) of f(x) at x = 45"
+            ],
+            "Answer": ["a) 6.714285714"],
+            "Explanation": [
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = x^(1/2)",
+                "f'(x) = (1/2)x^(-1/2)",
+                "A value near 45 where we can find f(x) is 49, so a = 49",
+                "The formula for L(x) = f(a) + f'(a)(x - a), so we must find f(a) and f'(a)",
+                "f(49) = 7",
+                "f'(49) = 1/(2 * 49^(1/2)) => 1/14",
+                "Plugging into formula: L(49) = 7 + (1/14)(45 - 49)",
+                "Simplifying:",
+                "7 + (1/14)(-4)",
+                "7 - (2/7)",
+                "6.714285714"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = x^(1/2)<br>",
+                "a) Find L(x) of f(x) at x = 80"
+            ],
+            "Answer": ["a) 7.944444444"],
+            "Explanation": [
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = x^(1/2)",
+                "f'(x) = (1/2)x^(-1/2)",
+                "A value near 80 where we can find f(x) is 81, so a = 81",
+                "The formula for L(x) = f(a) + f'(a)(x - a), so we must find f(a) and f'(a)",
+                "f(81) = 9",
+                "f'(81) = 1/(2 * 81^(1/2)) => 1/18",
+                "Plugging into formula: L(27) = 9 + (1/18)(80 - 81)",
+                "Simplifying:",
+                "9 + (1/18)(-1)",
+                "9 - (1/18)",
+                "7.944444444"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = x^(1/2)<br>",
+                "a) Find L(x) of f(x) at x = 19"
+            ],
+            "Answer": ["a) 4.375"],
+            "Explanation": [
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = x^(1/2)",
+                "f'(x) = (1/2)x^(-1/2)",
+                "A value near 19 where we can find f(x) is 16, so a = 16",
+                "The formula for L(x) = f(a) + f'(a)(x - a), so we must find f(a) and f'(a)",
+                "f(16) = 4",
+                "f'(16) = 1/(2 * 16^(1/2)) => 1/8",
+                "Plugging into formula: L(19) = 5 + (1/8)(19 - 16)",
+                "Simplifying:",
+                "4 + (1/8)(3)",
+                "4 + (3/8)",
+                "4.375"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = (x^2+9)^(1/2)",
+                "a = 4<br>",
+                "a) Find L(x) of f(x)",
+                "b) Find L(4.1)"
+            ],
+            "Answer":[
+                "a) L(x) = 5 + (4/5)(x-4)",
+                "b) 5.08"
+            ],
+            "Explanation":[
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = (x^2+9)^(1/2)",
+                "f'(x) = (1/(2 * (x^2+9)^(1/2)) * 2x",
+                "We use these to find at a",
+                "f(4) = (4^2+9)^(1/2)",
+                "f(4) = (16+9)^(1/2)",
+                "f(4) = (25)^(1/2)",
+                "f(4) = 5",
+                "f'(4) = (1/(2 * (4^2+9)^(1/2)) * 2 * 4",
+                "f'(4) = (1/(2 * (16+9)^(1/2)) * 8",
+                "f'(4) = (1/(2 * (25)^(1/2)) * 8",
+                "f'(4) = (1/(2 * 5) * 8",
+                "f'(4) = 8/10",
+                "f'(4) = 4/5",
+                "Plug into L(x) = f(a) + f'(a)(x-a)",
+                "L(x) = f(4) + f'(4)(x-4)",
+                "L(x) = 5 + (4/5)(x-4)",
+                "<span style='font-size:x-large'>b)</span>",
+                "Plug into L(x) = 5 + (4/5)(x-4)",
+                "L(4.1) = 5 + (4/5)(4.1-4)",
+                "L(4.1) = 5 + (4/5)(.1)",
+                "L(4.1) = 5 + (.4/5)",
+                "L(4.1) = 5.08"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = (x^2+25)^(1/2)",
+                "a = -12<br>",
+                "a) Find L(x) of f(x)",
+                "b) Find L(-11.4)"
+            ],
+            "Answer":[
+                "a) L(x) = 13 + (-12/13)(x+12)",
+                "b) 12.44615385"
+            ],
+            "Explanation":[
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = (x^2+25)^(1/2)",
+                "f'(x) = (1/(2 * (x^2+25)^(1/2)) * 2x",
+                "We use these to find at a",
+                "f(-12) = ((-12)^2+25)^(1/2)",
+                "f(-12) = (144+25)^(1/2)",
+                "f(-12) = (169)^(1/2)",
+                "f(-12) = 13",
+                "f'(-12) = (1/(2 * ((-12)^2+25)^(1/2)) * 2 * -12",
+                "f'(-12) = (1/(2 * (144+25)^(1/2)) * -24",
+                "f'(-12) = (1/(2 * (169)^(1/2)) * -24",
+                "f'(-12) = (1/(2 * 13) * -24",
+                "f'(-12) = -24/26",
+                "f'(-12) = -12/13",
+                "Plug into L(x) = f(a) + f'(a)(x-a)",
+                "L(x) = f(-12) + f'(-12)(x+12)",
+                "L(x) = 13 + (-12/13)(x+12)",
+                "<span style='font-size:x-large'>b)</span>",
+                "Plug into L(x) = 13 + (-12/13)(x+12)",
+                "L(-11.4) = 13 + (-12/13)(-11.4+12)",
+                "L(-11.4) = 13 + (-12/13)(.6)",
+                "L(-11.4) = 12.44615385"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = (x^2-15)^(1/2)",
+                "a = 8<br>",
+                "a) Find L(x) of f(x)",
+                "b) Find L(7.7)"
+            ],
+            "Answer":[
+                "a) L(x) = 7 + (8/7)(x-8)",
+                "b) 6.657142857"
+            ],
+            "Explanation":[
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = (x^2-15)^(1/2)",
+                "f'(x) = (1/(2 * (x^2-15)^(1/2)) * 2x",
+                "We use these to find at a",
+                "f(8) = (8^2-15)^(1/2)",
+                "f(8) = (64-15)^(1/2)",
+                "f(8) = (49)^(1/2)",
+                "f(8) = 7",
+                "f'(8) = (1/(2 * (8^2-15)^(1/2)) * 2 * 8",
+                "f'(8) = (1/(2 * (64-15)^(1/2)) * 16",
+                "f'(8) = (1/(2 * (49)^(1/2)) * 16",
+                "f'(8) = (1/(2 * 7) * 16",
+                "f'(8) = 16/14",
+                "f'(8) = 8/7",
+                "Plug into L(x) = f(a) + f'(a)(x-a)",
+                "L(x) = f(8) + f'(8)(x-8)",
+                "L(x) = 7 + (8/7)(x-8)",
+                "<span style='font-size:x-large'>b)</span>",
+                "Plug into L(x) = 7 + (8/7)(x-8)",
+                "L(7.7) = 7 + (8/7)(7.7-8)",
+                "L(7.7) = 7 + (8/7)(-.3)",
+                "L(7.7) = 6.657142857"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = (x^3+x^2-25)^(1/3)",
+                "a = 5<br>",
+                "a) Find L(x) of f(x)",
+                "b) Find L(5.1)"
+            ],
+            "Answer":[
+                "a) L(x) = 5 + (17/15)(x-5)",
+                "b) 5.113333333"
+            ],
+            "Explanation":[
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = (x^3+x^2-25)^(1/3)",
+                "f'(x) = (1/(3 * (x^3+x^2-25)^(2/3)) * (3x^2+2x)",
+                "We use these to find at a",
+                "f(5) = (5^3+5^2-25)^(1/3)",
+                "f(5) = (125+25-25)^(1/3)",
+                "f(5) = (125)^(1/3)",
+                "f(5) = 5",
+                "f'(5) = (1/(3 * (5^3+5^2-25)^(2/3)) * (3(5)^2+2(5))",
+                "f'(5) = (1/(3 * (125+25-25)^(2/3)) * (3(25)+2(5))",
+                "f'(5) = (1/(3 * (125)^(2/3)) * (75+10)",
+                "f'(5) = (1/(3 * 25) * (85)",
+                "f'(5) = (1/(75) * (85)",
+                "f'(5) = 85/75",
+                "f'(5) = 17/15",
+                "Plug into L(x) = f(a) + f'(a)(x-a)",
+                "L(x) = f(5) + f'(5)(x-5)",
+                "L(x) = 5 + (17/15)(x-5)",
+                "<span style='font-size:x-large'>b)</span>",
+                "Plug into L(x) = 5 + (17/15)(x-5)",
+                "L(5.1) = 5 + (17/15)(5.1-5)",
+                "L(5.1) = 5 + (17/15)(.1)",
+                "L(5.1) = 5.113333333"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = (x^2+17)^(1/2)",
+                "a = 8<br>",
+                "a) Find L(x) of f(x)",
+                "b) Find L(7)"
+            ],
+            "Answer":[
+                "a) L(x) = 9 + (8/9)(x-8)",
+                "b) 8.111111111"
+            ],
+            "Explanation":[
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = (x^2+17)^(1/2)",
+                "f'(x) = (1/(2 * (x^2+17)^(1/2)) * 2x",
+                "We use these to find at a",
+                "f(8) = (8^2+17)^(1/2)",
+                "f(8) = (64+17)^(1/2)",
+                "f(8) = (81)^(1/2)",
+                "f(8) = 9",
+                "f'(8) = (1/(2 * (8^2+17)^(1/2)) * 2 * 8",
+                "f'(8) = (1/(2 * (64+17)^(1/2)) * 16",
+                "f'(8) = (1/(2 * (81)^(1/2)) * 16",
+                "f'(8) = (1/(2 * 9) * 16",
+                "f'(8) = 16/18",
+                "f'(8) = 8/9",
+                "Plug into L(x) = f(a) + f'(a)(x-a)",
+                "L(x) = f(8) + f'(8)(x-8)",
+                "L(x) = 9 + (8/9)(x-8)",
+                "<span style='font-size:x-large'>b)</span>",
+                "Plug into L(x) = 9 + (8/9)(x-8)",
+                "L(7) = 9 + (8/9)(7-8)",
+                "L(7) = 9 + (8/9)(-1)",
+                "L(7) = 8.111111111"
+            ]
+        },
+        {
+            "Problem": [
+                "f(x) = (x^3-x^2+1)^(1/2)",
+                "a = 4<br>",
+                "a) Find L(x) of f(x)",
+                "b) Find L(4.03)"
+            ],
+            "Answer":[
+                "a) L(x) = 7 + (20/7)(x-4)",
+                "b) 7.085714286"
+            ],
+            "Explanation":[
+                "<span style='font-size:x-large'>a)</span>",
+                "f(x) = (x^3-x^2+1)^(1/2)",
+                "f'(x) = (1/(2 * (x^3-x^2+1)^(1/2)) * (3x^2-2x)",
+                "We use these to find at a",
+                "f(4) = (4^3-4^2+1)^(1/2)",
+                "f(4) = (64-16+1)^(1/2)",
+                "f(4) = (49)^(1/2)",
+                "f(4) = 7",
+                "f'(4) = (1/(2 * (4^3-4^2+1)^(1/2)) * (3(4)^2-2(4))",
+                "f'(4) = (1/(2 * (64-16+1)^(1/2)) * (3(16)-2(4))",
+                "f'(4) = (1/(2 * (49)^(1/2)) * (48-8)",
+                "f'(4) = (1/(2 * 7) * 40",
+                "f'(4) = 40/14",
+                "f'(4) = 20/7",
+                "Plug into L(x) = f(a) + f'(a)(x-a)",
+                "L(x) = f(4) + f'(4)(x-4)",
+                "L(x) = 7 + (20/7)(x-4)",
+                "<span style='font-size:x-large'>b)</span>",
+                "Plug into L(x) = 7 + (20/7)(x-4)",
+                "L(4.03) = 7 + (20/7)(4.03-4)",
+                "L(4.03) = 7 + (20/7)(.03)",
+                "L(4.03) = 7.085714286"
+            ]
+        }
+    ]
+}
