@@ -123,10 +123,12 @@
                 })
             }
 
+            var container = document.querySelector("#graph")
+
             functionPlot({
                 target: '#graph',
-                width: 400,
-                height: 400,
+                width: container.clientWidth,
+                height: container.clientWidth,
                 grid: true,
                 xAxis: xaxis,
                 yAxis: yaxis,
@@ -144,12 +146,31 @@
             width:100%;
             text-align: center;
             font-family: monospace;
+            font-size: 4rem
         }
         div {
             font-family: monospace;
-            font-size: large;
+            font-size: 1rem;
+        }
+        div#problem_display {
+            font-size: 1.3rem;
+        }
+        .sep {
+            font-size: 1.6rem;
+        }
+        #graph {
+            width: 30%;
+        }
+        button {
+            width: 10%;
+            min-width: fit-content;
+            font-size: 1.1rem;
+        }
+        label, fieldset {
+            font-size: 1.2rem;
         }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Study App</title>
 </head>
 <body>

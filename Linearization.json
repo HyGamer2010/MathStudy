@@ -7,7 +7,7 @@
             ],
             "Answer": ["a) 10.05"],
             "Explanation": [
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = x^(1/2)",
                 "f'(x) = (1/2)x^(-1/2)",
                 "A value near 101 where we can find f(x) is 100, so a = 100",
@@ -28,7 +28,7 @@
             ],
             "Answer": ["a) 5.2"],
             "Explanation": [
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = x^(1/2)",
                 "f'(x) = (1/2)x^(-1/2)",
                 "A value near 27 where we can find f(x) is 25, so a = 25",
@@ -49,7 +49,7 @@
             ],
             "Answer": ["a) 10.86363636"],
             "Explanation": [
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = x^(1/2)",
                 "f'(x) = (1/2)x^(-1/2)",
                 "A value near 118 where we can find f(x) is 121, so a = 121",
@@ -70,7 +70,7 @@
             ],
             "Answer": ["a) 3.166666667"],
             "Explanation": [
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = x^(1/2)",
                 "f'(x) = (1/2)x^(-1/2)",
                 "A value near 10 where we can find f(x) is 9, so a = 9",
@@ -91,7 +91,7 @@
             ],
             "Answer": ["a) 14.14285714"],
             "Explanation": [
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = x^(1/2)",
                 "f'(x) = (1/2)x^(-1/2)",
                 "A value near 200 where we can find f(x) is 196, so a = 196",
@@ -112,7 +112,7 @@
             ],
             "Answer": ["a) 13.42307692"],
             "Explanation": [
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = x^(1/2)",
                 "f'(x) = (1/2)x^(-1/2)",
                 "A value near 180 where we can find f(x) is 169, so a = 169",
@@ -133,7 +133,7 @@
             ],
             "Answer": ["a) 8.125"],
             "Explanation": [
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = x^(1/2)",
                 "f'(x) = (1/2)x^(-1/2)",
                 "A value near 66 where we can find f(x) is 64, so a = 64",
@@ -154,7 +154,7 @@
             ],
             "Answer": ["a) 6.714285714"],
             "Explanation": [
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = x^(1/2)",
                 "f'(x) = (1/2)x^(-1/2)",
                 "A value near 45 where we can find f(x) is 49, so a = 49",
@@ -175,7 +175,7 @@
             ],
             "Answer": ["a) 7.944444444"],
             "Explanation": [
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = x^(1/2)",
                 "f'(x) = (1/2)x^(-1/2)",
                 "A value near 80 where we can find f(x) is 81, so a = 81",
@@ -196,7 +196,7 @@
             ],
             "Answer": ["a) 4.375"],
             "Explanation": [
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = x^(1/2)",
                 "f'(x) = (1/2)x^(-1/2)",
                 "A value near 19 where we can find f(x) is 16, so a = 16",
@@ -222,7 +222,7 @@
                 "b) 5.08"
             ],
             "Explanation":[
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = (x^2+9)^(1/2)",
                 "f'(x) = (1/(2 * (x^2+9)^(1/2)) * 2x",
                 "We use these to find at a",
@@ -239,7 +239,7 @@
                 "Plug into L(x) = f(a) + f'(a)(x-a)",
                 "L(x) = f(4) + f'(4)(x-4)",
                 "L(x) = 5 + (4/5)(x-4)",
-                "<span style='font-size:x-large'>b)</span>",
+                "<span class='sep'>b)</span>",
                 "Plug into L(x) = 5 + (4/5)(x-4)",
                 "L(4.1) = 5 + (4/5)(4.1-4)",
                 "L(4.1) = 5 + (4/5)(.1)",
@@ -259,7 +259,7 @@
                 "b) 12.44615385"
             ],
             "Explanation":[
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = (x^2+25)^(1/2)",
                 "f'(x) = (1/(2 * (x^2+25)^(1/2)) * 2x",
                 "We use these to find at a",
@@ -276,7 +276,7 @@
                 "Plug into L(x) = f(a) + f'(a)(x-a)",
                 "L(x) = f(-12) + f'(-12)(x+12)",
                 "L(x) = 13 + (-12/13)(x+12)",
-                "<span style='font-size:x-large'>b)</span>",
+                "<span class='sep'>b)</span>",
                 "Plug into L(x) = 13 + (-12/13)(x+12)",
                 "L(-11.4) = 13 + (-12/13)(-11.4+12)",
                 "L(-11.4) = 13 + (-12/13)(.6)",
@@ -295,7 +295,7 @@
                 "b) 6.657142857"
             ],
             "Explanation":[
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = (x^2-15)^(1/2)",
                 "f'(x) = (1/(2 * (x^2-15)^(1/2)) * 2x",
                 "We use these to find at a",
@@ -312,7 +312,7 @@
                 "Plug into L(x) = f(a) + f'(a)(x-a)",
                 "L(x) = f(8) + f'(8)(x-8)",
                 "L(x) = 7 + (8/7)(x-8)",
-                "<span style='font-size:x-large'>b)</span>",
+                "<span class='sep'>b)</span>",
                 "Plug into L(x) = 7 + (8/7)(x-8)",
                 "L(7.7) = 7 + (8/7)(7.7-8)",
                 "L(7.7) = 7 + (8/7)(-.3)",
@@ -331,7 +331,7 @@
                 "b) 5.113333333"
             ],
             "Explanation":[
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = (x^3+x^2-25)^(1/3)",
                 "f'(x) = (1/(3 * (x^3+x^2-25)^(2/3)) * (3x^2+2x)",
                 "We use these to find at a",
@@ -349,7 +349,7 @@
                 "Plug into L(x) = f(a) + f'(a)(x-a)",
                 "L(x) = f(5) + f'(5)(x-5)",
                 "L(x) = 5 + (17/15)(x-5)",
-                "<span style='font-size:x-large'>b)</span>",
+                "<span class='sep'>b)</span>",
                 "Plug into L(x) = 5 + (17/15)(x-5)",
                 "L(5.1) = 5 + (17/15)(5.1-5)",
                 "L(5.1) = 5 + (17/15)(.1)",
@@ -368,7 +368,7 @@
                 "b) 8.111111111"
             ],
             "Explanation":[
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = (x^2+17)^(1/2)",
                 "f'(x) = (1/(2 * (x^2+17)^(1/2)) * 2x",
                 "We use these to find at a",
@@ -385,7 +385,7 @@
                 "Plug into L(x) = f(a) + f'(a)(x-a)",
                 "L(x) = f(8) + f'(8)(x-8)",
                 "L(x) = 9 + (8/9)(x-8)",
-                "<span style='font-size:x-large'>b)</span>",
+                "<span class='sep'>b)</span>",
                 "Plug into L(x) = 9 + (8/9)(x-8)",
                 "L(7) = 9 + (8/9)(7-8)",
                 "L(7) = 9 + (8/9)(-1)",
@@ -404,7 +404,7 @@
                 "b) 7.085714286"
             ],
             "Explanation":[
-                "<span style='font-size:x-large'>a)</span>",
+                "<span class='sep'>a)</span>",
                 "f(x) = (x^3-x^2+1)^(1/2)",
                 "f'(x) = (1/(2 * (x^3-x^2+1)^(1/2)) * (3x^2-2x)",
                 "We use these to find at a",
@@ -421,7 +421,7 @@
                 "Plug into L(x) = f(a) + f'(a)(x-a)",
                 "L(x) = f(4) + f'(4)(x-4)",
                 "L(x) = 7 + (20/7)(x-4)",
-                "<span style='font-size:x-large'>b)</span>",
+                "<span class='sep'>b)</span>",
                 "Plug into L(x) = 7 + (20/7)(x-4)",
                 "L(4.03) = 7 + (20/7)(4.03-4)",
                 "L(4.03) = 7 + (20/7)(.03)",
