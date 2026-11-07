@@ -75,6 +75,68 @@
             set_element(subject, false)
             set_element(subject + "Header", false)
         }
+        function gen_eq_deriv(degree = Math.round(Math.random()) + 2, min_exp = 1, step = 1, first_const = 1){
+            this.degree = degree
+            terms = [{
+                "Constant":first_const,
+                "Power":degree
+            }]
+
+            for(i = 1; i <= degree - min_exp; i += step){
+                var const_max = (i + 1)**1.8
+                var constant = Math.round(Math.random() * const_max * first_const)
+                var sign = Math.random() > .5 ? 1 : -1
+                if(constant == 0){
+                    continue
+                }
+                terms.push({
+                    "Constant":constant * sign,
+                    "Power":degree - i
+                })
+            }
+
+            eq = ""
+            deriv = ""
+            terms.forEach(term => {
+                termConst = term["Constant"]
+                termPower = term["Power"]
+                const_str = (termConst == 1 || termConst == -1) ? "" : (Math.abs(termConst).toString() + "*")
+                power_str = termPower == 1 ? "" : `**${termPower}`
+                if(termConst < 0){
+                    const_str = "-" + const_str
+                } else {
+                    const_str = "+" + const_str
+                }
+                if(termPower > 0){
+                    eq += `${const_str}x${power_str}`
+                } else {
+                    eq += termConst < 0 ? termConst : "+" + termConst
+                }
+
+                deriv_const = termConst * termPower
+                deriv_power = termPower - 1;
+
+                deriv_const_str = (deriv_const == 1 || deriv_const == -1) ? "" : (Math.abs(deriv_const).toString() + "*")
+                deriv_power_str = deriv_power == 1 ? "" : `**${deriv_power}`
+                if(deriv_const < 0){
+                    deriv_const_str = "-" + deriv_const_str
+                } else {
+                    deriv_const_str = "+" + deriv_const_str
+                }
+                if(deriv_power > 0){
+                    deriv += `${deriv_const_str}x${deriv_power_str}`
+                } else {
+                    deriv += deriv_const < 0 ? deriv_const : "+" + deriv_const
+                }
+            })
+            if(eq.startsWith("+")){
+                eq = eq.substring(1)
+            }
+            if(deriv.startsWith("+")){
+                deriv = deriv.substring(1)
+            }
+            return [eq, deriv]
+        }
         function generate_problem(){
             problem_explanation.hidden = true
             document.getElementById("answer_div").hidden = true 
@@ -82,9 +144,6 @@
             problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
             problems = problems_json_files[problem_type].Types
             index = Math.floor(Math.random() * problems.length)
-            if(problem_type == "RelatedRates"){//debug purposes
-                index = Math.round(Math.random() * 3)
-            }
             problem = problems[index]
 
             replacement_values = {}
@@ -119,61 +178,64 @@
                 } 
                 else if(index == 1){
                     while(true){
-                        degree = Math.round(Math.random()) + 2
-                        terms = [{
-                            "Constant":1,
-                            "Power":degree
-                        }]
+                        // degree = Math.round(Math.random()) + 2
+                        // terms = [{
+                        //     "Constant":1,
+                        //     "Power":degree
+                        // }]
 
-                        for(i = 1; i < degree; i++){
-                            var const_max = (i + 1)**1.8
-                            var constant = Math.round(Math.random() * const_max)
-                            var sign = Math.random() > .5 ? 1 : -1
-                            if(constant == 0){
-                                continue
-                            }
-                            terms.push({
-                                "Constant":constant * sign,
-                                "Power":degree - i
-                            })
-                        }
+                        // for(i = 1; i < degree; i++){
+                        //     var const_max = (i + 1)**1.8
+                        //     var constant = Math.round(Math.random() * const_max)
+                        //     var sign = Math.random() > .5 ? 1 : -1
+                        //     if(constant == 0){
+                        //         continue
+                        //     }
+                        //     terms.push({
+                        //         "Constant":constant * sign,
+                        //         "Power":degree - i
+                        //     })
+                        // }
 
-                        eq = ""
-                        deriv = ""
-                        terms.forEach(term => {
-                            termConst = term["Constant"]
-                            termPower = term["Power"]
-                            const_str = (termConst == 1 || termConst == -1) ? "" : (Math.abs(termConst).toString() + "*")
-                            power_str = termPower == 1 ? "" : `**${termPower}`
-                            if(termConst < 0){
-                                const_str = "-" + const_str
-                            } else {
-                                const_str = "+" + const_str
-                            }
-                            eq += `${const_str}x${power_str}`
+                        // eq = ""
+                        // deriv = ""
+                        // terms.forEach(term => {
+                        //     termConst = term["Constant"]
+                        //     termPower = term["Power"]
+                        //     const_str = (termConst == 1 || termConst == -1) ? "" : (Math.abs(termConst).toString() + "*")
+                        //     power_str = termPower == 1 ? "" : `**${termPower}`
+                        //     if(termConst < 0){
+                        //         const_str = "-" + const_str
+                        //     } else {
+                        //         const_str = "+" + const_str
+                        //     }
+                        //     eq += `${const_str}x${power_str}`
 
-                            deriv_const = termConst * termPower
-                            deriv_power = termPower - 1;
+                        //     deriv_const = termConst * termPower
+                        //     deriv_power = termPower - 1;
 
-                            deriv_const_str = (deriv_const == 1 || deriv_const == -1) ? "" : (Math.abs(deriv_const).toString() + "*")
-                            deriv_power_str = deriv_power == 1 ? "" : `**${deriv_power}`
-                            if(deriv_const < 0){
-                                deriv_const_str = "-" + deriv_const_str
-                            } else {
-                                deriv_const_str = "+" + deriv_const_str
-                            }
-                            if(deriv_power > 0){
-                                deriv += `${deriv_const_str}x${deriv_power_str}`
-                            } else {
-                                deriv += deriv_const < 0 ? deriv_const : "+" + deriv_const
-                            }
-                        })
-                        if(eq.startsWith("+")){
-                            eq = eq.substring(1)
-                        }
-                        if(deriv.startsWith("+")){
-                            deriv = deriv.substring(1)
-                        }
+                        //     deriv_const_str = (deriv_const == 1 || deriv_const == -1) ? "" : (Math.abs(deriv_const).toString() + "*")
+                        //     deriv_power_str = deriv_power == 1 ? "" : `**${deriv_power}`
+                        //     if(deriv_const < 0){
+                        //         deriv_const_str = "-" + deriv_const_str
+                        //     } else {
+                        //         deriv_const_str = "+" + deriv_const_str
+                        //     }
+                        //     if(deriv_power > 0){
+                        //         deriv += `${deriv_const_str}x${deriv_power_str}`
+                        //     } else {
+                        //         deriv += deriv_const < 0 ? deriv_const : "+" + deriv_const
+                        //     }
+                        // })
+                        // if(eq.startsWith("+")){
+                        //     eq = eq.substring(1)
+                        // }
+                        // if(deriv.startsWith("+")){
+                        //     deriv = deriv.substring(1)
+                        // }
+                        gen = gen_eq_deriv()
+                        var eq = gen[0]
+                        var deriv = gen[1]
 
                         root = Math.random() < .6 ? 2 : 3
 
@@ -184,6 +246,10 @@
 
                         cur_val = eval(eq_a)
                         if(cur_val <= 5){
+                            console.log(cur_val)
+                            console.log(a)
+                            console.log(eq_a)
+                            console.log("here1")
                             continue
                         }
 
@@ -194,6 +260,7 @@
 
                         offset = desired_val - cur_val
                         if(offset == 0){
+                            console.log("here2")
                             continue
                         }
                         eq += offset < 0 ? offset.toString() : "+" + offset.toString()
@@ -283,6 +350,64 @@
                     replacement_values["lenunit"] = lenunit
                     replacement_values["timeunit"] = timeunit
                 }
+                else if(index == 4){
+                    var radius = Math.floor(Math.random() * 10) + 1
+                    var dvdt = Math.floor(Math.random() * 30) / 10 + 1
+
+                    var drdt = dvdt/(4 * radius**2)
+
+                    replacement_values["radius"] = radius
+                    replacement_values["dr/dt"] = drdt
+                    replacement_values["dV/dt"] = dvdt
+                    replacement_values["lenunit"] = lenunit
+                    replacement_values["timeunit"] = timeunit
+                }
+                else if(index == 5){
+                    var x = Math.floor(Math.random() * 10 + 1) / 10
+                    var dydt = Math.floor(Math.random() * 50) / 10 + 1
+
+                    var dxdt = dydt * (2*x**(1/2))
+
+                    replacement_values["x"] = x
+                    replacement_values["dy/dt"] = dydt
+                    replacement_values["dx/dt"] = dxdt
+                    replacement_values["timeunit"] = timeunit
+                }
+                else if(index == 6){
+                    while(true){
+                        var geny = gen_eq_deriv(3, 1, 2, Math.floor(Math.random() * 3) + 1)
+                        var genx = gen_eq_deriv(Math.random() > .5 ? 2 : 1, 0, 1, Math.floor(Math.random() * 3) + 1)
+                        var x = Math.floor(Math.random() * 10) - 4
+                        var eqy = geny[0]
+                        var derivy = geny[1]
+                        var ineqy = eqy.replaceAll(`x`, `(${x})`)
+                        var y = eval(ineqy)
+                        if(Math.abs(y) >= 10){
+                            continue;
+                        }
+                        var inderivy = derivy.replaceAll(`x`, `(${x})`)
+                        var dydt = eval(inderivy)
+
+                        var eqx = genx[0]
+                        var ineqx = eqx.replaceAll(`x`, `(${x})`)
+                        var dxdt = eval(ineqx)
+
+                        var ans = dydt * dxdt
+
+                        replacement_values["x"] = x
+                        replacement_values["eqx"] = eqx.replaceAll("**", "^")
+                        replacement_values["ineqx"] = ineqx.replaceAll("**", "^")
+                        replacement_values["y"] = y
+                        replacement_values["eqy"] = eqy.replaceAll("**", "^")
+                        replacement_values["derivy"] = derivy.replaceAll("**", "^")
+                        replacement_values["ineqy"] = ineqy.replaceAll("**", "^")
+                        replacement_values["inderivy"] = inderivy.replaceAll("**", "^")
+                        replacement_values["dy/dt"] = dydt
+                        replacement_values["dx/dt"] = dxdt
+                        replacement_values["ans"] = ans
+                        break
+                    }
+                }
             }
             console.log(replacement_values)
 
@@ -345,6 +470,8 @@
                 yAxis: yaxis,
                 data: data
             })
+
+            console.log(container)
         }
         function reset(){
             problem_answer.innerHTML = ""
