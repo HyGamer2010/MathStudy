@@ -1,0 +1,168 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "How fast is the area of a square increasing when the side is %side% %lenunit% and growing at a rate of %ds/dt% %lenunit%/%timeunit%?"
+            ],
+            "Answer": ["%dA/dt% (%lenunit%^2)/%timeunit%"],
+            "Explanation": [
+                "<span class='sep'>Step 1: Gather info</span>",
+                "ds/dt = %ds/dt% %lenunit%/%timeunit%",
+                "s = %side% %lenunit%",
+                "Looking for dA/dt",
+                "<span class='sep'>Step 2: Find an equation that connects the 2 variables</span>",
+                "A = s^2",
+                "<span class='sep'>Step 3: Take the derivative of both side relative to t</span>",
+                "(d/dt)[A] = (d/dt)[s^2]",
+                "dA/dt = 2s(ds/dt)",
+                "<span class='sep'>Step 4: Plug in information</span>",
+                "dA/dt = 2(%side%)(%ds/dt%)",
+                "<span class='sep'>Step 5: Solve</span>",
+                "dA/dt = %dA/dt% (%lenunit%^2)/%timeunit%"
+            ]
+        },
+        {
+            "Problem": [
+                "The radius of a circle is increasing at a rate of %dr/dt% %lenunit% per %timeunit%. At what rate is the area increasing when the radius is %radius% %lenunit%?"
+            ],
+            "Answer": ["%dA/dt%π (%lenunit%^2)/%timeunit%"],
+            "Explanation": [
+                "<span class='sep'>Step 1: Gather info</span>",
+                "dr/dt = %dr/dt% %lenunit%/%timeunit%",
+                "r = %radius% %lenunit%",
+                "Looking for dA/dt",
+                "<span class='sep'>Step 2: Find an equation that connects the 2 variables</span>",
+                "A = πr^2",
+                "<span class='sep'>Step 3: Take the derivative of both side relative to t</span>",
+                "(d/dt)[A] = (d/dt)[πr^2]",
+                "dA/dt = 2πr(dr/dt)",
+                "<span class='sep'>Step 4: Plug in information</span>",
+                "dA/dt = 2π(%radius%)(%dr/dt%)",
+                "<span class='sep'>Step 5: Solve</span>",
+                "dA/dt = %dA/dt%π (%lenunit%^2)/%timeunit%"
+            ]
+        },
+        {
+            "Problem": [
+                "A stone dropped in a still pond creates a circular ripple whose radius increases at a constant rate of 10 ft/s. At what rate is the area enclosed by the ripple increasing 4.5s after the stone strikes the pond?"
+            ],
+            "Answer": ["900π (ft^2)/2"],
+            "Explanation": [
+                "<span class='sep'>Step 1: Gather info</span>",
+                "dr/dt = 10 ft/s",
+                "t = 4.5s",
+                "r = 4.5 * 10",
+                "r = 45 ft",
+                "Looking for dA/dt",
+                "<span class='sep'>Step 2: Find an equation that connects the 2 variables</span>",
+                "A = πr^2",
+                "<span class='sep'>Step 3: Take the derivative of both side relative to t</span>",
+                "(d/dt)[A] = (d/dt)[πr^2]",
+                "dA/dt = 2πr(dr/dt)",
+                "<span class='sep'>Step 4: Plug in information</span>",
+                "dA/dt = 2π(45)(10)",
+                "<span class='sep'>Step 5: Solve</span>",
+                "dA/dt = 900π (ft^2)/2"
+            ]
+        },
+        {
+            "Problem": [
+                "The radius of a sphere is increasing at a constant rate of .04 cm/s. At the time when the radius of the sphere is 15 cm, what is the rate of increase of the volume?"
+            ],
+            "Answer": ["36π (cm^3)/s"],
+            "Explanation": [
+                "<span class='sep'>Step 1: Gather info</span>",
+                "dr/dt = .04 cm/s",
+                "r = 15 cm",
+                "Looking for dV/dt",
+                "<span class='sep'>Step 2: Find an equation that connects the 2 variables</span>",
+                "V = (4/3)πr^3",
+                "<span class='sep'>Step 3: Take the derivative of both side relative to t</span>",
+                "(d/dt)[V] = (d/dt)[(4/3)πr^3]",
+                "dV/dt = 4πr^2 * (dr/dt)",
+                "<span class='sep'>Step 4: Plug in information</span>",
+                "dV/dt = 4π(15) ^ 2 * .04",
+                "<span class='sep'>Step 5: Solve</span>",
+                "dV/dt = 36π (cm^3)/s"
+            ]
+        },
+        {
+            "Problem": [
+                "The volume of a sphere is increasing at a rate of 3 (in^3)/s. At what rate is the radius increasing when the radius is 1.5 in?"
+            ],
+            "Answer": ["1/3π in/s"],
+            "Explanation": [
+                "<span class='sep'>Step 1: Gather info</span>",
+                "dV/dt = 3 (in^3)/s",
+                "r = 1.5 in",
+                "Looking for dr/dt",
+                "<span class='sep'>Step 2: Find an equation that connects the 2 variables</span>",
+                "V = (4/3)πr^3",
+                "<span class='sep'>Step 3: Take the derivative of both side relative to t</span>",
+                "(d/dt)[V] = (d/dt)[(4/3)πr^3]",
+                "dV/dt = 4πr^2 * (dr/dt)",
+                "<span class='sep'>Step 4: Plug in information</span>",
+                "3 = 4π(1.5)^2 * (dr/dt)",
+                "<span class='sep'>Step 5: Solve</span>",
+                "dr/dt = 3/9π in/s",
+                "dr/dt = 1/3π in/s"
+            ]
+        },
+        {
+            "Problem": [
+                "A point moves along a curve y = x^(1/2) in such a way that the y value is increasing at a rate of 3 units per second. At what rate is x changing when x = 1/4?"
+            ],
+            "Answer": ["3 un/s"],
+            "Explanation": [
+                "<span class='sep'>Step 1: Gather info</span>",
+                "dy/dt = 3 un/s",
+                "x = 1/4",
+                "Looking for dx/dt",
+                "<span class='sep'>Step 2: Find an equation that connects the 2 variables</span>",
+                "y = x^(1/2)",
+                "<span class='sep'>Step 3: Take the derivative of both side relative to t</span>",
+                "(d/dt)[y] = (d/dt)[x^(1/2)]",
+                "dy/dt = 1/(2x^(1/2)) * (dx/dt)",
+                "<span class='sep'>Step 4: Plug in information</span>",
+                "3 = 1/(2(1/4)^(1/2)) * (dx/dt)",
+                "<span class='sep'>Step 5: Solve</span>",
+                "3 = 1/(2(1/4)^(1/2)) * (dx/dt)",
+                "3 = 1/(2(1/2)) * (dx/dt)",
+                "3 = 1/(1) * (dx/dt)",
+                "dx/dt = 3 un/s"
+            ]
+        },
+        {
+            "Problem": [
+                "A point moves slong the graph of y = 2x^3-5x+3 so that, when the point is at (x, 2x^3-5x+3), the rate of change of x with respect to time is 2x^2. Find the rate of change of y with respect to time when y = 9."
+            ],
+            "Answer": ["152 un/s"],
+            "Explanation": [
+                "<span class='sep'>Step 1: Gather info</span>",
+                "dx/dt = 2x^2 un/s",
+                "y = 9",
+                "Looking for dy/dt",
+                "<span class='sep'>Step 2: Find an equation that connects the 2 variables</span>",
+                "y = 2x^3-5x+3",
+                "<span class='sep'>Step 3: Take the derivative of both side relative to t</span>",
+                "(d/dt)[y] = (d/dt)[2x^3-5x+3]",
+                "dy/dt = (6x^2-5)(dx/dt)",
+                "<span class='sep'>Step 4: Plug in information</span>",
+                "We do not need to have all the information needed. We need to solve for x first.",
+                "9 = 2x^3-5x+3",
+                "In y= on the calculator, we can set Y1 = 2x^3-5x+3 and Y2 = 9 and see where they intersect",
+                "<div id='graph'></div>",
+                "<button onclick='draw_graph({ domain: [-10, 10] }, { domain: [-10, 10] }, [`2x^3-5x+3`, `9`])'>Show graph</button>",
+                "x = 2",
+                "dx/dt = 2(2)^2",
+                "dx/dt = 8",
+                "dy/dt = (6(2)^2-5)(8)",
+                "<span class='sep'>Step 5: Solve</span>",
+                "dy/dt = (6(4)-5)(8)",
+                "dy/dt = (24-5)(8)",
+                "dy/dt = (19)(8)",
+                "dx/dt = 152 un/s"
+            ]
+        }
+    ]
+}

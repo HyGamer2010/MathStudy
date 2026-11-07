@@ -18,6 +18,9 @@
         var problem_explanation
         var problems_json_files = {}
 
+        var lenunits = ["m", "ft", "in", "cm", "km", "mi"]
+        var timeunits = ["s", "min", "hr"]
+
         document.addEventListener('DOMContentLoaded', (event) => {
             Object.entries(problem_sets).forEach(set => {
                 Object.entries(set[1]).forEach(category => {
@@ -69,34 +72,203 @@
             document.getElementById("answer_div").hidden = true 
 
             problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
-            switch (problem_type) {
-                case "Linearization":
-                    problems = problems_json_files[problem_type].Linearization
-                    break;
-                case "RelatedRates":
-                    problems = problems_json_files[problem_type].RelatedRates
-                    break;
-                default:
-                    break;
+            problems = problems_json_files[problem_type].Types
+            index = Math.floor(Math.random() * problems.length)
+            if(problem_type == "RelatedRates"){//debug purposes
+                index = Math.round(Math.random())
             }
-            problem = problems[Math.floor(Math.random() * problems.length)]
+            problem = problems[index]
+
+            replacement_values = {}
+            if(problem_type == "Linearization"){
+                if(index == 0){
+                    fa = Math.round(Math.random() * 12) + 3
+                    a = fa**2
+                    
+                    rand = Math.random()
+                    if(rand < .5){
+                        prev = (fa-1)**2
+                        dist = a - prev - 2
+
+                        offset = -(Math.round(Math.random() * dist / 2) + 1)
+                    } else {
+                        prev = (fa+1)**2
+                        dist = prev - a - 2
+
+                        offset = (Math.round(Math.random() * dist / 2) + 1)
+                    }
+
+                    x = a + offset
+
+                    fprimea = 1/(2 * fa)
+                    answer = fa + fprimea * (x - a)
+
+                    replacement_values["a"] = a
+                    replacement_values["x"] = x
+                    replacement_values["f(a)"] = fa
+                    replacement_values["f'(a)"] = fprimea
+                    replacement_values["ans"] = answer
+                } 
+                else if(index == 1){
+                    while(true){
+                        degree = Math.round(Math.random()) + 2
+                        terms = [{
+                            "Constant":1,
+                            "Power":degree
+                        }]
+
+                        for(i = 1; i < degree; i++){
+                            var const_max = (i + 1)**1.8
+                            var constant = Math.round(Math.random() * const_max)
+                            var sign = Math.random() > .5 ? 1 : -1
+                            if(constant == 0){
+                                continue
+                            }
+                            terms.push({
+                                "Constant":constant * sign,
+                                "Power":degree - i
+                            })
+                        }
+
+                        eq = ""
+                        deriv = ""
+                        terms.forEach(term => {
+                            termConst = term["Constant"]
+                            termPower = term["Power"]
+                            const_str = (termConst == 1 || termConst == -1) ? "" : (Math.abs(termConst).toString() + "*")
+                            power_str = termPower == 1 ? "" : `**${termPower}`
+                            if(termConst < 0){
+                                const_str = "-" + const_str
+                            } else {
+                                const_str = "+" + const_str
+                            }
+                            eq += `${const_str}x${power_str}`
+
+                            deriv_const = termConst * termPower
+                            deriv_power = termPower - 1;
+
+                            deriv_const_str = (deriv_const == 1 || deriv_const == -1) ? "" : (Math.abs(deriv_const).toString() + "*")
+                            deriv_power_str = deriv_power == 1 ? "" : `**${deriv_power}`
+                            if(deriv_const < 0){
+                                deriv_const_str = "-" + deriv_const_str
+                            } else {
+                                deriv_const_str = "+" + deriv_const_str
+                            }
+                            if(deriv_power > 0){
+                                deriv += `${deriv_const_str}x${deriv_power_str}`
+                            } else {
+                                deriv += deriv_const < 0 ? deriv_const : "+" + deriv_const
+                            }
+                        })
+                        if(eq.startsWith("+")){
+                            eq = eq.substring(1)
+                        }
+                        if(deriv.startsWith("+")){
+                            deriv = deriv.substring(1)
+                        }
+
+                        root = Math.random() < .6 ? 2 : 3
+
+                        a = Math.round(Math.random() * (12 - (degree * root**2 / 2))) + 3
+                        a *= Math.random() < .5 ? -1 : 1
+                        
+                        eq_a = eq.replaceAll("x", `(${a})`)
+
+                        cur_val = eval(eq_a)
+                        if(cur_val <= 5){
+                            continue
+                        }
+
+                        prev_val = Math.floor(cur_val**(1/root))**root
+                        next_val = Math.ceil(cur_val**(1/root))**root
+
+                        desired_val = Math.random() > .5 ? prev_val : next_val
+
+                        offset = desired_val - cur_val
+                        if(offset == 0){
+                            continue
+                        }
+                        eq += offset < 0 ? offset.toString() : "+" + offset.toString()
+
+                        if(root == 2){
+                            final_eq = `(${eq})**(1/2)`
+                            final_deriv = `(1/(2 * (${eq})**(1/2))) * (${deriv})`
+                        } else {
+                            final_eq = `(${eq})**(1/3)`
+                            final_deriv = `(1/(3 * (${eq})**(2/3))) * (${deriv})`
+                        }
+
+                        eq_a = final_eq.replaceAll("x", `(${a})`)
+                        deriv_a = final_deriv.replaceAll("x", `(${a})`)
+
+                        console.log(deriv_a)
+                        fprimea = eval(deriv_a)
+
+                        x = a + Math.round(Math.random() * 10) / 10 - .5
+                        fa = desired_val**(1/root)
+
+                        replacement_values["a"] = a
+                        replacement_values["x"] = x
+                        replacement_values["f(a)"] = fa
+                        replacement_values["f'(a)"] = fprimea
+                        replacement_values["eq"] = final_eq.replaceAll("**", "^")
+                        replacement_values["deriv"] = final_deriv.replaceAll("**", "^")
+                        replacement_values["eqa"] = eq_a.replaceAll("**", "^")
+                        replacement_values["deriva"] = deriv_a.replaceAll("**", "^")
+                        replacement_values["ans"] = fa + fprimea * (x - a)
+
+                        break;
+                    }
+                }
+            }
+            else if(problem_type == "RelatedRates"){
+                var lenunit = lenunits[Math.floor(Math.random() * lenunits.length)]
+                var timeunit = timeunits[Math.floor(Math.random() * timeunits.length)]
+
+                if(index == 0){
+                    var side = Math.floor(Math.random() * 10) + 1
+                    var dsdt = Math.floor(Math.random() * 20) / 10 + 1
+
+                    var dadt = 2 * side * dsdt
+
+                    replacement_values["side"] = side
+                    replacement_values["ds/dt"] = dsdt
+                    replacement_values["dA/dt"] = dadt
+                    replacement_values["lenunit"] = lenunit
+                    replacement_values["timeunit"] = timeunit
+                }
+                else if(index == 1){
+                    var radius = Math.floor(Math.random() * 10) + 1
+                    var drdt = Math.floor(Math.random() * 20) / 10 + 1
+
+                    var dadt = 2 * radius * drdt
+
+                    replacement_values["radius"] = radius
+                    replacement_values["dr/dt"] = drdt
+                    replacement_values["dA/dt"] = dadt
+                    replacement_values["lenunit"] = lenunit
+                    replacement_values["timeunit"] = timeunit
+                }
+            }
+            console.log(replacement_values)
+
             inner = ""
             for(var line of problem.Problem){
                 inner += `${line}<br>`
             }
-            problem_display.innerHTML = inner
+            problem_display.innerHTML = replace_values(inner, replacement_values)
 
             inner = ""
             for(var line of problem.Answer){
                 inner += `${line}<br>`
             }
-            problem_answer.innerHTML = inner
+            problem_answer.innerHTML = replace_values(inner, replacement_values)
 
             inner = ""
             for(var line of problem.Explanation){
                 inner += `${line}<br>`
             }
-            problem_explanation.innerHTML = inner
+            problem_explanation.innerHTML = replace_values(inner, replacement_values)
         }
 
         async function begin(){
@@ -158,8 +330,14 @@
         }
         
         async function load_json(problem_set) {
-            const problems_file = await fetch(`./${problem_set}.json`)
+            const problems_file = await fetch(`./Random/${problem_set}.json`)
             return await problems_file.json()
+        }
+        function replace_values(input, value_dict){
+            Object.entries(value_dict).forEach(value => {
+                input = input.replaceAll(`%${value[0]}%`, value[1].toString())
+            })
+            return input
         }
     </script>
     <style>
@@ -245,12 +423,19 @@
             width:100%;
             padding-top: 0px;
             text-align: center;
+            height: 2.5rem;
+        }
+        #V1Button{
+            position:absolute;
+            top:0;
+            right: 0;
         }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Study App</title>
 </head>
 <body>
+    <button id="V1Button" onclick="window.location.href='V1.html'">Go to V1</button>
     <header class="title" id="MainHeader">
         <h1>Math Study App</h1>
     </header>
