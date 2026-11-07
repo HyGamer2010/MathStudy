@@ -44,15 +44,15 @@
         },
         {
             "Problem": [
-                "A stone dropped in a still pond creates a circular ripple whose radius increases at a constant rate of 10 ft/s. At what rate is the area enclosed by the ripple increasing 4.5s after the stone strikes the pond?"
+                "A stone dropped in a still pond creates a circular ripple whose radius increases at a constant rate of %dr/dt% %lenunit%/%timeunit%. At what rate is the area enclosed by the ripple increasing %time% %timeunit% after the stone strikes the pond?"
             ],
-            "Answer": ["900π (ft^2)/2"],
+            "Answer": ["%dA/dt%π (%lenunit%^2)/%timeunit%"],
             "Explanation": [
                 "<span class='sep'>Step 1: Gather info</span>",
-                "dr/dt = 10 ft/s",
-                "t = 4.5s",
-                "r = 4.5 * 10",
-                "r = 45 ft",
+                "dr/dt = %dr/dt% %lenunit%/%timeunit%",
+                "t = %time% %timeunit%",
+                "r = %time% * %dr/dt%",
+                "r = %radius% %lenunit%",
                 "Looking for dA/dt",
                 "<span class='sep'>Step 2: Find an equation that connects the 2 variables</span>",
                 "A = πr^2",
@@ -60,20 +60,20 @@
                 "(d/dt)[A] = (d/dt)[πr^2]",
                 "dA/dt = 2πr(dr/dt)",
                 "<span class='sep'>Step 4: Plug in information</span>",
-                "dA/dt = 2π(45)(10)",
+                "dA/dt = 2π(%radius%)(%dr/dt%)",
                 "<span class='sep'>Step 5: Solve</span>",
-                "dA/dt = 900π (ft^2)/2"
+                "dA/dt = %dA/dt%π (%lenunit%^2)/%timeunit%"
             ]
         },
         {
             "Problem": [
-                "The radius of a sphere is increasing at a constant rate of .04 cm/s. At the time when the radius of the sphere is 15 cm, what is the rate of increase of the volume?"
+                "The radius of a sphere is increasing at a constant rate of %dr/dt% %lenunit%/%timeunit%. At the time when the radius of the sphere is %radius% %lenunit%, what is the rate of increase of the volume?"
             ],
-            "Answer": ["36π (cm^3)/s"],
+            "Answer": ["%dV/dt%π (%lenunit%^3)/%timeunit%"],
             "Explanation": [
                 "<span class='sep'>Step 1: Gather info</span>",
-                "dr/dt = .04 cm/s",
-                "r = 15 cm",
+                "dr/dt = %dr/dt% %lenunit%/%timeunit%",
+                "r = %radius% %lenunit%",
                 "Looking for dV/dt",
                 "<span class='sep'>Step 2: Find an equation that connects the 2 variables</span>",
                 "V = (4/3)πr^3",
@@ -81,9 +81,9 @@
                 "(d/dt)[V] = (d/dt)[(4/3)πr^3]",
                 "dV/dt = 4πr^2 * (dr/dt)",
                 "<span class='sep'>Step 4: Plug in information</span>",
-                "dV/dt = 4π(15) ^ 2 * .04",
+                "dV/dt = 4π(%radius%) ^ 2 * %dr/dt%",
                 "<span class='sep'>Step 5: Solve</span>",
-                "dV/dt = 36π (cm^3)/s"
+                "dV/dt = %dV/dt%π (%lenunit%^3)/%timeunit%"
             ]
         },
         {
