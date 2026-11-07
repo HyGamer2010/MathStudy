@@ -145,6 +145,7 @@
             problems = problems_json_files[problem_type].Types
             index = Math.floor(Math.random() * problems.length)
             problem = problems[index]
+            console.log(index)
 
             replacement_values = {}
             if(problem_type == "Linearization"){
@@ -382,15 +383,32 @@
                         var derivy = geny[1]
                         var ineqy = eqy.replaceAll(`x`, `(${x})`)
                         var y = eval(ineqy)
-                        if(Math.abs(y) >= 10){
-                            continue;
-                        }
                         var inderivy = derivy.replaceAll(`x`, `(${x})`)
                         var dydt = eval(inderivy)
+                        if(Math.abs(y) >= 10 || Math.abs(y) <= 4){
+                            continue;
+                        }
+                        tocontinue = false
+                        for(i = -10; i <= 10; i++){
+                            if(i == x){
+                                continue
+                            }
+                            var thisy = eval(eqy.replaceAll(`x`, `(${i})`))
+                            if(thisy == y){
+                                tocontinue = true
+                                break
+                            }
+                        }
+                        if(tocontinue){
+                            continue
+                        }
 
                         var eqx = genx[0]
                         var ineqx = eqx.replaceAll(`x`, `(${x})`)
                         var dxdt = eval(ineqx)
+                        if(dxdt == 0){
+                            continue
+                        }
 
                         var ans = dydt * dxdt
 
