@@ -59,6 +59,11 @@
         function set_element(element, hidden){
             document.getElementById(element).hidden = hidden
         }
+        function select_subject(subject){
+            reset()
+            set_element(subject, false)
+            set_element(subject + "Header", false)
+        }
         function generate_problem(){
             problem_explanation.hidden = true
             document.getElementById("answer_div").hidden = true 
@@ -135,6 +140,22 @@
                 data: data
             })
         }
+        function reset(){
+            problem_answer.innerHTML = ""
+            problem_explanation.innerHTML = ""
+            problem_display.innerHTML = ""
+
+            document.getElementById("problems").hidden = true
+            document.getElementById("answer_div").hidden = true
+            problem_explanation.hidden = true
+
+            Object.entries(problem_sets).forEach(set => {
+                Object.entries(set[1]).forEach(category => {
+                    document.getElementById(set[0] + category[0]).hidden = true
+                })
+                document.getElementById(set[0]).hidden = true
+            })
+        }
         
         async function load_json(problem_set) {
             const problems_file = await fetch(`./${problem_set}.json`)
@@ -142,21 +163,56 @@
         }
     </script>
     <style>
+        body{
+            background-color: rgb(30, 29, 39);
+            color:rgb(238, 235, 253)
+        }
         .title {
-            width:100%;
             text-align: center;
             font-family: monospace;
-            font-size: 4rem
+            font-size: 3.2rem;
+            padding-bottom: 10px;
+            padding-top: 10px;
+            margin:0;
+        }
+        .title h1, 
+        .title h2 {
+            margin: 0;
+            padding-top: 0px;
+        }
+        header{
+            width: 100%;
+        }
+        #APCalcABHeader{
+            background-color:rgb(39, 36, 55);
+        }
+        #MainHeader, nav, button, aside{
+            background-color:rgb(52, 49, 65);
+            color:white;
+        }
+        button{
+            border-style:groove;
         }
         div {
             font-family: monospace;
             font-size: 1rem;
         }
+        div.sect{
+            padding-top: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            align-content: center;
+        }
         div#problem_display {
             font-size: 1.3rem;
         }
+        div#problem_explanation{
+            padding-top:.5rem;
+            padding-bottom:.5rem;
+        }
         .sep {
             font-size: 1.6rem;
+            background-color: rgb(44, 42, 59);
         }
         #graph {
             width: 3in;
@@ -166,53 +222,89 @@
             min-width: fit-content;
             font-size: 1.1rem;
         }
+        button.category{
+            width:100%;
+            height: fit-content;
+            font-size: 2rem;
+        }
         label, fieldset {
             font-size: 1.2rem;
+        }
+        nav, aside {
+            width: 15%;
+            height: 100%;
+            padding-top:0px;
+        }
+        nav{
+            float: left;
+        }
+        aside{
+            float: right;
+        }
+        nav button {
+            width:100%;
+            padding-top: 0px;
+            text-align: center;
         }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Study App</title>
 </head>
 <body>
-    <h1 class="title">Math Study App</h1>
-    <div id="initial">
+    <header class="title" id="MainHeader">
+        <h1>Math Study App</h1>
+    </header>
+    <!-- <div id="initial">
         <button onclick='select_menu("initial", "APCalcAB")'>AP Calc AB</button>
-    </div>
-    <div id="selection">
-        <div id="APCalcAB" hidden="true">
-            <button onclick='select_category("APCalcAB", "Unit4")'>Unit 4</button>
-            <button onclick='select_menu("APCalcAB", "initial")'>Back</button>
+    </div> -->
+    <section>
+        <nav>
+            <button onclick='select_subject("APCalcAB")'>AP Calc AB</button>
+        </nav>
+        <aside></aside>
+        <article id="selection">
+            <header class="title" id="APCalcABHeader" hidden="true"><h2>AP Calc AB</h2></header>
+            <div id="APCalcAB" hidden="true">
+                <div class="sect">
+                    <button class="category" onclick='select_category("APCalcAB", "Unit4")'>Unit 4</button>
+                </div>
+            </div>
+            <div class="sect" id="APCalcABUnit4" hidden="true">
+                <!-- <select>
+                    <option value="All">All</option>
+                    <option value="Linearization">Linearization</option>
+                </select> -->
+                <fieldset>
+                    <legend>Choose</legend>
+    
+                    <input type="checkbox" value="All" class="APCalcABUnit4">
+                    <label>All</label>
+                    <br>
+    
+                    <input type="checkbox" value="Linearization" class="APCalcABUnit4">
+                    <label>Linearization</label>
+                    <br>
+    
+                    <input type="checkbox" value="RelatedRates" class="APCalcABUnit4">
+                    <label>Related Rates</label>
+                    <br>
+                </fieldset>
+                <button onclick="begin()">Begin</button>
+            </div>
+        </article>
+        <div class="sect" id="problems" hidden="true">
+            <div id="problem_display"></div>
+            <button onclick='set_element("answer_div", false)'>Reveal Answer</button>
+            <div id="answer_div" hidden="true">
+                <p id="problem_answer"></p>
+                <p>Different answer? Check explanation</p>
+                <button onclick='set_element("problem_explanation", false)'>Check explanation</button>
+            </div>
+            <div id="problem_explanation" hidden="true"></div>
+            <button onclick='generate_problem()'>Next</button>
+            <button onclick='select_menu("problems", problem_set + category)'>Back</button>
         </div>
-        <div id="APCalcABUnit4" hidden="true">
-            <!-- <select>
-                <option value="All">All</option>
-                <option value="Linearization">Linearization</option>
-            </select> -->
-            <fieldset>
-                <legend>Choose</legend>
-
-                <input type="checkbox" value="All" class="APCalcABUnit4">
-                <label>All</label>
-
-                <input type="checkbox" value="Linearization" class="APCalcABUnit4">
-                <label>Linearization</label>
-
-                <input type="checkbox" value="RelatedRates" class="APCalcABUnit4">
-                <label>Related Rates</label>
-            </fieldset>
-            <button onclick="begin()">Begin</button>
-        </div>
-    </div>
-    <div id="problems" hidden="true">
-        <div id="problem_display"></div>
-        <button onclick='set_element("answer_div", false)'>Reveal Answer</button>
-        <div id="answer_div" hidden="true">
-            <p id="problem_answer"></p>
-            <p>Different answer? Check explanation</p>
-            <button onclick='select_menu("answer_div", "problem_explanation")'>Check explanation</button>
-        </div>
-        <div id="problem_explanation" hidden="true"></div>
-        <button onclick='generate_problem()'>Next</button>
-        <button onclick='select_menu("problems", problem_set + category)'>Back</button>
-    </div>
+    </section>
+    
+    
 </body>
