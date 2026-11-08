@@ -2,6 +2,16 @@
     <script src="https://unpkg.com/function-plot/dist/function-plot.js"></script>
 
     <script>
+        MathJax = {
+          loader: {
+            load: ['input/asciimath', 'output/chtml', 'ui/menu']
+          }
+        };
+    </script>	
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@4/startup.js" defer></script>
+    <script src="ASCIIMathML.js"></script>
+
+    <script>
         problem_sets = {
             "APCalcAB": {
                 "Unit4": [
@@ -21,7 +31,7 @@
         var aside
         var problems_json_files = {}
 
-        var lenunits = ["m", "ft", "in", "cm", "km", "mi"]
+        var lenunits = ["m", "ft", "\"in\"", "cm", "km", "mi"]
         var timeunits = ["s", "min", "hr"]
 
         document.addEventListener('DOMContentLoaded', (event) => {
@@ -179,61 +189,6 @@
                 } 
                 else if(index == 1){
                     while(true){
-                        // degree = Math.round(Math.random()) + 2
-                        // terms = [{
-                        //     "Constant":1,
-                        //     "Power":degree
-                        // }]
-
-                        // for(i = 1; i < degree; i++){
-                        //     var const_max = (i + 1)**1.8
-                        //     var constant = Math.round(Math.random() * const_max)
-                        //     var sign = Math.random() > .5 ? 1 : -1
-                        //     if(constant == 0){
-                        //         continue
-                        //     }
-                        //     terms.push({
-                        //         "Constant":constant * sign,
-                        //         "Power":degree - i
-                        //     })
-                        // }
-
-                        // eq = ""
-                        // deriv = ""
-                        // terms.forEach(term => {
-                        //     termConst = term["Constant"]
-                        //     termPower = term["Power"]
-                        //     const_str = (termConst == 1 || termConst == -1) ? "" : (Math.abs(termConst).toString() + "*")
-                        //     power_str = termPower == 1 ? "" : `**${termPower}`
-                        //     if(termConst < 0){
-                        //         const_str = "-" + const_str
-                        //     } else {
-                        //         const_str = "+" + const_str
-                        //     }
-                        //     eq += `${const_str}x${power_str}`
-
-                        //     deriv_const = termConst * termPower
-                        //     deriv_power = termPower - 1;
-
-                        //     deriv_const_str = (deriv_const == 1 || deriv_const == -1) ? "" : (Math.abs(deriv_const).toString() + "*")
-                        //     deriv_power_str = deriv_power == 1 ? "" : `**${deriv_power}`
-                        //     if(deriv_const < 0){
-                        //         deriv_const_str = "-" + deriv_const_str
-                        //     } else {
-                        //         deriv_const_str = "+" + deriv_const_str
-                        //     }
-                        //     if(deriv_power > 0){
-                        //         deriv += `${deriv_const_str}x${deriv_power_str}`
-                        //     } else {
-                        //         deriv += deriv_const < 0 ? deriv_const : "+" + deriv_const
-                        //     }
-                        // })
-                        // if(eq.startsWith("+")){
-                        //     eq = eq.substring(1)
-                        // }
-                        // if(deriv.startsWith("+")){
-                        //     deriv = deriv.substring(1)
-                        // }
                         gen = gen_eq_deriv()
                         var eq = gen[0]
                         var deriv = gen[1]
@@ -277,7 +232,6 @@
                         eq_a = final_eq.replaceAll("x", `(${a})`)
                         deriv_a = final_deriv.replaceAll("x", `(${a})`)
 
-                        console.log(deriv_a)
                         fprimea = eval(deriv_a)
 
                         x = a + Math.round(Math.random() * 10) / 10 - .5
@@ -446,6 +400,8 @@
                 inner += `${line}<br>`
             }
             problem_explanation.innerHTML = replace_values(inner, replacement_values)
+
+            MathJax.typeset()
         }
 
         async function begin(){
@@ -640,6 +596,9 @@
             top:0;
             right: 0;
         }
+        br{
+            size:1.5rem;
+        }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Study App</title>
@@ -695,7 +654,7 @@
                 <p>Different answer? Check explanation</p>
                 <button onclick='set_element("problem_explanation", false)'>Check explanation</button>
             </div>
-            <div id="problem_explanation" hidden="true"></div>
+            <p id="problem_explanation" hidden="true"></p>
             <button onclick='generate_problem()'>Next</button>
             <button onclick='select_menu("problems", problem_set + category)'>Back</button>
         </div>

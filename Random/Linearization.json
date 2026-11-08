@@ -2,50 +2,50 @@
     "Types": [
         {
             "Problem": [
-                "f(x) = x^(1/2)<br>",
-                "a) Find L(x) of f(x) at x = %x%"
+                "`f(x) = sqrt(x)`<br>",
+                "a) Find `L(x)` of `f(x)` at `x = %x%`"
             ],
             "Answer": [
-                "a) %ans%"
+                "a) `%ans%`"
             ],
             "Explanation": [
-                "f(x) = x^(1/2)",
-                "f'(x) = (1/2)x^(-1/2)",
-                "A value near %x% where we can find f(x) is %a%, so a = %a%",
-                "The formula for L(x) = f(a) + f'(a)(x - a), so we must find f(a) and f'(a)",
-                "f(%a%) = %f(a)%",
-                "f'(%a%) = 1/(2 * %a%^(1/2)) => %f'(a)%",
-                "Plugging into formula: L(%x%) = %f(a)% + (%f'(a)%)(%x% - %a%)",
-                "%ans%"
+                "`f(x) = sqrt(x)`",
+                "`f'(x) = 1/(2sqrt(x))`",
+                "A value near %x% where we can find f(x) is %a%, so `a = %a%`",
+                "The formula `L(x)` is `L(x) = f(a) + f'(a)(x - a)`, so we must find f(a) and f'(a)",
+                "`f(%a%) = %f(a)%`",
+                "`f'(%a%) = 1/(2sqrt(%a%))` => `%f'(a)%`",
+                "Plugging into formula: `L(%x%) = %f(a)% + (%f'(a)%)(%x% - %a%)`",
+                "`L(%x%) = %ans%`"
             ]
         },
         {
             "Problem": [
-                "f(x) = %eq%",
-                "a = %a%<br>",
-                "a) Find L(x) of f(x)",
-                "b) Find L(%x%)"
+                "`f(x) = %eq%`",
+                "`a = %a%`<br>",
+                "a) Find `L(x)` of `f(x)`",
+                "b) Find `L(%x%)`"
             ],
             "Answer":[
-                "a) L(x) = %f(a)% + %f'(a)%(x-%a%)",
-                "b) %ans%"
+                "a) `L(x) = %f(a)% + %f'(a)%(x-%a%)`",
+                "b) `%ans%`"
             ],
             "Explanation":[
                 "<span class='sep'>a)</span>",
-                "f(x) = %eq%",
-                "f'(x) = %deriv%",
+                "`f(x) = %eq%`",
+                "`f'(x) = %deriv%`",
                 "We use these to find at a",
-                "f(%a%) = %eqa%",
-                "f(%a%) = %f(a)%",
-                "f'(%a%) = %deriva%",
-                "f'(%a%) = %f'(a)%",
-                "Plug into L(x) = f(a) + f'(a)(x-a)",
-                "L(x) = f(%a%) + f'(%a%)(x-%a%)",
-                "L(x) = %f(a)% + %f'(a)%(x-%a%)",
+                "`f(%a%) = %eqa%`",
+                "`f(%a%) = %f(a)%`",
+                "`f'(%a%) = %deriva%`",
+                "`f'(%a%) = %f'(a)%`",
+                "Plug into `L(x) = f(a) + f'(a)(x-a)`",
+                "`L(x) = f(%a%) + f'(%a%)(x-%a%)`",
+                "`L(x) = %f(a)% + %f'(a)%(x-%a%)`",
                 "<span class='sep'>b)</span>",
-                "Plug into L(x) = %f(a)% + %f'(a)%(x-%a%)",
-                "L(%x%) = %f(a)% + %f'(a)%(%x%-%a%)",
-                "L(%x%) = %ans%"
+                "Plug into `L(x) = %f(a)% + %f'(a)%(x-%a%)`",
+                "`L(%x%) = %f(a)% + %f'(a)%(%x%-%a%)`",
+                "`L(%x%) = %ans%`"
             ]
         }
     ]
