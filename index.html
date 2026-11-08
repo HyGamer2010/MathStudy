@@ -154,6 +154,7 @@
             problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
             problems = problems_json_files[problem_type].Types
             index = Math.floor(Math.random() * problems.length)
+            index = 9
             problem = problems[index]
             console.log(index)
 
@@ -380,6 +381,54 @@
                         break
                     }
                 }
+                else if(index == 7){
+                    var x = Math.floor(Math.random() * 10 + 1) * 10
+                    var y = Math.floor(Math.random() * 10 + 1) * 10
+                    var d = (x**2+y**2)**(1/2)
+                    var dydt = Math.floor(Math.random() * 20 + 1)
+
+                    var dddt = (y*dydt)/d
+
+                    replacement_values["x"] = x
+                    replacement_values["y"] = y
+                    replacement_values["d"] = d
+                    replacement_values["dy/dt"] = dydt
+                    replacement_values["dd/dt"] = dddt
+                    replacement_values["timeunit"] = timeunit
+                    replacement_values["lenunit"] = lenunit
+                }
+                else if(index == 8){
+                    var mh = Math.floor(Math.random() * 5 + 1)
+                    var lh = Math.floor(Math.random() * 5 + mh + 3)
+                    var dxdt = Math.floor(Math.random() * 20)/10 + 1
+                    var x = Math.floor(Math.random() * 20 + 1)
+
+                    var dsdt = (dxdt/lh) / ((1/mh) - (1/lh))
+
+                    replacement_values["x"] = x
+                    replacement_values["mh"] = mh
+                    replacement_values["lh"] = lh
+                    replacement_values["dx/dt"] = dxdt
+                    replacement_values["ds/dt"] = dsdt
+                    replacement_values["timeunit"] = timeunit
+                    replacement_values["lenunit"] = lenunit
+                }
+                else if(index == 9){
+                    var x = Math.floor(Math.random() * 40 + 11)
+                    var y = Math.floor(Math.random() * 20 + 11)
+                    var d = (x**2+y**2)**(1/2)
+                    var dddt = Math.floor(Math.random() * 40 + 11)
+
+                    var dxdt = (d*dddt)/x
+
+                    replacement_values["x"] = x
+                    replacement_values["y"] = y
+                    replacement_values["d"] = d
+                    replacement_values["dx/dt"] = dxdt
+                    replacement_values["dd/dt"] = dddt
+                    replacement_values["timeunit"] = timeunit
+                    replacement_values["lenunit"] = lenunit
+                }
             }
             console.log(replacement_values)
 
@@ -446,6 +495,25 @@
             })
 
             console.log(container)
+        }
+        function draw_picture(xaxis, yaxis, points){
+            var container = document.querySelector("#picture")
+
+            functionPlot({
+                target: "#picture",
+                width: container.clientWidth,
+                height: container.clientHeight,
+                grid: false,
+                xAxis:xaxis,
+                yAxis:yaxis,
+                data: [
+                    {
+                        points: points,
+                        fnType: 'points',
+                        graphType: 'polyline'
+                    }
+                ]
+            })
         }
         function reset(){
             problem_answer.innerHTML = ""
@@ -532,15 +600,16 @@
         div#problem_display {
             font-size: 1.3rem;
         }
-        div#problem_explanation{
+        p#problem_explanation{
             padding-top:.5rem;
             padding-bottom:.5rem;
+            line-height: 1.5rem;
         }
         .sep {
             font-size: 1.6rem;
             background-color: rgb(44, 42, 59);
         }
-        #graph {
+        #graph, #picture {
             width: 3in;
         }
         button {
@@ -595,9 +664,6 @@
             position:absolute;
             top:0;
             right: 0;
-        }
-        br{
-            size:1.5rem;
         }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
