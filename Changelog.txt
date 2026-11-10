@@ -1,6 +1,6 @@
 |11/10/2026
 -Added rounding
--Added Area of oblique triangle problems to Advanced Math
+-Added Area of oblique triangle and vector problems to Advanced Math
 |11/9/2026
 -Added changelog
 -Added related rates problems 10-11 (All I plan to for now unless requested to make more)
