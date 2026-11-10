@@ -1,0 +1,45 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "Initial point: ` (%x1%,%y1%) `",
+                "Terminal point: ` (%x2%,%y2%) `<br>",
+                "Find the component form of the vector"
+            ],
+            "Answer": [
+                "` < %x3%,%y3% > `"
+            ],
+            "Explanation": [
+                "`< (%x2%) - (%x1%),(%y2%) - (%y1%) >`",
+                "`< %x3%,%y3% >`",
+                "<div id='vectors'></div>",
+                "<button onclick='draw_vectors({ domain: [-10, 10] }, { domain: [-10, 10] }, [[%x1%, %y1%, %x3%, %y3%]])'>Show picture</button>"
+            ]
+        },
+        {
+            "Problem": [
+                "`vec u = < %x1%,%y1% > `",
+                "`vec v = < %x2%,%y2% > `<br>",
+                "a) Find `||vec u + vec v||`",
+                "b) Find `theta` for `vec u + vec v`"
+            ],
+            "Answer": [
+                "a) `%magnitude%`",
+                "b) `%theta%`"
+            ],
+            "Explanation": [
+                "`vec u + vec v = < (%x1%) + (%x2%),(%y1%) + (%y2%) >`",
+                "`vec u + vec v = < %x3%,%y3% >`",
+                "<div id='vectors'></div>",
+                "<button onclick='draw_vectors({ domain: [-10, 10] }, { domain: [-10, 10] }, [[0, 0, %x3%, %y3%]])'>Show picture</button>",
+                "<span class='sep'>a)</span>",
+                "`||vec u + vec v|| = sqrt((%x3%)^2 + (%y3%)^2)`",
+                "`||vec u + vec v|| = %magnitude%`",
+                "<span class='sep'>b)</span>",
+                "`tan(theta) = %y3%/%x3%`",
+                "`theta = tan^-1(%y3%/%x3%)`",
+                "`theta = %theta%`"
+            ]
+        }
+    ]
+}

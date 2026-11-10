@@ -1,0 +1,42 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "<div id='triangle1'></div>",
+                "<button onclick='draw_triangle(`triangle1`, `%A1%`, `%B1%`, `%C1%`, `%a1%`, `%b1%`, `%c1%`)'>Show picture</button>",
+                "Note: picture not drawn to scale<br>",
+                "Find the area of the triangle"
+            ],
+            "Answer": [
+                "%A%"
+            ],
+            "Explanation": [
+                "`%si1% = %s1v%`",
+                "`%si2% = %s2v%`",
+                "`%an3% = %a3v%`",
+                "`Area = (%s1v%*%s2v%sin(%a3v%))/2`",
+                "`Area = %A%`"
+            ]
+        },
+        {
+            "Problem": [
+                "<div id='triangle1'></div>",
+                "<button onclick='draw_triangle(`triangle1`, `%A1%`, `%B1%`, `%C1%`, `%a1%`, `%b1%`, `%c1%`)'>Show picture</button>",
+                "Note: picture not drawn to scale<br>",
+                "Find the area of the triangle"
+            ],
+            "Answer": [
+                "%A%"
+            ],
+            "Explanation": [
+                "`%si1% = %s1v%`",
+                "`%si2% = %s2v%`",
+                "`%si3% = %s3v%`",
+                "`s = (%s1v%+%s2v%+%s3v%)/2`",
+                "`s = %s%`",
+                "`Area = sqrt(%s%(%s%-%s1v%)(%s%-%s2v%)(%s%-%s3v%))`",
+                "`Area = %A%`"
+            ]
+        }
+    ]
+}
