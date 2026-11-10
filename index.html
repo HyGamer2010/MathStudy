@@ -21,6 +21,7 @@
             }
         }
 
+        var cur_selected_subject = null
         var problem_set = ""
         var category = ""
         var problem_display
@@ -51,11 +52,27 @@
             aside = document.querySelector("aside")
             body = document.querySelector("body")
 
+            load_changelog()
+
             resize_body()
         })
 
         problem_types_selected = []
 
+        async function load_changelog(){
+            var changelog_file = await fetch("Changelog.txt")
+            var text = await changelog_file.text()
+
+            var element = document.getElementById("Changelog")
+
+            text.split("\n").forEach(line => {
+                if(line.startsWith("|")){
+                    element.innerHTML += `<span class='sep'>${line.substring(1)}</span><br>`
+                }else {
+                    element.innerHTML += line + "<br>"
+                }
+            })
+        }
 
         function select_all_box(){
             elements = document.getElementsByClassName(problem_set + category)
@@ -81,9 +98,14 @@
             document.getElementById(element).hidden = hidden
         }
         function select_subject(subject){
+            if(cur_selected_subject != null){
+                set_element(cur_selected_subject, true)
+                set_element(cur_selected_subject + "Header", true)
+            }
             reset()
             set_element(subject, false)
             set_element(subject + "Header", false)
+            cur_selected_subject = subject
         }
         function gen_eq_deriv(degree = Math.round(Math.random()) + 2, min_exp = 1, step = 1, first_const = 1){
             this.degree = degree
@@ -563,6 +585,7 @@
             padding-bottom: 10px;
             padding-top: 10px;
             margin:0;
+            background-color:rgb(39, 36, 55);
         }
         .title h1, 
         .title h2 {
@@ -575,9 +598,6 @@
         }
         header{
             width: 100%;
-        }
-        #APCalcABHeader{
-            background-color:rgb(39, 36, 55);
         }
         #MainHeader, nav, button, aside{
             background-color:rgb(52, 49, 65);
@@ -679,6 +699,7 @@
     <section>
         <nav>
             <button onclick='select_subject("APCalcAB")'>AP Calc AB</button>
+            <button onclick='select_subject("Changelog")'>Changelog</button>
         </nav>
         <aside></aside>
         <article id="selection">
@@ -688,6 +709,12 @@
                     <button class="category" onclick='select_category("APCalcAB", "Unit4")'>Unit 4</button>
                 </div>
             </div>
+
+            <header class="title" id="ChangelogHeader" hidden="true"><h2>Changelog</h2></header>
+            <div class="sect" id="Changelog" hidden="true">
+                
+            </div>
+            
             <div class="sect" id="APCalcABUnit4" hidden="true">
                 <!-- <select>
                     <option value="All">All</option>

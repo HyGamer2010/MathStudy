@@ -1,0 +1,18 @@
+|11/9/2026
+-Added changelog
+|11/8/2026
+-Added related rates problems 7-9
+|11/7/2026
+-Modified layout to look nicer and be more mobile friendly
+-Made related rates problems 2-6 randomized
+-Added MathJax and AsciiMath for math typing
+|11/6/2026
+-Massive visual overhaul
+-Made V2: switching from preset problems to randomized problems
+-Added the other half of linearization problems
+-Added related rates problems
+-Moved problems from a single json file into separate json files per category
+|11/5/2026
+-Initial commit
+-10 linearization problems
+-Basic ui
