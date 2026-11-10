@@ -18,6 +18,11 @@
                     "Linearization",
                     "RelatedRates"
                 ]
+            },
+            "AdvancedMath": {
+                "Unit6": [
+                    "Laws"
+                ]
             }
         }
 
@@ -30,6 +35,8 @@
         var body
         var nav
         var aside
+        var deg2rad = Math.PI/180
+        var rad2deg = 180/Math.PI
         var problems_json_files = {}
 
         var lenunits = ["m", "ft", "\"in\"", "cm", "km", "mi"]
@@ -176,6 +183,7 @@
             problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
             problems = problems_json_files[problem_type].Types
             index = Math.floor(Math.random() * problems.length)
+            index = 5
             problem = problems[index]
             console.log(index)
 
@@ -450,6 +458,301 @@
                     replacement_values["timeunit"] = timeunit
                     replacement_values["lenunit"] = lenunit
                 }
+                else if(index == 10){
+                    var e = Math.floor(Math.random() * 10 + 1) * 10
+                    var s = Math.floor(Math.random() * 10 + 1) * 10
+                    var d = (e**2+s**2)**(1/2)
+                    var dedt = Math.floor(Math.random() * 20 + 11)
+                    var dsdt = Math.floor(Math.random() * 20 + 11)
+
+                    var dddt = (e * dedt + s * dsdt) / d
+
+                    replacement_values["e"] = e
+                    replacement_values["s"] = s
+                    replacement_values["d"] = d
+                    replacement_values["de/dt"] = dedt
+                    replacement_values["ds/dt"] = dsdt
+                    replacement_values["dd/dt"] = dddt
+                    replacement_values["timeunit"] = timeunit
+                    replacement_values["lenunit"] = lenunit
+                }
+                else if(index == 11){
+                    var dcdt = Math.floor(Math.random() * 10 + 1) * 10
+                    var dbdt = Math.floor(Math.random() * 10 + 1) * 10
+                    var t = Math.floor(Math.random() * 4 + 1) * 5
+                    var c = dcdt * t * 2
+                    var b = dbdt * t
+                    var d = (c**2+b**2)**(1/2)
+
+                    var dddt = (c * dcdt + b * dbdt) / d
+
+                    replacement_values["c"] = c
+                    replacement_values["b"] = b
+                    replacement_values["d"] = d
+                    replacement_values["t"] = t
+                    replacement_values["dc/dt"] = dcdt
+                    replacement_values["db/dt"] = dbdt
+                    replacement_values["dd/dt"] = dddt
+                    replacement_values["timeunit"] = timeunit
+                    replacement_values["lenunit"] = lenunit
+                }
+            }
+            else if(problem_type == "Laws"){
+                var a1 = ""
+                var b1 = ""
+                var c1 = ""
+                var A1 = ""
+                var B1 = ""
+                var C1 = ""
+
+                var a2 = ""
+                var b2 = ""
+                var c2 = ""
+                var A2 = ""
+                var B2 = ""
+                var C2 = ""
+
+                var a3 = ""
+                var b3 = ""
+                var c3 = ""
+                var A3 = ""
+                var B3 = ""
+                var C3 = ""
+
+                var side1 = ""
+                var angle1 = ""
+                var angle2 = ""
+                var angle3 = ""
+                var side2 = ""
+                var side3 = ""
+                var angle2v2 = ""
+                var angle3v2 = ""
+                var side3v2 = ""
+
+                var si1 = ""
+                var an1 = ""
+                var an2 = ""
+                var an3 = ""
+                var si2 = ""
+                var si3 = ""
+
+                var shows1 = false
+                var shows2 = false
+                var shows3 = false
+                var showa1 = false
+                var showa2 = false
+                var showa3 = false
+
+                if(index == 0){
+                    shows1 = true
+                    showa1 = true
+                    showa2 = true
+                    side1 = Math.floor(Math.random() * 15 + 1)
+                    angle1 = Math.floor(Math.random() * 90 + 21)
+                    angle2 = Math.floor(Math.random() * (140 - angle1) + 21)
+                    angle3 = 180 - angle1 - angle2
+                    side2 = (side1 * Math.sin(angle2 * deg2rad)/Math.sin(angle1 * deg2rad))
+                    side3 = (side1 * Math.sin(angle3 * deg2rad)/Math.sin(angle1 * deg2rad))
+                }
+                else if(index == 1){
+                    shows1 = true
+                    showa1 = true
+                    shows2 = true
+                    side2 = Math.floor(Math.random() * 9 + 1)
+                    side1 = Math.floor(Math.random() * (13 - side2) + 1) + side2 + 1
+                    angle1 = Math.floor(Math.random() * 90 + 21)
+                    angle2 = Math.asin(side2 * Math.sin(angle1 * deg2rad) / side1) * rad2deg
+                    angle3 = 180 - angle1 - angle2
+                    side3 = (side1 * Math.sin(angle3 * deg2rad)/Math.sin(angle1 * deg2rad))
+                } else if(index == 2){
+                    shows1 = true
+                    showa1 = true
+                    shows2 = true
+                    angle1 = Math.floor(Math.random() * 50 + 21)
+                    side2 = Math.floor(Math.random() * 9 + 6)
+                    var height = side2 * Math.sin(angle1 * deg2rad)
+                    side1 = Math.floor(height * .75)
+                    replacement_values["h"] = height
+                }
+                else if(index == 3){
+                    shows1 = true
+                    showa1 = true
+                    shows2 = true
+                    angle1 = Math.floor(Math.random() * 50 + 21)
+                    side2 = Math.floor(Math.random() * 9 + 6)
+                    var height = side2 * Math.sin(angle1 * deg2rad)
+                    side1 = Math.floor(Math.random() * (side2 - height) * .8) + height + 1
+
+                    angle2 = Math.asin(side2 * Math.sin(angle1 * deg2rad) / side1) * rad2deg
+                    angle3 = 180 - angle1 - angle2
+                    side3 = (side1 * Math.sin(angle3 * deg2rad)/Math.sin(angle1 * deg2rad))
+
+                    angle2v2 = 180 - angle2
+                    angle3v2 = 180 - angle1 - angle2v2
+                    side3v2 = (side1 * Math.sin(angle3v2 * deg2rad)/Math.sin(angle1 * deg2rad))
+
+                    replacement_values["h"] = height
+                }
+                else if(index == 4){
+                    shows1 = true
+                    shows2 = true
+                    showa3 = true
+                    side1 = Math.floor(Math.random() * 15 + 1)
+                    side2 = Math.floor(Math.random() * 15 + 1)
+                    angle3 = Math.floor(Math.random() * (140 - angle1) + 21)
+
+                    side3 = (side1**2+side2**2-2 * (side1) * (side2) * Math.cos(angle3 * deg2rad))**(1/2)
+                    angle2 = Math.asin(side2 * Math.sin(angle3 * deg2rad) / side3) * rad2deg
+                    angle1 = 180 - angle2 - angle3
+                }
+                else if(index == 5){
+                    shows1 = true
+                    shows2 = true
+                    shows3 = true
+                    side1 = Math.floor(Math.random() * 12 + 1)
+                    side2 = Math.floor(Math.random() * (Math.floor(side1 / 2.5)) + 1) + side1
+                    side3 = Math.floor(Math.random() * (Math.floor(side1 / 2.5)) + 1) + side2
+                    //cos^-1((-%s3v%^2+%s1v%^2+%s2v%^2)/(2(%s1v%)(%s2v%)))
+                    angle3 = Math.acos((-1 * (side3)**2+side1**2+side2**2)/(2 * side1 * side2)) * rad2deg
+                    angle2 = Math.asin(side2 * Math.sin(angle3 * deg2rad) / side3) * rad2deg
+                    angle1 = 180 - angle2 - angle3
+                }
+                var rand = Math.floor(Math.random() * 3)
+                switch (rand){
+                    case 0:
+                        if(shows1)
+                            a1 = side1
+                        a2 = side1
+                        a3 = side1
+                        if(showa1)
+                            A1 = angle1
+                        A2 = angle1
+                        A3 = angle1
+                        if(showa2)
+                            B1 = angle2
+                        B2 = angle2
+                        B3 = angle2v2
+                        if(shows2)
+                            b1 = side2
+                        b2 = side2
+                        b3 = side2
+                        if(shows3)
+                            c1 = side3
+                        c2 = side3
+                        c3 = side3v2
+                        if(showa3)
+                            C1 = angle3
+                        C2 = angle3
+                        C3 = angle3v2
+                        si1 = "a"
+                        si2 = "b"
+                        si3 = "c"
+                        an1 = "A"
+                        an2 = "B"
+                        an3 = "C"
+                        break
+                    case 1:
+                        if(shows1)
+                            b1 = side1
+                        b2 = side1
+                        b3 = side1
+                        if(showa1)
+                            B1 = angle1
+                        B2 = angle1
+                        B3 = angle1
+                        if(showa2)
+                            C1 = angle2
+                        C2 = angle2
+                        C3 = angle2v2
+                        if(shows2)
+                            c1 = side2
+                        c2 = side2
+                        c3 = side2
+                        if(shows3)
+                            a1 = side3
+                        a2 = side3
+                        a3 = side3v2
+                        if(showa3)
+                            A1 = angle3
+                        A2 = angle3
+                        A3 = angle3v2
+                        si1 = "b"
+                        si2 = "c"
+                        si3 = "a"
+                        an1 = "B"
+                        an2 = "C"
+                        an3 = "A"
+                        break
+                    case 2:
+                        if(shows1)
+                            c1 = side1
+                        c2 = side1
+                        c3 = side1
+                        if(showa1)
+                            C1 = angle1
+                        C2 = angle1
+                        C3 = angle1
+                        if(showa2)
+                            A1 = angle2
+                        A2 = angle2
+                        A3 = angle2v2
+                        if(shows2)
+                            a1 = side2
+                        a2 = side2
+                        a3 = side2
+                        if(shows3)
+                            b1 = side3
+                        b2 = side3
+                        b3 = side3v2
+                        if(showa3)
+                            B1 = angle3
+                        B2 = angle3
+                        B3 = angle3v2
+                        si1 = "c"
+                        si2 = "a"
+                        si3 = "b"
+                        an1 = "C"
+                        an2 = "A"
+                        an3 = "B"
+                        break
+                }
+                replacement_values["A1"] = A1
+                replacement_values["B1"] = B1
+                replacement_values["C1"] = C1
+                replacement_values["a1"] = a1
+                replacement_values["b1"] = b1
+                replacement_values["c1"] = c1
+
+                replacement_values["A2"] = A2
+                replacement_values["B2"] = B2
+                replacement_values["C2"] = C2
+                replacement_values["a2"] = a2
+                replacement_values["b2"] = b2
+                replacement_values["c2"] = c2
+
+                replacement_values["A3"] = A3
+                replacement_values["B3"] = B3
+                replacement_values["C3"] = C3
+                replacement_values["a3"] = a3
+                replacement_values["b3"] = b3
+                replacement_values["c3"] = c3
+
+                replacement_values["si1"] = si1
+                replacement_values["si2"] = si2
+                replacement_values["si3"] = si3
+                replacement_values["an1"] = an1
+                replacement_values["an2"] = an2
+                replacement_values["an3"] = an3
+
+                replacement_values["s1v"] = side1
+                replacement_values["s2v"] = side2
+                replacement_values["s3v"] = side3
+                replacement_values["a1v"] = angle1
+                replacement_values["a2v"] = angle2
+                replacement_values["a3v"] = angle3
+                replacement_values["a2v2"] = angle2
+                replacement_values["a3v2"] = angle3
+                replacement_values["s3v2"] = side3
             }
             console.log(replacement_values)
 
@@ -532,6 +835,93 @@
                         points: points,
                         fnType: 'points',
                         graphType: 'polyline'
+                    }
+                ]
+            })
+        }
+        function draw_vectors(xaxis, yaxis, vectors){
+            var container = document.querySelector("#vectors")
+
+            var data = []
+            vectors.forEach(vector => {
+                data.push({
+                    vector: [vector[2], vector[3]],
+                    offset: [vector[0], vector[1]],
+                    graphType: 'polyline',
+                    fnType: 'vector'
+                })
+            })
+
+            functionPlot({
+                target: "#vectors",
+                width: container.clientWidth,
+                height: container.clientHeight,
+                grid: false,
+                xAxis:xaxis,
+                yAxis:yaxis,
+                data: data
+            })
+        }
+        function draw_triangle(id, A, B, C, a, b, c){
+            var container = document.querySelector("#" + id)
+
+            functionPlot({
+                target: "#" + id,
+                width: container.clientWidth,
+                height: container.clientHeight,
+                grid: false,
+                xAxis:{domain: [-1, 4]},
+                yAxis:{domain: [-1, 4]},
+                data: [
+                    {
+                        points: [[0, 0], [3, 0], [1.5, 3], [0, 0]],
+                        fnType: 'points',
+                        graphType: 'polyline'
+                    },
+                    {
+                        graphType: 'text',
+                        location: [-.1, -.1],
+                        text: 'A'
+                    },
+                    {
+                        graphType: 'text',
+                        location: [3.1, -.1],
+                        text: 'B'
+                    },
+                    {
+                        graphType: 'text',
+                        location: [1.5, 3.1],
+                        text: 'C'
+                    },
+                    {
+                        graphType: 'text',
+                        location: [.15, .1],
+                        text: A
+                    },
+                    {
+                        graphType: 'text',
+                        location: [2.7, .1],
+                        text: B
+                    },
+                    {
+                        graphType: 'text',
+                        location: [1.4, 2.8],
+                        text: C
+                    },
+                    {
+                        graphType: 'text',
+                        location: [2.3, 1.6],
+                        text: a
+                    },
+                    {
+                        graphType: 'text',
+                        location: [.6, 1.6],
+                        text: b
+                    },
+                    {
+                        graphType: 'text',
+                        location: [1.4, -.2],
+                        text: c
                     }
                 ]
             })
@@ -622,13 +1012,13 @@
         p#problem_explanation{
             padding-top:.5rem;
             padding-bottom:.5rem;
-            line-height: 1.5rem;
+            line-height: 2rem;
         }
         .sep {
             font-size: 1.6rem;
             background-color: rgb(44, 42, 59);
         }
-        #graph, #picture {
+        #graph, #picture, #vectors, #triangle {
             width: 3in;
         }
         button {
@@ -699,6 +1089,7 @@
     <section>
         <nav>
             <button onclick='select_subject("APCalcAB")'>AP Calc AB</button>
+            <button onclick='select_subject("AdvancedMath")'>Advanced Math</button>
             <button onclick='select_subject("Changelog")'>Changelog</button>
         </nav>
         <aside></aside>
@@ -710,16 +1101,19 @@
                 </div>
             </div>
 
+            <header class="title" id="AdvancedMathHeader" hidden="true"><h2>Advanced Math</h2></header>
+            <div id="AdvancedMath" hidden="true">
+                <div class="sect">
+                    <button class="category" onclick='select_category("AdvancedMath", "Unit6")'>Unit 6</button>
+                </div>
+            </div>
+
             <header class="title" id="ChangelogHeader" hidden="true"><h2>Changelog</h2></header>
             <div class="sect" id="Changelog" hidden="true">
                 
             </div>
             
             <div class="sect" id="APCalcABUnit4" hidden="true">
-                <!-- <select>
-                    <option value="All">All</option>
-                    <option value="Linearization">Linearization</option>
-                </select> -->
                 <fieldset>
                     <legend>Choose</legend>
     
@@ -733,6 +1127,21 @@
     
                     <input type="checkbox" value="RelatedRates" class="APCalcABUnit4">
                     <label>Related Rates</label>
+                    <br>
+                </fieldset>
+                <button onclick="begin()">Begin</button>
+            </div>
+
+            <div class="sect" id="AdvancedMathUnit6" hidden="true">
+                <fieldset>
+                    <legend>Choose</legend>
+    
+                    <input type="checkbox" value="All" class="AdvancedMathUnit6">
+                    <label>All</label>
+                    <br>
+    
+                    <input type="checkbox" value="Laws" class="AdvancedMathUnit6">
+                    <label>Law of Sines and Cosines</label>
                     <br>
                 </fieldset>
                 <button onclick="begin()">Begin</button>

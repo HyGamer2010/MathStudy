@@ -1,0 +1,162 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "<div id='triangle1'></div>",
+                "<button onclick='draw_triangle(`triangle1`, `%A1%`, `%B1%`, `%C1%`, `%a1%`, `%b1%`, `%c1%`)'>Show picture</button>",
+                "Note: picture not drawn to scale<br>",
+                "Solve the triangle"
+            ],
+            "Answer": [
+                "<div id='triangle2'></div>",
+                "<button onclick='draw_triangle(`triangle2`, `%A2%`, `%B2%`, `%C2%`, `%a2%`, `%b2%`, `%c2%`)'>Show picture</button>"
+            ],
+            "Explanation": [
+                "`%si1% = %s1v%`",
+                "`%an1% = %a1v%`",
+                "`%an2% = %a2v%`",
+                "`%an3% = 180 - %a1v% - %a2v%`",
+                "`%an3% = %a3v%`",
+                "`%si2%/sin(%a2v%) = %s1v%/sin(%a1v%)`",
+                "`%si2% = (%s1v%sin(%a2v%))/sin(%a1v%)`",
+                "`%si2% = %s2v%`",
+                "`%si3%/sin(%a3v%) = %s1v%/sin(%a1v%)`",
+                "`%si3% = (%s1v%sin(%a3v%))/sin(%a1v%)`",
+                "`%si3% = %s3v%`"
+            ]
+        },
+        {
+            "Problem": [
+                "<div id='triangle1'></div>",
+                "<button onclick='draw_triangle(`triangle1`, `%A1%`, `%B1%`, `%C1%`, `%a1%`, `%b1%`, `%c1%`)'>Show picture</button>",
+                "Note: picture not drawn to scale<br>",
+                "Solve the triangle"
+            ],
+            "Answer": [
+                "<div id='triangle2'></div>",
+                "<button onclick='draw_triangle(`triangle2`, `%A2%`, `%B2%`, `%C2%`, `%a2%`, `%b2%`, `%c2%`)'>Show picture</button>"
+            ],
+            "Explanation": [
+                "`%si1% = %s1v%`",
+                "`%si2% = %s2v%`",
+                "`%an1% = %a1v%`",
+                "`sin(%an2%)/%s2v% = sin(%a1v%)/%s1v%`",
+                "`%an2% = sin^-1((%s2v%sin(%a1v%))/%s1v%)`",
+                "`%an2% = %a2v%`",
+                "`%an3% = 180 - %a1v% - %a2v%`",
+                "`%an3% = %a3v%`",
+                "`%si3%/sin(%a3v%) = %s1v%/sin(%a1v%)`",
+                "`%si3% = (%s1v%sin(%a3v%))/sin(%a1v%)`",
+                "`%si3% = %s3v%`"
+            ]
+        },
+        {
+            "Problem": [
+                "<div id='triangle1'></div>",
+                "<button onclick='draw_triangle(`triangle1`, `%A1%`, `%B1%`, `%C1%`, `%a1%`, `%b1%`, `%c1%`)'>Show picture</button>",
+                "Note: picture not drawn to scale<br>",
+                "Solve the triangle"
+            ],
+            "Answer": [
+                "No solution"
+            ],
+            "Explanation": [
+                "`%si1% = %s1v%`",
+                "`%si2% = %s2v%`",
+                "`%an1% = %a1v%`",
+                "`h = %s2v%cos(%a1v%)`",
+                "`h = %h%`",
+                "Since `%si1% < h`, there is no solution"
+            ]
+        },
+        {
+            "Problem": [
+                "<div id='triangle1'></div>",
+                "<button onclick='draw_triangle(`triangle1`, `%A1%`, `%B1%`, `%C1%`, `%a1%`, `%b1%`, `%c1%`)'>Show picture</button>",
+                "Note: picture not drawn to scale<br>",
+                "Solve the triangle"
+            ],
+            "Answer": [
+                "<div id='triangle2'></div>",
+                "<button onclick='draw_triangle(`triangle2`, `%A2%`, `%B2%`, `%C2%`, `%a2%`, `%b2%`, `%c2%`)'>Show solution 1</button>",
+                "<div id='triangle3'></div>",
+                "<button onclick='draw_triangle(`triangle3`, `%A3%`, `%B3%`, `%C3%`, `%a3%`, `%b3%`, `%c3%`)'>Show solution 2</button>"
+            ],
+            "Explanation": [
+                "`%si1% = %s1v%`",
+                "`%si2% = %s2v%`",
+                "`%an1% = %a1v%`",
+                "`sin(%an2%)/%s2v% = sin(%a1v%)/%s1v%`",
+                "`%an2% = sin^-1((%s2v%sin(%a1v%))/%s1v%)`",
+                "`%an2% = %a2v%`",
+                "`h = %s2v%cos(%a1v%)`",
+                "`h = %h%`",
+                "Since `%h% < %si1% < %s2v%`, there are 2 solutions",
+                "<span class='sep'>Step 1: Solution 1</span>",
+                "`%an2% = %a2v%`",
+                "`%an3% = 180 - %a1v% - %a2v%`",
+                "`%an3% = %a3v%`",
+                "`%si3%/sin(%a3v%) = %s1v%/sin(%a1v%)`",
+                "`%si3% = (%s1v%sin(%a3v%))/sin(%a1v%)`",
+                "`%si3% = %s3v%`",
+                "<span class='sep'>Step 1: Solution 2</span>",
+                "`%an2% = 180 - %a2v%`",
+                "`%an3% = 180 - %a1v% - %a2v2%`",
+                "`%an3% = %a3v2%`",
+                "`%si3%/sin(%a3v2%) = %s1v%/sin(%a1v%)`",
+                "`%si3% = (%s1v%sin(%a3v2%))/sin(%a1v%)`",
+                "`%si3% = %s3v2%`"
+            ]
+        },
+        {
+            "Problem": [
+                "<div id='triangle1'></div>",
+                "<button onclick='draw_triangle(`triangle1`, `%A1%`, `%B1%`, `%C1%`, `%a1%`, `%b1%`, `%c1%`)'>Show picture</button>",
+                "Note: picture not drawn to scale<br>",
+                "Solve the triangle"
+            ],
+            "Answer": [
+                "<div id='triangle2'></div>",
+                "<button onclick='draw_triangle(`triangle2`, `%A2%`, `%B2%`, `%C2%`, `%a2%`, `%b2%`, `%c2%`)'>Show picture</button>"
+            ],
+            "Explanation": [
+                "`%si1% = %s1v%`",
+                "`%si2% = %s2v%`",
+                "`%an3% = %a3v%`",
+                "`%si3%^2 = %s1v%^2+%s2v%^2-2(%s1v%)(%s2v%)cos(%a3v%)`",
+                "`%si3% = sqrt(%s1v%^2+%s2v%^2-2(%s1v%)(%s2v%)cos(%a3v%))`",
+                "`%si3% = %s3v%`",
+                "`sin(%an2%)/%s2v% = sin(%a3v%)/%s3v%`",
+                "`%an2% = sin^-1((%s2v%sin(%a3v%))/%s3v%)`",
+                "`%an2% = %a2v%`",
+                "`%an1% = 180 - %a2v% - %a3v%`",
+                "`%an1% = %a1v%`"
+            ]
+        },
+        {
+            "Problem": [
+                "<div id='triangle1'></div>",
+                "<button onclick='draw_triangle(`triangle1`, `%A1%`, `%B1%`, `%C1%`, `%a1%`, `%b1%`, `%c1%`)'>Show picture</button>",
+                "Note: picture not drawn to scale<br>",
+                "Solve the triangle"
+            ],
+            "Answer": [
+                "<div id='triangle2'></div>",
+                "<button onclick='draw_triangle(`triangle2`, `%A2%`, `%B2%`, `%C2%`, `%a2%`, `%b2%`, `%c2%`)'>Show picture</button>"
+            ],
+            "Explanation": [
+                "`%si1% = %s1v%`",
+                "`%si2% = %s2v%`",
+                "`%si3% = %s3v%`",
+                "`%s3v%^2 = %s1v%^2+%s2v%^2-2(%s1v%)(%s2v%)cos(%an3%)`",
+                "`%an3% = cos^-1((-%s3v%^2+%s1v%^2+%s2v%^2)/(2(%s1v%)(%s2v%)))`",
+                "`%an3% = %a3v%`",
+                "`sin(%an2%)/%s2v% = sin(%a3v%)/%s3v%`",
+                "`%an2% = sin^-1((%s2v%sin(%a3v%))/%s3v%)`",
+                "`%an2% = %a2v%`",
+                "`%an1% = 180 - %a2v% - %a3v%`",
+                "`%an1% = %a1v%`"
+            ]
+        }
+    ]
+}
