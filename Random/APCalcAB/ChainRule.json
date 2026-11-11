@@ -1,0 +1,19 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "Find the derivative of `%eq%`"
+            ],
+            "Answer": [
+                "`%deriv%`"
+            ],
+            "Explanation": [
+                "The outside function = `%outside%`",
+                "`d/dx[%outside%] = %out_deriv%`",
+                "The inside function = `%inside%`",
+                "`d/dx[%inside%] = %in_deriv%`",
+                "`d/dx[%eq%] = %deriv%`"
+            ]
+        }
+    ]
+}

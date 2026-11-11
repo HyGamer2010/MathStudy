@@ -127,7 +127,7 @@
             set_element(subject + "Header", false)
             cur_selected_subject = subject
         }
-        function gen_eq_deriv(degree = Math.round(Math.random()) + 2, min_exp = 1, step = 1, first_const = 1){
+        function gen_poly_deriv(degree = Math.round(Math.random()) + 2, min_exp = 1, step = 1, first_const = 1){
             this.degree = degree
             terms = [{
                 "Constant":first_const,
@@ -170,15 +170,17 @@
 
                 deriv_const_str = (deriv_const == 1 || deriv_const == -1) ? "" : (Math.abs(deriv_const).toString() + "*")
                 deriv_power_str = deriv_power == 1 ? "" : `**${deriv_power}`
-                if(deriv_const < 0){
-                    deriv_const_str = "-" + deriv_const_str
-                } else {
-                    deriv_const_str = "+" + deriv_const_str
-                }
-                if(deriv_power > 0){
-                    deriv += `${deriv_const_str}x${deriv_power_str}`
-                } else {
-                    deriv += deriv_const < 0 ? deriv_const : "+" + deriv_const
+                if(deriv_const != 0){ 
+                    if(deriv_const < 0){
+                        deriv_const_str = "-" + deriv_const_str
+                    } else {
+                        deriv_const_str = "+" + deriv_const_str
+                    }
+                    if(deriv_power > 0){
+                        deriv += `${deriv_const_str}x${deriv_power_str}`
+                    } else {
+                        deriv += deriv_const < 0 ? deriv_const : "+" + deriv_const
+                    }
                 }
             })
             if(eq.startsWith("+")){
@@ -189,6 +191,9 @@
             }
             return [eq, deriv]
         }
+        function gen_eq_deriv(){
+            
+        }
         function generate_problem(){
             problem_explanation.hidden = true
             document.getElementById("answer_div").hidden = true 
@@ -196,6 +201,7 @@
             problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
             problems = problems_json_files[problem_type].Types
             index = Math.floor(Math.random() * problems.length)
+            index = 0
             problem = problems[index]
 
             replacement_values = {}
@@ -231,7 +237,7 @@
                     } 
                     else if(index == 1){
                         while(true){
-                            gen = gen_eq_deriv()
+                            gen = gen_poly_deriv()
                             var eq = gen[0]
                             var deriv = gen[1]
 
@@ -364,8 +370,8 @@
                     }
                     else if(index == 6){
                         while(true){
-                            var geny = gen_eq_deriv(3, 1, 2, Math.floor(Math.random() * 3) + 1)
-                            var genx = gen_eq_deriv(Math.random() > .5 ? 2 : 1, 0, 1, Math.floor(Math.random() * 3) + 1)
+                            var geny = gen_poly_deriv(3, 1, 2, Math.floor(Math.random() * 3) + 1)
+                            var genx = gen_poly_deriv(Math.random() > .5 ? 2 : 1, 0, 1, Math.floor(Math.random() * 3) + 1)
                             var x = Math.floor(Math.random() * 10) - 4
                             var eqy = geny[0]
                             var derivy = geny[1]
@@ -499,6 +505,40 @@
                         replacement_values["dd/dt"] = dddt
                         replacement_values["timeunit"] = timeunit
                         replacement_values["lenunit"] = lenunit
+                    }
+                }
+                else if(problem_type == "ChainRule"){
+                    if(index == 0){
+                        var op = Math.floor(Math.random() * 2)
+                        var outside
+                        var inside
+                        if(op == 0){
+                            var deg = Math.floor(Math.random() * 4 + 2)
+                            outside = `x^${deg}`
+                            out_deriv = `${deg}x^${deg - 1}`
+                        }
+                        else if(op == 1){
+                            var trig_funcs = ["sin", "cos", "tan", "csc", "sec", "cot", "sin^-1", "cos^-1", "tan^-1", "csc^-1", "sec^-1", "cot^-1"]
+                            var trig_derivs = ["cosx", "-sinx", "sec^2x", "-cscxcotx", "secxtanx", "-csc^2x", "1/(sqrt(1-x^2))", "-1/(sqrt(1-x^2))", "1/(1+x^2)", "-1/(abs(x)sqrt(x^2-1))", "1/(abs(x)sqrt(x^2-1))", "-1/(1+x^2)"]
+                            var trig_op = Math.floor(Math.random() * 12)
+                            outside = `${trig_funcs[trig_op]}x`
+                            out_deriv = trig_derivs[trig_op]
+                        }
+                        var degree = Math.floor(Math.random() * 2 + 2)
+                        var in_vals = gen_poly_deriv(degree=degree, min_exp=0)
+                        inside = in_vals[0]
+                        in_deriv = in_vals[1]
+                        var eq = outside.replaceAll("x", `(${inside})`).replaceAll("**", "^")
+                        var deriv = `${out_deriv.replaceAll("x", `(${inside})`)}*(${in_deriv})`.replaceAll("**", "^")
+
+                        console.log(eq)
+
+                        replacement_values["out_deriv"] = out_deriv
+                        replacement_values["in_deriv"] = in_deriv
+                        replacement_values["outside"] = outside
+                        replacement_values["inside"] = inside
+                        replacement_values["eq"] = eq
+                        replacement_values["deriv"] = deriv
                     }
                 }
             }
@@ -1346,7 +1386,7 @@
             <header class="title" id="APCalcABHeader" hidden="true"><h2>AP Calc AB</h2></header>
             <div id="APCalcAB" hidden="true">
                 <div class="sect">
-                    <!-- <button class="category" onclick='select_category("APCalcAB", "Unit3")'>Unit 3</button> -->
+                    <button class="category" onclick='select_category("APCalcAB", "Unit3")'>Unit 3</button>
                     <button class="category" onclick='select_category("APCalcAB", "Unit4")'>Unit 4</button>
                 </div>
             </div>
