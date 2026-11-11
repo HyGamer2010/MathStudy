@@ -19,26 +19,101 @@
         {
             "Problem": [
                 "`vec u = < %x1%,%y1% > `",
-                "`vec v = < %x2%,%y2% > `<br>",
-                "a) Find `||vec u + vec v||`",
-                "b) Find `theta` for `vec u + vec v`"
+                "`vec v = < %x2%,%y2% > `",
+                "`vec r = vec u %sign% vec v `<br>",
+                "a) Find `||vec r||`",
+                "b) Find `theta` for `vec r`"
             ],
             "Answer": [
                 "a) `%magnitude%`",
-                "b) `%theta%`"
+                "b) `%theta%^@`"
             ],
             "Explanation": [
-                "`vec u + vec v = < (%x1%) + (%x2%),(%y1%) + (%y2%) >`",
-                "`vec u + vec v = < %x3%,%y3% >`",
+                "`vec r = < (%x1%) %sign% (%x2%),(%y1%) %sign% (%y2%) >`",
+                "`vec r = < %x3%,%y3% >`",
                 "<div id='vectors'></div>",
                 "<button onclick='draw_vectors({ domain: [-10, 10] }, { domain: [-10, 10] }, [[0, 0, %x3%, %y3%]])'>Show picture</button>",
                 "<span class='sep'>a)</span>",
-                "`||vec u + vec v|| = sqrt((%x3%)^2 + (%y3%)^2)`",
-                "`||vec u + vec v|| = %magnitude%`",
+                "`||vec r|| = sqrt((%x3%)^2 + (%y3%)^2)`",
+                "`||vec r|| = %magnitude%`",
                 "<span class='sep'>b)</span>",
                 "`tan(theta) = %y3%/%x3%`",
                 "`theta = tan^-1(%y3%/%x3%)`",
-                "`theta = %theta%`"
+                "`theta = %theta%^@`"
+            ]
+        },
+        {
+            "Problem": [
+                "`vec u = < %px1%,%py1% > `",
+                "`vec v = < %px2%,%py2% > `",
+                "`vec r = %scal1%vec u %sign% %scal2%vec v `<br>",
+                "a) Find `||vec r||`",
+                "b) Find `theta` for `vec r`"
+            ],
+            "Answer": [
+                "a) `%magnitude%`",
+                "b) `%theta%^@`"
+            ],
+            "Explanation": [
+                "`%scal1%vec u = < %x1%,%y1% > `",
+                "`%scal2%vec v = < %x2%,%y2% > `",
+                "`vec r = < (%x1%) %sign% (%x2%),(%y1%) %sign% (%y2%) >`",
+                "`vec r = < %x3%,%y3% >`",
+                "<div id='vectors'></div>",
+                "<button onclick='draw_vectors({ domain: [-10, 10] }, { domain: [-10, 10] }, [[0, 0, %x3%, %y3%]])'>Show picture</button>",
+                "<span class='sep'>a)</span>",
+                "`||vec r|| = sqrt((%x3%)^2 + (%y3%)^2)`",
+                "`||vec r|| = %magnitude%`",
+                "<span class='sep'>b)</span>",
+                "`tan(theta) = %y3%/%x3%`",
+                "`theta = tan^-1(%y3%/%x3%)`",
+                "`theta = %theta%^@`"
+            ]
+        },
+        {
+            "Problem": [
+                "`vec u = < %x1%,%y1% > `",
+                "What is the unit vector?"
+            ],
+            "Answer": [
+                "` < %x2%,%y2% > `"
+            ],
+            "Explanation": [
+                "`||vec u|| = %magnitude%`",
+                "Unit vector = ` < %x1%/%magnitude% , %y1%/%magnitude% > `",
+                "Unit vector = ` < %x2% , %y2% > `",
+                "<div id='vectors'></div>",
+                "<button onclick='draw_vectors({ domain: [-10, 10] }, { domain: [-10, 10] }, [[0, 0, %x2%, %y2%]])'>Show picture</button>"
+            ]
+        },
+        {
+            "Problem": [
+                "`vec u` is defined as `%magnitude% units` @ `%angle%^@`",
+                "What is the component form of `vec u`?"
+            ],
+            "Answer": [
+                "` < %x1%,%y1% > `"
+            ],
+            "Explanation": [
+                "`x = %magnitude%cos(%angle%)`",
+                "`x = %x1%`",
+                "`y = %magnitude%sin(%angle%)`",
+                "`y = %y1%`",
+                "`vec u = < %x1%,%y1% > `"
+            ]
+        },
+        {
+            "Problem": [
+                "`vec u = < %x1%,%y1% > `",
+                "`vec v = < %x2%,%y2% > `",
+                "Find `vec u * vec v`"
+            ],
+            "Answer": [
+                "%dot%"
+            ],
+            "Explanation": [
+                "`vec u * vec v = (%x1% * %x2%) + (%y1% * %y2%)`",
+                "`vec u * vec v = %dot%`"
             ]
         }
     ]

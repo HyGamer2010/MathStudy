@@ -1,0 +1,67 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "`z = %a%%sign%%b%i`",
+                "Find the triginometric form of `z`"
+            ],
+            "Answer": [
+                "`z = %r%(cos(%angle%)+isin(%angle%))`"
+            ],
+            "Explanation": [
+                "`r = sqrt((%a%)^2+(%b%)^2)`",
+                "`tan(theta) = %b%/%a%`",
+                "`theta = tan^-1(%b%/%a%)`",
+                "`theta = %angle%`"
+            ]
+        },
+        {
+            "Problem": [
+                "`z = %r%(cos(%angle%)+isin(%angle%))`",
+                "Find the standard form of `z`"
+            ],
+            "Answer": [
+                "`z = %a%%sign%%b%i`"
+            ],
+            "Explanation": [
+                "`a = %r%cos(%angle%)`",
+                "`a = %a%`",
+                "`b = %r%isin(%angle%)`",
+                "`b = %b%`",
+                "`z = %a%%sign%%b%i`"
+            ]
+        },
+        {
+            "Problem": [
+                "`z_1 = %a1%%sign1%%b1%i`",
+                "`z_2 = %a2%%sign2%%b2%i`",
+                "`z_3 = z_1 * z_2`",
+                "Find `z_3`"
+            ],
+            "Answer": [
+                "`z_3 = %a3%%sign3%%b3%i`"
+            ],
+            "Explanation": [
+                "`z_3 = (%a1%%sign1%%b1%i)(%a2%%sign2%%b2%i)`",
+                "`z_3 = (%a1%*%a2%)+(%a1%*%b2%i)+(%b1%i*%a2%)+(%b1%i*%b2%i)`",
+                "`z_3 = (%f%)+(%o%i)+(%i%i)+(%l%i^2)`",
+                "`z_3 = %a3%%sign3%%b3%i`"
+            ]
+        },
+        {
+            "Problem": [
+                "`z_1 = %r1%(cos(%angle1%)+isin(%angle1%))`",
+                "`z_2 = %r2%(cos(%angle2%)+isin(%angle2%))`",
+                "`z_3 = z_1 * z_2`",
+                "Find `z_3`"
+            ],
+            "Answer": [
+                "`z_3 = %r3%(cos(%angle3%)+isin(%angle3%))`"
+            ],
+            "Explanation": [
+                "`z_3 = (%r1% * %r2%)(cos(%angle1%+%angle2%)+isin(%angle1%+%angle2%))`",
+                "`z_3 = %r3%(cos(%angle3%)+isin(%angle3%))`"
+            ]
+        }
+    ]
+}

@@ -15,6 +15,9 @@
         problem_sets = {
             "APCalcAB": {
                 rounding: 2,
+                "Unit3": [
+                    "ChainRule"
+                ],
                 "Unit4": [
                     "Linearization",
                     "RelatedRates"
@@ -24,7 +27,9 @@
                 rounding: 2,
                 "Unit6": [
                     "Laws",
-                    "AOBT"
+                    "AOBT",
+                    "Vectors",
+                    "Imaginary"
                 ]
             }
         }
@@ -497,7 +502,7 @@
                     }
                 }
             }
-            else if(cur_selected_subject){
+            else if(cur_selected_subject == "AdvancedMath"){
                 if(problem_type == "Laws" || problem_type == "AOBT"){
                     var a1 = ""
                     var b1 = ""
@@ -804,8 +809,10 @@
                         var x2 = Math.floor(Math.random() * 20 + 1) - 10
                         var y2 = Math.floor(Math.random() * 20 + 1) - 10
 
-                        var x3 = x2 + x1
-                        var y3 = y2 + y1
+                        var sign = Math.random() > .5 ? "+" : "-"
+
+                        var x3 = sign == "+" ? x1 + x2 : x1 - x2
+                        var y3 = sign == "+" ? y1 + y2 : y1 - y2
 
                         var magnitude = (x3**2+y3**2)**(1/2)
                         var theta = Math.atan2(y3, x3) * rad2deg
@@ -819,8 +826,179 @@
                         replacement_values["y2"] = y2
                         replacement_values["x3"] = x3
                         replacement_values["y3"] = y3
+                        replacement_values["sign"] = sign
                         replacement_values["magnitude"] = magnitude
                         replacement_values["theta"] = theta
+                    }
+                    else if(index == 2){
+                        var px1 = Math.floor(Math.random() * 20 + 1) - 10
+                        var py1 = Math.floor(Math.random() * 20 + 1) - 10
+                        var px2 = Math.floor(Math.random() * 20 + 1) - 10
+                        var py2 = Math.floor(Math.random() * 20 + 1) - 10
+
+                        var scal1 = Math.floor(Math.random() * 8 + 2) * (Math.random() > .5 ? 1 : -1)
+                        var scal2 = Math.floor(Math.random() * 8 + 2)
+
+                        var x1 = px1 * scal1
+                        var y1 = py1 * scal1
+                        var x2 = px2 * scal2
+                        var y2 = py2 * scal2
+
+                        var sign = Math.random() > .5 ? "+" : "-"
+
+                        var x3 = sign == "+" ? x1 + x2 : x1 - x2
+                        var y3 = sign == "+" ? y1 + y2 : y1 - y2
+
+                        var magnitude = (x3**2+y3**2)**(1/2)
+                        var theta = Math.atan2(y3, x3) * rad2deg
+                        if(theta < 0){
+                            theta += 360
+                        }
+
+                        replacement_values["x1"] = x1
+                        replacement_values["y1"] = y1
+                        replacement_values["x2"] = x2
+                        replacement_values["y2"] = y2
+                        replacement_values["px1"] = px1
+                        replacement_values["py1"] = py1
+                        replacement_values["px2"] = px2
+                        replacement_values["py2"] = py2
+                        replacement_values["x3"] = x3
+                        replacement_values["y3"] = y3
+                        replacement_values["scal1"] = scal1
+                        replacement_values["scal2"] = scal2
+                        replacement_values["sign"] = sign
+                        replacement_values["magnitude"] = magnitude
+                        replacement_values["theta"] = theta
+                    }
+                    else if(index == 3){
+                        var x1 = Math.floor(Math.random() * 20 + 1) - 10
+                        var y1 = Math.floor(Math.random() * 20 + 1) - 10
+
+                        var magnitude = (x1**2+y1**2)**(1/2)
+
+                        var x2 = x1 / magnitude
+                        var y2 = y1 / magnitude
+
+                        replacement_values["x1"] = x1
+                        replacement_values["y1"] = y1
+                        replacement_values["x2"] = x2
+                        replacement_values["y2"] = y2
+                        replacement_values["magnitude"] = magnitude
+                    }
+                    else if(index == 4){
+                        var magnitude = Math.floor(Math.random() * 20 + 1)
+                        var angle = Math.floor(Math.random() * 50 + 21)
+
+                        var x1 = magnitude * Math.cos(angle * deg2rad)
+                        var y1 = magnitude * Math.sin(angle * deg2rad)
+
+                        replacement_values["x1"] = x1
+                        replacement_values["y1"] = y1
+                        replacement_values["magnitude"] = magnitude
+                        replacement_values["angle"] = angle
+                    }
+                    else if(index == 5){
+                        var x1 = Math.floor(Math.random() * 20 + 1) - 10
+                        var y1 = Math.floor(Math.random() * 20 + 1) - 10
+                        var x2 = Math.floor(Math.random() * 20 + 1) - 10
+                        var y2 = Math.floor(Math.random() * 20 + 1) - 10
+
+                        var dot = (x1 * x2) + (y1 * y2)
+                        replacement_values["x1"] = x1
+                        replacement_values["y1"] = y1
+                        replacement_values["x2"] = x2
+                        replacement_values["y2"] = y2
+                        replacement_values["dot"] = dot
+                    }
+                }
+                else if(problem_type == "Imaginary"){
+                    if(index == 0){
+                        var a = Math.floor(Math.random() * 18 + 3) * (Math.random() > .5 ? 1 : -1)
+                        var b = Math.floor(Math.random() * 18 + 3) * (Math.random() > .5 ? 1 : -1)
+
+                        var r = (a**2+b**2)**(1/2)
+                        var angle = Math.atan2(b, a) * rad2deg
+
+                        if(angle < 0){
+                            angle += 360
+                        }
+
+                        var sign = b > 0 ? "+" : ""
+
+                        replacement_values["a"] = a
+                        replacement_values["b"] = b
+                        replacement_values["r"] = r
+                        replacement_values["angle"] = angle
+                        replacement_values["sign"] = sign
+                    }
+                    else if(index == 1){
+                        var r = Math.floor(Math.random() * 18 + 3)
+                        var angle = Math.floor(Math.random() * 360)
+
+                        var a = r * Math.cos(angle * rad2deg)
+                        var b = r * Math.sin(angle * rad2deg)
+
+                        var sign = b > 0 ? "+" : ""
+
+                        replacement_values["a"] = a
+                        replacement_values["b"] = b
+                        replacement_values["r"] = r
+                        replacement_values["angle"] = angle
+                        replacement_values["sign"] = sign
+                    }
+                    else if(index == 2){
+                        var a1 = Math.floor(Math.random() * 8 + 3) * (Math.random() > .5 ? 1 : -1)
+                        var b1 = Math.floor(Math.random() * 8 + 3) * (Math.random() > .5 ? 1 : -1)
+                        var a2 = Math.floor(Math.random() * 8 + 3) * (Math.random() > .5 ? 1 : -1)
+                        var b2 = Math.floor(Math.random() * 8 + 3) * (Math.random() > .5 ? 1 : -1)
+                        var sign1 = b1 > 0 ? "+" : ""
+                        var sign2 = b2 > 0 ? "+" : ""
+
+                        var f = a1 * a2
+                        var o = a1 * b2
+                        var i = b1 * a2
+                        var l = b1 * b2
+
+                        var a3 = f - l
+                        var b3 = o + i
+                        var sign3 = b3 >= 0 ? "+" : ""
+
+                        replacement_values["a1"] = a1
+                        replacement_values["b1"] = b1
+                        replacement_values["sign1"] = sign1
+                        replacement_values["a2"] = a2
+                        replacement_values["b2"] = b2
+                        replacement_values["sign2"] = sign2
+                        replacement_values["a3"] = a3
+                        replacement_values["b3"] = b3
+                        replacement_values["sign3"] = sign3
+                        replacement_values["f"] = f
+                        replacement_values["o"] = o
+                        replacement_values["i"] = i
+                        replacement_values["l"] = l
+                    }
+                    else if(index == 3){
+                        var r1 = Math.floor(Math.random() * 18 + 3) * (Math.random() > .5 ? 1 : -1)
+                        var r2 = Math.floor(Math.random() * 18 + 3) * (Math.random() > .5 ? 1 : -1)
+                        var angle1 = Math.floor(Math.random() * 360)
+                        var angle2 = Math.floor(Math.random() * 360)
+
+                        var r3 = r1 * r2
+                        var angle3 = angle1 + angle2
+                        if(angle3 >= 360){
+                            angle3 -= 360
+                        }
+                        else if(angle3 < 0){
+                            angle3 += 360
+                        }
+
+                        replacement_values["r1"] = r1
+                        replacement_values["r2"] = r2
+                        replacement_values["r3"] = r3
+                        replacement_values["angle1"] = angle1
+                        replacement_values["angle2"] = angle2
+                        replacement_values["angle3"] = angle3
                     }
                 }
             }
@@ -1168,6 +1346,7 @@
             <header class="title" id="APCalcABHeader" hidden="true"><h2>AP Calc AB</h2></header>
             <div id="APCalcAB" hidden="true">
                 <div class="sect">
+                    <!-- <button class="category" onclick='select_category("APCalcAB", "Unit3")'>Unit 3</button> -->
                     <button class="category" onclick='select_category("APCalcAB", "Unit4")'>Unit 4</button>
                 </div>
             </div>
@@ -1183,7 +1362,20 @@
             <div class="sect" id="Changelog" hidden="true">
                 
             </div>
-            
+            <!-- AP Calc Units -->
+            <div class="sect" id="APCalcABUnit3" hidden="true">
+                <fieldset>
+                    <legend>Choose Topics to Include</legend>
+    
+                    <input type="checkbox" value="All" class="APCalcABUnit3">
+                    <label>All</label>
+                    <br>
+    
+                    <input type="checkbox" value="ChainRule" class="APCalcABUnit3">
+                    <label>Chain Rule</label>
+                </fieldset>
+                <button onclick="begin()">Begin</button>
+            </div>
             <div class="sect" id="APCalcABUnit4" hidden="true">
                 <fieldset>
                     <legend>Choose Topics to Include</legend>
@@ -1202,7 +1394,7 @@
                 </fieldset>
                 <button onclick="begin()">Begin</button>
             </div>
-
+            <!-- Advanced Math Units -->
             <div class="sect" id="AdvancedMathUnit6" hidden="true">
                 <fieldset>
                     <legend>Choose Topics to Include</legend>
@@ -1221,6 +1413,10 @@
 
                     <input type="checkbox" value="Vectors" class="AdvancedMathUnit6">
                     <label>Vectors</label>
+                    <br>
+
+                    <input type="checkbox" value="Imaginary" class="AdvancedMathUnit6">
+                    <label>Imaginary Numbers</label>
                     <br>
                 </fieldset>
                 <button onclick="begin()">Begin</button>
