@@ -1,0 +1,1351 @@
+problem_sets = {
+    "APCalcAB": {
+        rounding: 2,
+        "Unit3": [
+            "ChainRule",
+            "ImplicitDifferentiation"
+        ],
+        "Unit4": [
+            "Linearization",
+            "RelatedRates"
+        ]
+    },
+    "AdvancedMath": {
+        rounding: 2,
+        "Unit6": [
+            "Laws",
+            "AOBT",
+            "Vectors",
+            "Imaginary"
+        ]
+    }
+}
+
+var cur_rounding = 0
+var cur_selected_subject = null
+var problem_set = ""
+var category = ""
+var problem_display
+var problem_answer
+var problem_explanation
+var body
+var nav
+var aside
+var section
+var deg2rad = Math.PI/180
+var rad2deg = 180/Math.PI
+var problems_json_files = {}
+
+var lenunits = ["m", "ft", "\"in\"", "cm", "km", "mi"]
+var timeunits = ["s", "min", "hr"]
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    Object.entries(problem_sets).forEach(set => {
+        Object.entries(set[1]).forEach(category => {
+            if(category[0] != "rounding"){
+                document.getElementsByClassName(set[0] + category[0])[0].addEventListener('change', (event) => {
+                    if(event.target.checked){
+                        select_all_box()
+                    }
+                })
+            }
+        })
+    });
+    problem_display = document.getElementById("problem_display")
+    problem_answer = document.getElementById("problem_answer")
+    problem_explanation = document.getElementById("problem_explanation")
+    nav = document.querySelector("nav")
+    aside = document.querySelector("aside")
+    body = document.querySelector("body")
+    section = document.querySelector("section")
+
+    load_changelog()
+})
+
+problem_types_selected = []
+
+async function load_changelog(){
+    var changelog_file = await fetch("Changelog.txt")
+    var text = await changelog_file.text()
+
+    var element = document.getElementById("Changelog")
+
+    text.split("\n").forEach(line => {
+        if(line.startsWith("|")){
+            element.innerHTML += `<span class='sep'>${line.substring(1)}</span><br>`
+        }else {
+            element.innerHTML += line + "<br>"
+        }
+    })
+}
+
+function select_all_box(){
+    elements = document.getElementsByClassName(problem_set + category)
+    for (var el of elements){
+        el.checked = true
+    }
+}
+
+function select_menu(from_id, to_id){
+    var from = document.getElementById(from_id)
+    var to = document.getElementById(to_id)
+
+    from.hidden = true
+    to.hidden = false
+}
+function select_category(problem_set, category){
+    select_menu(problem_set, problem_set + category)
+
+    this.problem_set = problem_set
+    this.category = category
+}
+function set_element(element, hidden){
+    document.getElementById(element).hidden = hidden
+}
+function select_subject(subject){
+    if(cur_selected_subject != null){
+        set_element(cur_selected_subject, true)
+        set_element(cur_selected_subject + "Header", true)
+    }
+    reset()
+    if(subject != "Changelog")
+        cur_rounding = problem_sets[subject].rounding
+    set_element(subject, false)
+    set_element(subject + "Header", false)
+    cur_selected_subject = subject
+}
+function gen_poly_deriv(degree = Math.round(Math.random()) + 2, min_exp = 1, step = 1, first_const = 1){
+    this.degree = degree
+    terms = [{
+        "Constant":first_const,
+        "Power":degree
+    }]
+
+    for(i = 1; i <= degree - min_exp; i += step){
+        var const_max = (i + 1)**1.8
+        var constant = Math.round(Math.random() * const_max * first_const)
+        var sign = Math.random() > .5 ? 1 : -1
+        if(constant == 0){
+            continue
+        }
+        terms.push({
+            "Constant":constant * sign,
+            "Power":degree - i
+        })
+    }
+
+    eq = ""
+    deriv = ""
+    terms.forEach(term => {
+        termConst = term["Constant"]
+        termPower = term["Power"]
+        const_str = (termConst == 1 || termConst == -1) ? "" : (Math.abs(termConst).toString() + "*")
+        power_str = termPower == 1 ? "" : `**${termPower}`
+        if(termConst < 0){
+            const_str = "-" + const_str
+        } else {
+            const_str = "+" + const_str
+        }
+        if(termPower > 0){
+            eq += `${const_str}x${power_str}`
+        } else {
+            eq += termConst < 0 ? termConst : "+" + termConst
+        }
+
+        deriv_const = termConst * termPower
+        deriv_power = termPower - 1;
+
+        deriv_const_str = (deriv_const == 1 || deriv_const == -1) ? "" : (Math.abs(deriv_const).toString() + "*")
+        deriv_power_str = deriv_power == 1 ? "" : `**${deriv_power}`
+        if(deriv_const != 0){ 
+            if(deriv_const < 0){
+                deriv_const_str = "-" + deriv_const_str
+            } else {
+                deriv_const_str = "+" + deriv_const_str
+            }
+            if(deriv_power > 0){
+                deriv += `${deriv_const_str}x${deriv_power_str}`
+            } else {
+                deriv += deriv_const < 0 ? deriv_const : "+" + deriv_const
+            }
+        }
+    })
+    if(eq.startsWith("+")){
+        eq = eq.substring(1)
+    }
+    if(deriv.startsWith("+")){
+        deriv = deriv.substring(1)
+    }
+    return [eq, deriv]
+}
+function gen_eq_deriv(){
+    
+}
+function generate_problem(){
+    problem_explanation.hidden = true
+    document.getElementById("answer_div").hidden = true 
+
+    problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
+    problems = problems_json_files[problem_type].Types
+    index = Math.floor(Math.random() * problems.length)
+    problem = problems[index]
+
+    replacement_values = {}
+    if(cur_selected_subject == "APCalcAB"){
+        if(problem_type == "Linearization"){
+            if(index == 0){
+                fa = Math.round(Math.random() * 12) + 3
+                a = fa**2
+                
+                rand = Math.random()
+                if(rand < .5){
+                    prev = (fa-1)**2
+                    dist = a - prev - 2
+
+                    offset = -(Math.round(Math.random() * dist / 2) + 1)
+                } else {
+                    prev = (fa+1)**2
+                    dist = prev - a - 2
+
+                    offset = (Math.round(Math.random() * dist / 2) + 1)
+                }
+
+                x = a + offset
+
+                fprimea = 1/(2 * fa)
+                answer = fa + fprimea * (x - a)
+
+                replacement_values["a"] = a
+                replacement_values["x"] = x
+                replacement_values["f(a)"] = fa
+                replacement_values["f'(a)"] = fprimea
+                replacement_values["ans"] = answer
+            } 
+            else if(index == 1){
+                while(true){
+                    gen = gen_poly_deriv()
+                    var eq = gen[0]
+                    var deriv = gen[1]
+
+                    root = Math.random() < .6 ? 2 : 3
+
+                    a = Math.round(Math.random() * (12 - (degree * root**2 / 2))) + 3
+                    a *= Math.random() < .5 ? -1 : 1
+                    
+                    eq_a = eq.replaceAll("x", `(${a})`)
+
+                    cur_val = eval(eq_a)
+
+                    prev_val = Math.floor(cur_val**(1/root))**root
+                    next_val = Math.ceil(cur_val**(1/root))**root
+
+                    desired_val = Math.random() > .5 ? prev_val : next_val
+
+                    offset = desired_val - cur_val
+                    if(offset == 0){
+                        continue
+                    }
+                    eq += offset < 0 ? offset.toString() : "+" + offset.toString()
+
+                    if(root == 2){
+                        final_eq = `(${eq})**(1/2)`
+                        final_deriv = `(1/(2 * (${eq})**(1/2))) * (${deriv})`
+                    } else {
+                        final_eq = `(${eq})**(1/3)`
+                        final_deriv = `(1/(3 * (${eq})**(2/3))) * (${deriv})`
+                    }
+
+                    eq_a = final_eq.replaceAll("x", `(${a})`)
+                    deriv_a = final_deriv.replaceAll("x", `(${a})`)
+
+                    fprimea = eval(deriv_a)
+
+                    x = a + Math.round(Math.random() * 10) / 10 - .5
+                    fa = desired_val**(1/root)
+
+                    replacement_values["a"] = a
+                    replacement_values["x"] = x
+                    replacement_values["f(a)"] = fa
+                    replacement_values["f'(a)"] = fprimea
+                    replacement_values["eq"] = final_eq.replaceAll("**", "^")
+                    replacement_values["deriv"] = final_deriv.replaceAll("**", "^")
+                    replacement_values["eqa"] = eq_a.replaceAll("**", "^")
+                    replacement_values["deriva"] = deriv_a.replaceAll("**", "^")
+                    replacement_values["ans"] = fa + fprimea * (x - a)
+
+                    break;
+                }
+            }
+        }
+        else if(problem_type == "RelatedRates"){
+            var lenunit = lenunits[Math.floor(Math.random() * lenunits.length)]
+            var timeunit = timeunits[Math.floor(Math.random() * timeunits.length)]
+
+            if(index == 0){
+                var side = Math.floor(Math.random() * 10) + 1
+                var dsdt = Math.floor(Math.random() * 20) / 10 + 1
+
+                var dadt = 2 * side * dsdt
+
+                replacement_values["side"] = side
+                replacement_values["ds/dt"] = dsdt
+                replacement_values["dA/dt"] = dadt
+                replacement_values["lenunit"] = lenunit
+                replacement_values["timeunit"] = timeunit
+            }
+            else if(index == 1){
+                var radius = Math.floor(Math.random() * 10) + 1
+                var drdt = Math.floor(Math.random() * 20) / 10 + 1
+
+                var dadt = 2 * radius * drdt
+
+                replacement_values["radius"] = radius
+                replacement_values["dr/dt"] = drdt
+                replacement_values["dA/dt"] = dadt
+                replacement_values["lenunit"] = lenunit
+                replacement_values["timeunit"] = timeunit
+            }
+            else if(index == 2){
+                var time = Math.floor(Math.random() * 100) / 10 + 1
+                var drdt = Math.floor(Math.random() * 20) / 10 + 1
+                var radius = drdt * time
+
+                var dadt = 2 * radius * drdt
+
+                replacement_values["radius"] = radius
+                replacement_values["time"] = time
+                replacement_values["dr/dt"] = drdt
+                replacement_values["dA/dt"] = dadt
+                replacement_values["lenunit"] = lenunit
+                replacement_values["timeunit"] = timeunit
+            }
+            else if(index == 3){
+                var radius = Math.floor(Math.random() * 20) + 1
+                var drdt = Math.floor(Math.random() * 100) / 100 + .01
+
+                var dvdt = 4 * radius**2 * drdt
+
+                replacement_values["radius"] = radius
+                replacement_values["dr/dt"] = drdt
+                replacement_values["dV/dt"] = dvdt
+                replacement_values["lenunit"] = lenunit
+                replacement_values["timeunit"] = timeunit
+            }
+            else if(index == 4){
+                var radius = Math.floor(Math.random() * 10) + 1
+                var dvdt = Math.floor(Math.random() * 30) / 10 + 1
+
+                var drdt = dvdt/(4 * radius**2)
+
+                replacement_values["radius"] = radius
+                replacement_values["dr/dt"] = drdt
+                replacement_values["dV/dt"] = dvdt
+                replacement_values["lenunit"] = lenunit
+                replacement_values["timeunit"] = timeunit
+            }
+            else if(index == 5){
+                var x = Math.floor(Math.random() * 10 + 1) / 10
+                var dydt = Math.floor(Math.random() * 50) / 10 + 1
+
+                var dxdt = dydt * (2*x**(1/2))
+
+                replacement_values["x"] = x
+                replacement_values["dy/dt"] = dydt
+                replacement_values["dx/dt"] = dxdt
+                replacement_values["timeunit"] = timeunit
+            }
+            else if(index == 6){
+                while(true){
+                    var geny = gen_poly_deriv(3, 1, 2, Math.floor(Math.random() * 3) + 1)
+                    var genx = gen_poly_deriv(Math.random() > .5 ? 2 : 1, 0, 1, Math.floor(Math.random() * 3) + 1)
+                    var x = Math.floor(Math.random() * 10) - 4
+                    var eqy = geny[0]
+                    var derivy = geny[1]
+                    var ineqy = eqy.replaceAll(`x`, `(${x})`)
+                    var y = eval(ineqy)
+                    var inderivy = derivy.replaceAll(`x`, `(${x})`)
+                    var dydt = eval(inderivy)
+                    if(Math.abs(y) >= 10 || Math.abs(y) <= 4){
+                        continue;
+                    }
+                    tocontinue = false
+                    for(i = -10; i <= 10; i++){
+                        if(i == x){
+                            continue
+                        }
+                        var thisy = eval(eqy.replaceAll(`x`, `(${i})`))
+                        if(thisy == y){
+                            tocontinue = true
+                            break
+                        }
+                    }
+                    if(tocontinue){
+                        continue
+                    }
+
+                    var eqx = genx[0]
+                    var ineqx = eqx.replaceAll(`x`, `(${x})`)
+                    var dxdt = eval(ineqx)
+                    if(dxdt == 0){
+                        continue
+                    }
+
+                    var ans = dydt * dxdt
+
+                    replacement_values["x"] = x
+                    replacement_values["eqx"] = eqx.replaceAll("**", "^")
+                    replacement_values["ineqx"] = ineqx.replaceAll("**", "^")
+                    replacement_values["y"] = y
+                    replacement_values["eqy"] = eqy.replaceAll("**", "^")
+                    replacement_values["derivy"] = derivy.replaceAll("**", "^")
+                    replacement_values["ineqy"] = ineqy.replaceAll("**", "^")
+                    replacement_values["inderivy"] = inderivy.replaceAll("**", "^")
+                    replacement_values["dy/dt"] = dydt
+                    replacement_values["dx/dt"] = dxdt
+                    replacement_values["ans"] = ans
+                    break
+                }
+            }
+            else if(index == 7){
+                var x = Math.floor(Math.random() * 10 + 1) * 10
+                var y = Math.floor(Math.random() * 10 + 1) * 10
+                var d = (x**2+y**2)**(1/2)
+                var dydt = Math.floor(Math.random() * 20 + 1)
+
+                var dddt = (y*dydt)/d
+
+                replacement_values["x"] = x
+                replacement_values["y"] = y
+                replacement_values["d"] = d
+                replacement_values["dy/dt"] = dydt
+                replacement_values["dd/dt"] = dddt
+                replacement_values["timeunit"] = timeunit
+                replacement_values["lenunit"] = lenunit
+            }
+            else if(index == 8){
+                var mh = Math.floor(Math.random() * 5 + 1)
+                var lh = Math.floor(Math.random() * 5 + mh + 3)
+                var dxdt = Math.floor(Math.random() * 20)/10 + 1
+                var x = Math.floor(Math.random() * 20 + 1)
+
+                var dsdt = (dxdt/lh) / ((1/mh) - (1/lh))
+
+                replacement_values["x"] = x
+                replacement_values["mh"] = mh
+                replacement_values["lh"] = lh
+                replacement_values["dx/dt"] = dxdt
+                replacement_values["ds/dt"] = dsdt
+                replacement_values["timeunit"] = timeunit
+                replacement_values["lenunit"] = lenunit
+            }
+            else if(index == 9){
+                var x = Math.floor(Math.random() * 40 + 11)
+                var y = Math.floor(Math.random() * 20 + 11)
+                var d = (x**2+y**2)**(1/2)
+                var dddt = Math.floor(Math.random() * 40 + 11)
+
+                var dxdt = (d*dddt)/x
+
+                replacement_values["x"] = x
+                replacement_values["y"] = y
+                replacement_values["d"] = d
+                replacement_values["dx/dt"] = dxdt
+                replacement_values["dd/dt"] = dddt
+                replacement_values["timeunit"] = timeunit
+                replacement_values["lenunit"] = lenunit
+            }
+            else if(index == 10){
+                var e = Math.floor(Math.random() * 10 + 1) * 10
+                var s = Math.floor(Math.random() * 10 + 1) * 10
+                var d = (e**2+s**2)**(1/2)
+                var dedt = Math.floor(Math.random() * 20 + 11)
+                var dsdt = Math.floor(Math.random() * 20 + 11)
+
+                var dddt = (e * dedt + s * dsdt) / d
+
+                replacement_values["e"] = e
+                replacement_values["s"] = s
+                replacement_values["d"] = d
+                replacement_values["de/dt"] = dedt
+                replacement_values["ds/dt"] = dsdt
+                replacement_values["dd/dt"] = dddt
+                replacement_values["timeunit"] = timeunit
+                replacement_values["lenunit"] = lenunit
+            }
+            else if(index == 11){
+                var dcdt = Math.floor(Math.random() * 10 + 1) * 10
+                var dbdt = Math.floor(Math.random() * 10 + 1) * 10
+                var t = Math.floor(Math.random() * 4 + 1) * 5
+                var c = dcdt * t * 2
+                var b = dbdt * t
+                var d = (c**2+b**2)**(1/2)
+
+                var dddt = (c * dcdt + b * dbdt) / d
+
+                replacement_values["c"] = c
+                replacement_values["b"] = b
+                replacement_values["d"] = d
+                replacement_values["t"] = t
+                replacement_values["dc/dt"] = dcdt
+                replacement_values["db/dt"] = dbdt
+                replacement_values["dd/dt"] = dddt
+                replacement_values["timeunit"] = timeunit
+                replacement_values["lenunit"] = lenunit
+            }
+        }
+        else if(problem_type == "ChainRule"){
+            if(index == 0){
+                var op = Math.floor(Math.random() * 4)
+                var outside
+                var inside
+                if(op == 0){
+                    var deg = Math.floor(Math.random() * 4 + 2)
+                    outside = `x^${deg}`
+                    out_deriv = `${deg}x^${deg - 1}`
+                }
+                else if(op == 1){
+                    var trig_funcs = ["sin", "cos", "tan", "csc", "sec", "cot", "sin^-1", "cos^-1", "tan^-1", "csc^-1", "sec^-1", "cot^-1"]
+                    var trig_derivs = ["cosx", "-sinx", "sec^2x", "-cscxcotx", "secxtanx", "-csc^2x", "1/(sqrt(1-x^2))", "-1/(sqrt(1-x^2))", "1/(1+x^2)", "-1/(abs(x)sqrt(x^2-1))", "1/(abs(x)sqrt(x^2-1))", "-1/(1+x^2)"]
+                    var trig_op = Math.floor(Math.random() * 12)
+                    outside = `${trig_funcs[trig_op]}x`
+                    out_deriv = trig_derivs[trig_op]
+                }
+                else if(op == 2){
+                    var base = Math.floor(Math.random() * 9 + 2)
+                    var log_funcs = [`log_${base}`, `ln`]
+                    var log_derivs = [`1/(xln(${base}))`, "1/x"]
+
+                    var log_op = Math.floor(Math.random() * 2)
+                    outside = `${log_funcs[log_op]}x`
+                    out_deriv = log_derivs[log_op]
+                }
+                else if(op == 3){
+                    var base = Math.floor(Math.random() * 4 + 2)
+
+                    outside = `${base}^x`
+                    out_deriv = `${outside}ln(${base})`
+                }
+                var degree = Math.floor(Math.random() * 2 + 2)
+                var in_vals = gen_poly_deriv(degree=degree, min_exp=0)
+                inside = in_vals[0].replaceAll("**", "^").replaceAll("*x", "x")
+                in_deriv = in_vals[1].replaceAll("**", "^").replaceAll("*x", "x")
+                var eq = outside.replaceAll("x", `(${inside})`).replaceAll("**", "^").replaceAll("*x", "x")
+                var deriv = `${out_deriv.replaceAll("x", `(${inside})`)}*(${in_deriv})`.replaceAll("**", "^").replaceAll("*x", "x")
+
+                console.log(eq)
+
+                replacement_values["out_deriv"] = out_deriv
+                replacement_values["in_deriv"] = in_deriv
+                replacement_values["outside"] = outside
+                replacement_values["inside"] = inside
+                replacement_values["eq"] = eq
+                replacement_values["deriv"] = deriv
+            }
+        }
+        else if(problem_type == "ImplicitDifferentiation"){
+            if(index == 0){
+                var termsLeftCount = Math.max(Math.floor(Math.random() * 6) - 2, 1)
+                var termsRightCount = Math.max(Math.floor(Math.random() * 6) - 2, 1)
+
+                var termsLeft = []
+                var termsRight = []
+                var derivsLeft = []
+                var derivsRight = []
+
+                var yChance = 1
+
+                for(i = 0; i < termsLeftCount; i++){
+                    var constant = Math.floor(Math.random() * 5 + 1)
+                    var xpow = termsLeftCount - i + 1
+                    var ypow = 0
+                    if(Math.floor(Math.random() * yChance) == 0){
+                        ypow = Math.max(Math.floor(Math.random() * 3) + 1)
+                        yChance++
+                    } else {
+                        ypow = 0
+                    }
+                    termsLeft.push(`${constant}x^${xpow}y^${ypow}`)
+                    derivsLeft.push(`${xpow * constant}x^${xpow-1}y^${ypow}`, `${constant*ypow}x^${xpow}y^${ypow - 1}y'`)
+                }
+                for(i = 0; i < termsRightCount; i++){
+                    var constant = Math.floor(Math.random() * 5 + 1)
+                    var xpow = termsRightCount - i + 1
+                    var ypow = 0
+                    if(Math.floor(Math.random() * yChance) == 0){
+                        ypow = Math.max(Math.floor(Math.random() * 3) + 1)
+                        yChance++
+                    } else {
+                        ypow = 0
+                    }
+                    termsRight.push(`${constant}x^${xpow}y^${ypow}`)
+                    derivsRight.push(`${xpow * constant**2}x^${xpow-1}y^${ypow}`, `${constant**2*ypow}x^${xpow}y^${ypow - 1}y'`)
+                }
+                
+            }
+            var left_str = ""
+            var right_str = ""
+            for(term of termsLeft){
+                term = term.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                if(!term.includes("0"))
+                    left_str += `+${term}`
+            }
+            for(term of termsRight){
+                term = term.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                if(!term.includes("0"))
+                    right_str += `+${term}`
+            }
+            left_str = left_str.substring(1)
+            right_str = right_str.substring(1)
+            replacement_values["termsLeft"] = left_str
+            replacement_values["termsRight"] = right_str
+            left_str = ""
+            right_str = ""
+            movedLeft = ""
+            movedRight = ""
+            for(deriv of derivsLeft){
+                console.log(deriv)
+                deriv = deriv.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                if(deriv.includes("0")){
+                    continue
+                }
+                left_str += `+${deriv}`
+                if(deriv.includes("y'")){
+                    movedLeft += `+${deriv}`
+                } else {
+                    movedRight += `-(${deriv})`
+                }
+            }
+            for(deriv of derivsRight){
+                console.log(deriv)
+                deriv = deriv.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                if(deriv.includes("0")){
+                    continue
+                }
+                right_str += `+${deriv}`
+                if(deriv.includes("y'")){
+                    movedLeft += `-(${deriv})`
+                } else {
+                    movedRight += `+${deriv}`
+                }
+            }
+            if(left_str.startsWith("+")){
+                left_str = left_str.substring(1)
+            }
+            if(right_str.startsWith("+")){
+                right_str = right_str.substring(1)
+            }
+            if(movedLeft.startsWith("+")){
+                movedLeft = movedLeft.substring(1)
+            }
+            if(movedRight.startsWith("+")){
+                movedRight = movedRight.substring(1)
+            }
+            replacement_values["derivsLeft"] = left_str
+            replacement_values["derivsRight"] = right_str
+            replacement_values["movedLeft"] = movedLeft
+            replacement_values["movedRight"] = movedRight
+
+            var deriv = `(${movedRight})/(${movedLeft.replaceAll("y'", "")})`
+            replacement_values["deriv"] = deriv
+        }
+    }
+    else if(cur_selected_subject == "AdvancedMath"){
+        if(problem_type == "Laws" || problem_type == "AOBT"){
+            var a1 = ""
+            var b1 = ""
+            var c1 = ""
+            var A1 = ""
+            var B1 = ""
+            var C1 = ""
+
+            var a2 = ""
+            var b2 = ""
+            var c2 = ""
+            var A2 = ""
+            var B2 = ""
+            var C2 = ""
+
+            var a3 = ""
+            var b3 = ""
+            var c3 = ""
+            var A3 = ""
+            var B3 = ""
+            var C3 = ""
+
+            var side1 = ""
+            var angle1 = ""
+            var angle2 = ""
+            var angle3 = ""
+            var side2 = ""
+            var side3 = ""
+            var angle2v2 = ""
+            var angle3v2 = ""
+            var side3v2 = ""
+
+            var si1 = ""
+            var an1 = ""
+            var an2 = ""
+            var an3 = ""
+            var si2 = ""
+            var si3 = ""
+
+            var shows1 = false
+            var shows2 = false
+            var shows3 = false
+            var showa1 = false
+            var showa2 = false
+            var showa3 = false
+            if(problem_type == "Laws"){
+                if(index == 0){
+                    shows1 = true
+                    showa1 = true
+                    showa2 = true
+                    side1 = Math.floor(Math.random() * 15 + 1)
+                    angle1 = Math.floor(Math.random() * 90 + 21)
+                    angle2 = Math.floor(Math.random() * (140 - angle1) + 21)
+                    angle3 = 180 - angle1 - angle2
+                    side2 = (side1 * Math.sin(angle2 * deg2rad)/Math.sin(angle1 * deg2rad))
+                    side3 = (side1 * Math.sin(angle3 * deg2rad)/Math.sin(angle1 * deg2rad))
+                }
+                else if(index == 1){
+                    shows1 = true
+                    showa1 = true
+                    shows2 = true
+                    side2 = Math.floor(Math.random() * 9 + 1)
+                    side1 = Math.floor(Math.random() * (13 - side2) + 1) + side2 + 1
+                    angle1 = Math.floor(Math.random() * 90 + 21)
+                    angle2 = Math.asin(side2 * Math.sin(angle1 * deg2rad) / side1) * rad2deg
+                    angle3 = 180 - angle1 - angle2
+                    side3 = (side1 * Math.sin(angle3 * deg2rad)/Math.sin(angle1 * deg2rad))
+                } 
+                else if(index == 2){
+                    shows1 = true
+                    showa1 = true
+                    shows2 = true
+                    angle1 = Math.floor(Math.random() * 50 + 21)
+                    side2 = Math.floor(Math.random() * 9 + 6)
+                    var height = side2 * Math.sin(angle1 * deg2rad)
+                    side1 = Math.floor(height * .75)
+                    replacement_values["h"] = height
+                }
+                else if(index == 3){
+                    shows1 = true
+                    showa1 = true
+                    shows2 = true
+                    angle1 = Math.floor(Math.random() * 50 + 21)
+                    side2 = Math.floor(Math.random() * 9 + 6)
+                    var height = side2 * Math.sin(angle1 * deg2rad)
+                    side1 = Math.floor(Math.random() * (side2 - height) * .8) + height + 1
+
+                    angle2 = Math.asin(side2 * Math.sin(angle1 * deg2rad) / side1) * rad2deg
+                    angle3 = 180 - angle1 - angle2
+                    side3 = (side1 * Math.sin(angle3 * deg2rad)/Math.sin(angle1 * deg2rad))
+
+                    angle2v2 = 180 - angle2
+                    angle3v2 = 180 - angle1 - angle2v2
+                    side3v2 = (side1 * Math.sin(angle3v2 * deg2rad)/Math.sin(angle1 * deg2rad))
+
+                    replacement_values["h"] = height
+                }
+                else if(index == 4){
+                    shows1 = true
+                    shows2 = true
+                    showa3 = true
+                    side1 = Math.floor(Math.random() * 15 + 1)
+                    side2 = Math.floor(Math.random() * 15 + 1)
+                    angle3 = Math.floor(Math.random() * 100 + 21)
+
+                    side3 = (side1**2+side2**2-2 * (side1) * (side2) * Math.cos(angle3 * deg2rad))**(1/2)
+                    angle2 = Math.asin(side2 * Math.sin(angle3 * deg2rad) / side3) * rad2deg
+                    angle1 = 180 - angle2 - angle3
+                }
+                else if(index == 5){
+                    shows1 = true
+                    shows2 = true
+                    shows3 = true
+                    side1 = Math.floor(Math.random() * 12 + 1)
+                    side2 = Math.floor(Math.random() * (Math.floor(side1 / 2.5)) + 1) + side1
+                    side3 = Math.floor(Math.random() * (Math.floor(side1 / 2.5)) + 1) + side2
+                    angle3 = Math.acos((-1 * (side3)**2+side1**2+side2**2)/(2 * side1 * side2)) * rad2deg
+                    angle2 = Math.asin(side2 * Math.sin(angle3 * deg2rad) / side3) * rad2deg
+                    angle1 = 180 - angle2 - angle3
+                }
+            }
+            else if(problem_type == "AOBT") {
+                if(index == 0){
+                    shows1 = true
+                    shows2 = true
+                    showa3 = true
+                    side1 = Math.floor(Math.random() * 15 + 1)
+                    side2 = Math.floor(Math.random() * 15 + 1)
+                    angle3 = Math.floor(Math.random() * 100 + 21)
+
+                    var area = side1 * side2 * Math.sin(angle3 * deg2rad)/2
+                    replacement_values["A"] = area
+                }
+                else if(index == 1){
+                    shows1 = true
+                    shows2 = true
+                    shows3 = true
+                    side1 = Math.floor(Math.random() * 12 + 1)
+                    side2 = Math.floor(Math.random() * 12 + 1)
+                    side3 = Math.floor(Math.random() * (12 - Math.abs(side1 - side2)/2) + 1)
+                    var s = (side1 + side2 + side3)/2
+                    var area = s * (s - side1) * (s - side2) * (s - side3)
+                    replacement_values["A"] = area
+                    replacement_values["s"] = s
+                }
+            }
+            var rand = Math.floor(Math.random() * 3)
+            switch (rand){
+                case 0:
+                    if(shows1)
+                        a1 = side1
+                    a2 = side1
+                    a3 = side1
+                    if(showa1)
+                        A1 = angle1
+                    A2 = angle1
+                    A3 = angle1
+                    if(showa2)
+                        B1 = angle2
+                    B2 = angle2
+                    B3 = angle2v2
+                    if(shows2)
+                        b1 = side2
+                    b2 = side2
+                    b3 = side2
+                    if(shows3)
+                        c1 = side3
+                    c2 = side3
+                    c3 = side3v2
+                    if(showa3)
+                        C1 = angle3
+                    C2 = angle3
+                    C3 = angle3v2
+                    si1 = "a"
+                    si2 = "b"
+                    si3 = "c"
+                    an1 = "A"
+                    an2 = "B"
+                    an3 = "C"
+                    break
+                case 1:
+                    if(shows1)
+                        b1 = side1
+                    b2 = side1
+                    b3 = side1
+                    if(showa1)
+                        B1 = angle1
+                    B2 = angle1
+                    B3 = angle1
+                    if(showa2)
+                        C1 = angle2
+                    C2 = angle2
+                    C3 = angle2v2
+                    if(shows2)
+                        c1 = side2
+                    c2 = side2
+                    c3 = side2
+                    if(shows3)
+                        a1 = side3
+                    a2 = side3
+                    a3 = side3v2
+                    if(showa3)
+                        A1 = angle3
+                    A2 = angle3
+                    A3 = angle3v2
+                    si1 = "b"
+                    si2 = "c"
+                    si3 = "a"
+                    an1 = "B"
+                    an2 = "C"
+                    an3 = "A"
+                    break
+                case 2:
+                    if(shows1)
+                        c1 = side1
+                    c2 = side1
+                    c3 = side1
+                    if(showa1)
+                        C1 = angle1
+                    C2 = angle1
+                    C3 = angle1
+                    if(showa2)
+                        A1 = angle2
+                    A2 = angle2
+                    A3 = angle2v2
+                    if(shows2)
+                        a1 = side2
+                    a2 = side2
+                    a3 = side2
+                    if(shows3)
+                        b1 = side3
+                    b2 = side3
+                    b3 = side3v2
+                    if(showa3)
+                        B1 = angle3
+                    B2 = angle3
+                    B3 = angle3v2
+                    si1 = "c"
+                    si2 = "a"
+                    si3 = "b"
+                    an1 = "C"
+                    an2 = "A"
+                    an3 = "B"
+                    break
+            }
+            replacement_values["A1"] = A1
+            replacement_values["B1"] = B1
+            replacement_values["C1"] = C1
+            replacement_values["a1"] = a1
+            replacement_values["b1"] = b1
+            replacement_values["c1"] = c1
+
+            replacement_values["A2"] = A2
+            replacement_values["B2"] = B2
+            replacement_values["C2"] = C2
+            replacement_values["a2"] = a2
+            replacement_values["b2"] = b2
+            replacement_values["c2"] = c2
+
+            replacement_values["A3"] = A3
+            replacement_values["B3"] = B3
+            replacement_values["C3"] = C3
+            replacement_values["a3"] = a3
+            replacement_values["b3"] = b3
+            replacement_values["c3"] = c3
+
+            replacement_values["si1"] = si1
+            replacement_values["si2"] = si2
+            replacement_values["si3"] = si3
+            replacement_values["an1"] = an1
+            replacement_values["an2"] = an2
+            replacement_values["an3"] = an3
+
+            replacement_values["s1v"] = side1
+            replacement_values["s2v"] = side2
+            replacement_values["s3v"] = side3
+            replacement_values["a1v"] = angle1
+            replacement_values["a2v"] = angle2
+            replacement_values["a3v"] = angle3
+            replacement_values["a2v2"] = angle2
+            replacement_values["a3v2"] = angle3
+            replacement_values["s3v2"] = side3
+        }
+        else if(problem_type == "Vectors"){
+            if(index == 0){
+                var x1 = Math.floor(Math.random() * 20 + 1) - 10
+                var y1 = Math.floor(Math.random() * 20 + 1) - 10
+                var x2 = Math.floor(Math.random() * 20 + 1) - 10
+                var y2 = Math.floor(Math.random() * 20 + 1) - 10
+
+                var x3 = x2 - x1
+                var y3 = y2 - y1
+
+                replacement_values["x1"] = x1
+                replacement_values["y1"] = y1
+                replacement_values["x2"] = x2
+                replacement_values["y2"] = y2
+                replacement_values["x3"] = x3
+                replacement_values["y3"] = y3
+            }
+            else if(index == 1){
+                var x1 = Math.floor(Math.random() * 20 + 1) - 10
+                var y1 = Math.floor(Math.random() * 20 + 1) - 10
+                var x2 = Math.floor(Math.random() * 20 + 1) - 10
+                var y2 = Math.floor(Math.random() * 20 + 1) - 10
+
+                var sign = Math.random() > .5 ? "+" : "-"
+
+                var x3 = sign == "+" ? x1 + x2 : x1 - x2
+                var y3 = sign == "+" ? y1 + y2 : y1 - y2
+
+                var magnitude = (x3**2+y3**2)**(1/2)
+                var theta = Math.atan2(y3, x3) * rad2deg
+                if(theta < 0){
+                    theta += 360
+                }
+
+                replacement_values["x1"] = x1
+                replacement_values["y1"] = y1
+                replacement_values["x2"] = x2
+                replacement_values["y2"] = y2
+                replacement_values["x3"] = x3
+                replacement_values["y3"] = y3
+                replacement_values["sign"] = sign
+                replacement_values["magnitude"] = magnitude
+                replacement_values["theta"] = theta
+            }
+            else if(index == 2){
+                var px1 = Math.floor(Math.random() * 20 + 1) - 10
+                var py1 = Math.floor(Math.random() * 20 + 1) - 10
+                var px2 = Math.floor(Math.random() * 20 + 1) - 10
+                var py2 = Math.floor(Math.random() * 20 + 1) - 10
+
+                var scal1 = Math.floor(Math.random() * 8 + 2) * (Math.random() > .5 ? 1 : -1)
+                var scal2 = Math.floor(Math.random() * 8 + 2)
+
+                var x1 = px1 * scal1
+                var y1 = py1 * scal1
+                var x2 = px2 * scal2
+                var y2 = py2 * scal2
+
+                var sign = Math.random() > .5 ? "+" : "-"
+
+                var x3 = sign == "+" ? x1 + x2 : x1 - x2
+                var y3 = sign == "+" ? y1 + y2 : y1 - y2
+
+                var magnitude = (x3**2+y3**2)**(1/2)
+                var theta = Math.atan2(y3, x3) * rad2deg
+                if(theta < 0){
+                    theta += 360
+                }
+
+                replacement_values["x1"] = x1
+                replacement_values["y1"] = y1
+                replacement_values["x2"] = x2
+                replacement_values["y2"] = y2
+                replacement_values["px1"] = px1
+                replacement_values["py1"] = py1
+                replacement_values["px2"] = px2
+                replacement_values["py2"] = py2
+                replacement_values["x3"] = x3
+                replacement_values["y3"] = y3
+                replacement_values["scal1"] = scal1
+                replacement_values["scal2"] = scal2
+                replacement_values["sign"] = sign
+                replacement_values["magnitude"] = magnitude
+                replacement_values["theta"] = theta
+            }
+            else if(index == 3){
+                var x1 = Math.floor(Math.random() * 20 + 1) - 10
+                var y1 = Math.floor(Math.random() * 20 + 1) - 10
+
+                var magnitude = (x1**2+y1**2)**(1/2)
+
+                var x2 = x1 / magnitude
+                var y2 = y1 / magnitude
+
+                replacement_values["x1"] = x1
+                replacement_values["y1"] = y1
+                replacement_values["x2"] = x2
+                replacement_values["y2"] = y2
+                replacement_values["magnitude"] = magnitude
+            }
+            else if(index == 4){
+                var magnitude = Math.floor(Math.random() * 20 + 1)
+                var angle = Math.floor(Math.random() * 50 + 21)
+
+                var x1 = magnitude * Math.cos(angle * deg2rad)
+                var y1 = magnitude * Math.sin(angle * deg2rad)
+
+                replacement_values["x1"] = x1
+                replacement_values["y1"] = y1
+                replacement_values["magnitude"] = magnitude
+                replacement_values["angle"] = angle
+            }
+            else if(index == 5){
+                var x1 = Math.floor(Math.random() * 20 + 1) - 10
+                var y1 = Math.floor(Math.random() * 20 + 1) - 10
+                var x2 = Math.floor(Math.random() * 20 + 1) - 10
+                var y2 = Math.floor(Math.random() * 20 + 1) - 10
+
+                var dot = (x1 * x2) + (y1 * y2)
+                replacement_values["x1"] = x1
+                replacement_values["y1"] = y1
+                replacement_values["x2"] = x2
+                replacement_values["y2"] = y2
+                replacement_values["dot"] = dot
+            }
+        }
+        else if(problem_type == "Imaginary"){
+            if(index == 0){
+                var a = Math.floor(Math.random() * 18 + 3) * (Math.random() > .5 ? 1 : -1)
+                var b = Math.floor(Math.random() * 18 + 3) * (Math.random() > .5 ? 1 : -1)
+
+                var r = (a**2+b**2)**(1/2)
+                var angle = Math.atan2(b, a) * rad2deg
+
+                if(angle < 0){
+                    angle += 360
+                }
+
+                var sign = b > 0 ? "+" : ""
+
+                replacement_values["a"] = a
+                replacement_values["b"] = b
+                replacement_values["r"] = r
+                replacement_values["angle"] = angle
+                replacement_values["sign"] = sign
+            }
+            else if(index == 1){
+                var r = Math.floor(Math.random() * 18 + 3)
+                var angle = Math.floor(Math.random() * 360)
+
+                var a = r * Math.cos(angle * rad2deg)
+                var b = r * Math.sin(angle * rad2deg)
+
+                var sign = b > 0 ? "+" : ""
+
+                replacement_values["a"] = a
+                replacement_values["b"] = b
+                replacement_values["r"] = r
+                replacement_values["angle"] = angle
+                replacement_values["sign"] = sign
+            }
+            else if(index == 2){
+                var a1 = Math.floor(Math.random() * 8 + 3) * (Math.random() > .5 ? 1 : -1)
+                var b1 = Math.floor(Math.random() * 8 + 3) * (Math.random() > .5 ? 1 : -1)
+                var a2 = Math.floor(Math.random() * 8 + 3) * (Math.random() > .5 ? 1 : -1)
+                var b2 = Math.floor(Math.random() * 8 + 3) * (Math.random() > .5 ? 1 : -1)
+                var sign1 = b1 > 0 ? "+" : ""
+                var sign2 = b2 > 0 ? "+" : ""
+
+                var f = a1 * a2
+                var o = a1 * b2
+                var i = b1 * a2
+                var l = b1 * b2
+
+                var a3 = f - l
+                var b3 = o + i
+                var sign3 = b3 >= 0 ? "+" : ""
+
+                replacement_values["a1"] = a1
+                replacement_values["b1"] = b1
+                replacement_values["sign1"] = sign1
+                replacement_values["a2"] = a2
+                replacement_values["b2"] = b2
+                replacement_values["sign2"] = sign2
+                replacement_values["a3"] = a3
+                replacement_values["b3"] = b3
+                replacement_values["sign3"] = sign3
+                replacement_values["f"] = f
+                replacement_values["o"] = o
+                replacement_values["i"] = i
+                replacement_values["l"] = l
+            }
+            else if(index == 3){
+                var r1 = Math.floor(Math.random() * 18 + 3) * (Math.random() > .5 ? 1 : -1)
+                var r2 = Math.floor(Math.random() * 18 + 3) * (Math.random() > .5 ? 1 : -1)
+                var angle1 = Math.floor(Math.random() * 360)
+                var angle2 = Math.floor(Math.random() * 360)
+
+                var r3 = r1 * r2
+                var angle3 = angle1 + angle2
+                if(angle3 >= 360){
+                    angle3 -= 360
+                }
+                else if(angle3 < 0){
+                    angle3 += 360
+                }
+
+                replacement_values["r1"] = r1
+                replacement_values["r2"] = r2
+                replacement_values["r3"] = r3
+                replacement_values["angle1"] = angle1
+                replacement_values["angle2"] = angle2
+                replacement_values["angle3"] = angle3
+            }
+        }
+    }
+    inner = ""
+    for(var line of problem.Problem){
+        inner += `${line}<br>`
+    }
+    problem_display.innerHTML = replace_values(inner, replacement_values)
+
+    inner = ""
+    for(var line of problem.Answer){
+        inner += `${line}<br>`
+    }
+    problem_answer.innerHTML = replace_values(inner, replacement_values)
+
+    inner = ""
+    for(var line of problem.Explanation){
+        inner += `${line}<br>`
+    }
+    problem_explanation.innerHTML = replace_values(inner, replacement_values)
+
+    MathJax.typeset()
+}
+
+async function begin(){
+    select_menu(problem_set + category, "problems")
+
+    elements = document.getElementsByClassName(problem_set + category)
+    all = false
+    problems_json_files = {}
+    for(el of elements){
+        if(el.value == "All" && el.checked){
+            all = true
+        }
+        else if(el.checked || all){
+            problem_types_selected.push(el.value)
+            problems_json_files[el.value] = await load_json(problem_set, el.value)
+        }
+    }
+
+    generate_problem()
+}
+
+function draw_graph(xaxis, yaxis, funcs){
+    data = []
+    for(func of funcs){
+        data.push({
+            fn: func,
+            color: '#0071e3',
+            graphType: 'polyline'
+        })
+    }
+
+    var container = document.querySelector("#graph")
+
+    functionPlot({
+        target: '#graph',
+        width: container.clientWidth,
+        height: container.clientWidth,
+        grid: true,
+        xAxis: xaxis,
+        yAxis: yaxis,
+        data: data
+    })
+}
+function draw_picture(xaxis, yaxis, points){
+    var container = document.querySelector("#picture")
+
+    functionPlot({
+        target: "#picture",
+        width: container.clientWidth,
+        height: container.clientHeight,
+        grid: false,
+        xAxis:xaxis,
+        yAxis:yaxis,
+        data: [
+            {
+                points: points,
+                fnType: 'points',
+                graphType: 'polyline'
+            }
+        ]
+    })
+}
+function draw_vectors(xaxis, yaxis, vectors){
+    var container = document.querySelector("#vectors")
+
+    var data = []
+    vectors.forEach(vector => {
+        data.push({
+            vector: [vector[2], vector[3]],
+            offset: [vector[0], vector[1]],
+            graphType: 'polyline',
+            fnType: 'vector'
+        })
+    })
+
+    functionPlot({
+        target: "#vectors",
+        width: container.clientWidth,
+        height: container.clientHeight,
+        grid: false,
+        xAxis:xaxis,
+        yAxis:yaxis,
+        data: data
+    })
+}
+function draw_triangle(id, A, B, C, a, b, c){
+    var container = document.querySelector("#" + id)
+
+    functionPlot({
+        target: "#" + id,
+        width: container.clientWidth,
+        height: container.clientHeight,
+        grid: false,
+        xAxis:{domain: [-1, 4]},
+        yAxis:{domain: [-1, 4]},
+        data: [
+            {
+                points: [[0, 0], [3, 0], [1.5, 3], [0, 0]],
+                fnType: 'points',
+                graphType: 'polyline'
+            },
+            {
+                graphType: 'text',
+                location: [-.1, -.1],
+                text: 'A'
+            },
+            {
+                graphType: 'text',
+                location: [3.1, -.1],
+                text: 'B'
+            },
+            {
+                graphType: 'text',
+                location: [1.5, 3.1],
+                text: 'C'
+            },
+            {
+                graphType: 'text',
+                location: [.15, .1],
+                text: A
+            },
+            {
+                graphType: 'text',
+                location: [2.7, .1],
+                text: B
+            },
+            {
+                graphType: 'text',
+                location: [1.4, 2.8],
+                text: C
+            },
+            {
+                graphType: 'text',
+                location: [2.3, 1.6],
+                text: a
+            },
+            {
+                graphType: 'text',
+                location: [.6, 1.6],
+                text: b
+            },
+            {
+                graphType: 'text',
+                location: [1.4, -.2],
+                text: c
+            }
+        ]
+    })
+}
+function reset(){
+    problem_answer.innerHTML = ""
+    problem_explanation.innerHTML = ""
+    problem_display.innerHTML = ""
+
+    document.getElementById("problems").hidden = true
+    document.getElementById("answer_div").hidden = true
+    problem_explanation.hidden = true
+
+    Object.entries(problem_sets).forEach(set => {
+        Object.entries(set[1]).forEach(category => {
+            if(category[0] != "rounding"){
+                document.getElementById(set[0] + category[0]).hidden = true
+            }
+        })
+        document.getElementById(set[0]).hidden = true
+    })
+}
+
+async function load_json(subject, problem_set) {
+    const problems_file = await fetch(`./Random/${subject}/${problem_set}.json`)
+    return await problems_file.json()
+}
+function replace_values(input, value_dict){
+    Object.entries(value_dict).forEach(value => {
+        if(typeof(value[1]) == "number"){
+            value[1] = Math.round(value[1] * 10**cur_rounding) / 10**cur_rounding
+        }
+        input = input.replaceAll(`%${value[0]}%`, value[1].toString())
+    })
+    return input
+}

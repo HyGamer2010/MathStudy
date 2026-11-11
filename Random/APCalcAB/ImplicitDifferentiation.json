@@ -1,0 +1,22 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "Find the derivative of `%termsLeft%=%termsRight%`"
+            ],
+            "Answer": [
+                "`y'=%deriv%`"
+            ],
+            "Explanation": [
+                "`%termsLeft%=%termsRight%`",
+                "Take the derivative of both side (Remember to do chain rule for any `y'`s)",
+                "`d/dx[%termsLeft%]=d/dx[%termsRight%]`",
+                "`%derivsLeft%=%derivsRight%`",
+                "Move everything with `y'`'s to one side and everything else to the other.",
+                "`%movedLeft%=%movedRight%`",
+                "Use GCF to take a y' out and divide both sides by what is left",
+                "`y'=%deriv%`"
+            ]
+        }
+    ]
+}

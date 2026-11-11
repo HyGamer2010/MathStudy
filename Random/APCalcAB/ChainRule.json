@@ -8,10 +8,14 @@
                 "`%deriv%`"
             ],
             "Explanation": [
-                "The outside function = `%outside%`",
-                "`d/dx[%outside%] = %out_deriv%`",
-                "The inside function = `%inside%`",
-                "`d/dx[%inside%] = %in_deriv%`",
+                "Formula for chain rule: `d/dx[f(u)] = f'(u) * u'`",
+                "Outside function: `f(x)`",
+                "inside function: `u`",
+                "`f(x) = %outside%`",
+                "`f'(x) = %out_deriv%`",
+                "`u = %inside%`",
+                "`u' = %in_deriv%`",
+                "Plugging into chain rule:",
                 "`d/dx[%eq%] = %deriv%`"
             ]
         }
