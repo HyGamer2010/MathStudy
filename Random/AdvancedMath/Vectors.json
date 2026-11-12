@@ -12,7 +12,7 @@
             "Explanation": [
                 "`< (%x2%) - (%x1%),(%y2%) - (%y1%) >`",
                 "`< %x3%,%y3% >`",
-                "<div id='vectors'></div>",
+                "<div id='vectors' class='graph'></div>",
                 "<button onclick='draw_vectors(`vectors`, { domain: [-10, 10] }, { domain: [-10, 10] }, [[%x1%, %y1%, %x3%, %y3%]])'>Show picture</button>"
             ]
         },
@@ -31,7 +31,7 @@
             "Explanation": [
                 "`vec r = < (%x1%) %sign% (%x2%),(%y1%) %sign% (%y2%) >`",
                 "`vec r = < %x3%,%y3% >`",
-                "<div id='vectors'></div>",
+                "<div id='vectors' class='graph'></div>",
                 "<button onclick='draw_vectors(`vectors`, { domain: [-10, 10] }, { domain: [-10, 10] }, [[0, 0, %x3%, %y3%]])'>Show picture</button>",
                 "<span class='sep'>a)</span>",
                 "`||vec r|| = sqrt((%x3%)^2 + (%y3%)^2)`",
@@ -59,7 +59,7 @@
                 "`%scal2%vec v = < %x2%,%y2% > `",
                 "`vec r = < (%x1%) %sign% (%x2%),(%y1%) %sign% (%y2%) >`",
                 "`vec r = < %x3%,%y3% >`",
-                "<div id='vectors'></div>",
+                "<div id='vectors' class='graph'></div>",
                 "<button onclick='draw_vectors(`vectors`, { domain: [-10, 10] }, { domain: [-10, 10] }, [[0, 0, %x3%, %y3%]])'>Show picture</button>",
                 "<span class='sep'>a)</span>",
                 "`||vec r|| = sqrt((%x3%)^2 + (%y3%)^2)`",
@@ -82,7 +82,7 @@
                 "`||vec u|| = %magnitude%`",
                 "Unit vector = ` < %x1%/%magnitude% , %y1%/%magnitude% > `",
                 "Unit vector = ` < %x2% , %y2% > `",
-                "<div id='vectors'></div>",
+                "<div id='vectors' class='graph'></div>",
                 "<button onclick='draw_vectors(`vectors`, { domain: [-10, 10] }, { domain: [-10, 10] }, [[0, 0, %x2%, %y2%]])'>Show picture</button>"
             ]
         },

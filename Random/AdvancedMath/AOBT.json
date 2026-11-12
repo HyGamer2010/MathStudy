@@ -2,7 +2,7 @@
     "Types": [
         {
             "Problem": [
-                "<div id='triangle1'></div>",
+                "<div id='triangle1' class='graph'></div>",
                 "<button onclick='draw_triangle(`triangle1`, `%A1%`, `%B1%`, `%C1%`, `%a1%`, `%b1%`, `%c1%`)'>Show picture</button>",
                 "Note: picture not drawn to scale<br>",
                 "Find the area of the triangle"
@@ -20,7 +20,7 @@
         },
         {
             "Problem": [
-                "<div id='triangle1'></div>",
+                "<div id='triangle1' class='graph'></div>",
                 "<button onclick='draw_triangle(`triangle1`, `%A1%`, `%B1%`, `%C1%`, `%a1%`, `%b1%`, `%c1%`)'>Show picture</button>",
                 "Note: picture not drawn to scale<br>",
                 "Find the area of the triangle"

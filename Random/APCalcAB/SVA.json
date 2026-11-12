@@ -3,17 +3,33 @@
         {
             "Problem": [
                 "`%f%(t)` is shown on this graph.",
-                "<div id='pic1'></div>",
+                "<div id='pic1' class='graph'></div>",
                 "<button onclick='draw_picture(`pic1`, { domain: [-10, 10] }, { domain: [-10, 10] }, true, %fpoints%)'>Show picture</button>",
                 "What is the graph of `%d%(t)`?"
             ],
             "Answer": [
                 "Graph of `%d%(t)`:",
-                "<div id='pic2'></div>",
+                "<div id='pic2' class='graph'></div>",
                 "<button onclick='draw_segmented(`pic2`, { domain: [-10, 10] }, { domain: [-10, 10] }, true, %dpoints%)'>Show picture</button>"
             ],
             "Explanation": [
                 "%explanation%"
+            ]
+        },
+        {
+            "Problem": [
+                "`s(t) = %s(t)%`",
+                "Across the interval (0, %end%),<br>",
+                "a) Where does it change direction?",
+                "b) What are the minimum and maximum positions on the graph?"
+            ],
+            "Answer": [
+                "a) %positions%",
+                "b) Min: `%min%`, Max: `%max`"
+            ],
+            "Explanation": [
+                "`v(t) = s'(t)`",
+                "`v(t) = %v(t)%`"
             ]
         }
     ]

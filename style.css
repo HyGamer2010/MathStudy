@@ -54,7 +54,7 @@ p#problem_explanation{
     font-size: 1.6rem;
     background-color: rgb(44, 42, 59);
 }
-#graph, #picture, #vectors, #triangle {
+.graph {
     width: 3in;
 }
 button {
@@ -119,6 +119,10 @@ pre.code{
 code {
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
+}
+.function-plot{
+    background-color: white;
+    color: black;
 }
 @media (max-width: 1000px){
     aside {

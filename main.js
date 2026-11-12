@@ -10,7 +10,7 @@ problem_sets = {
             "RelatedRates"
         ],
         "Unit5": [
-            "SVAGraph"
+            "SVA"
         ]
     },
     "AdvancedMath": {
@@ -666,7 +666,7 @@ function generate_problem(){
                 replacement_values["deriv"] = deriv
             }
         }
-        else if(problem_type == "SVAGraph"){
+        else if(problem_type == "SVA"){
             if(index == 0){
                 var points_ct = Math.floor(Math.random() * 2 + 5)
                 var dist_between_pts = 10/(points_ct - 1)
@@ -703,6 +703,41 @@ function generate_problem(){
                 replacement_values["fpoints"] = `[${pts_str.substring(1)}]`
                 replacement_values["dpoints"] = `[${deriv_str.substring(1)}]`
                 replacement_values["explanation"] = explanation
+            }
+            else if(index == 1){
+                var change_ct = Math.floor(Math.random() * 2 + 1)
+                var change_ct = 1
+                var end = Math.floor(Math.random() * 5 + (5 * change_ct) + 1)
+
+                var changes_str
+                var factors = []
+                var factors_str = ""
+
+                for(i = 0; i < change_ct; i++){
+                    var change = Math.floor(Math.random() * (4 + (4 * change_ct)) * (i + 1) / change_ct + 1)
+                    var coefficient = Math.floor(Math.random() * 3 + 1)
+                    factors.push({
+                        coefficient: coefficient,
+                        constant: change * coefficient
+                    })
+                    changes_str += `, ${change}`
+                    factors_str += `(${coefficient}t - ${change * coefficient})`
+                }
+
+                var st
+                var vt
+                if(factors.length == 1){
+                    var first = factors[0].coefficient/2
+                    st = `${Math.round(first) == first ? first : `${factors[0].coefficient}/2`}t^2-${factors[0].constant}t+${Math.floor(Math.random() * 10 + 1)}`
+                    vt = factors_str
+                } else {
+                    vt = `${factors[0].coefficient * factors[1].coefficient}t^2-${factors[0].coefficient * factors[1].constant + factors[1].coefficient * factors[0].constant}t+${factors[1].coefficient * factors[1].constant}`
+                }
+
+                replacement_values["positions"] = changes_str.substring(2)
+                replacement_values["s(t)"] = st
+                replacement_values["v(t)"] = vt
+                replacement_values["end"] = end
             }
         }
     }
