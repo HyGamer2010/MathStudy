@@ -667,6 +667,7 @@ function generate_problem(){
             }
         }
         else if(problem_type == "SVA"){
+            index = 0
             if(index == 0){
                 var points_ct = Math.floor(Math.random() * 2 + 5)
                 var dist_between_pts = 10/(points_ct - 1)
