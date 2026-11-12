@@ -114,8 +114,7 @@ function select_subject(subject){
     set_element(subject + "Header", false)
     cur_selected_subject = subject
 }
-function gen_poly_deriv(degree = Math.round(Math.random()) + 2, min_exp = 1, step = 1, first_const = 1){
-    this.degree = degree
+function gen_poly_deriv(degree, min_exp = 1, step = 1, first_const = 1){
     terms = [{
         "Constant":first_const,
         "Power":degree
@@ -223,13 +222,14 @@ function generate_problem(){
             } 
             else if(index == 1){
                 while(true){
-                    gen = gen_poly_deriv()
+                    degree = Math.round(Math.random()) + 2
+                    gen = gen_poly_deriv(Math.round(Math.random()) + 2)
                     var eq = gen[0]
                     var deriv = gen[1]
 
                     root = Math.random() < .6 ? 2 : 3
 
-                    a = Math.round(Math.random() * (12 - (degree * root**2 / 2))) + 3
+                    a = Math.floor(Math.random() * (12 - (degree * root**2 / 2)) + 3)
                     a *= Math.random() < .5 ? -1 : 1
                     
                     eq_a = eq.replaceAll("x", `(${a})`)
@@ -1199,6 +1199,7 @@ async function begin(){
     elements = document.getElementsByClassName(problem_set + category)
     all = false
     problems_json_files = {}
+    problem_types_selected = []
     for(el of elements){
         if(el.value == "All" && el.checked){
             all = true
@@ -1208,6 +1209,7 @@ async function begin(){
             problems_json_files[el.value] = await load_json(problem_set, el.value)
         }
     }
+    console.log(problems_json_files)
 
     generate_problem()
 }
