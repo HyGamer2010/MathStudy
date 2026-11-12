@@ -9,8 +9,8 @@
             ],
             "Explanation": [
                 "Formula for chain rule: `d/dx[f(u)] = f'(u) * u'`",
-                "Outside function: `f(x)`",
-                "inside function: `u`",
+                "Outside function: %highout%",
+                "inside function: `%highin%`",
                 "`f(x) = %outside%`",
                 "`f'(x) = %out_deriv%`",
                 "`u = %inside%`",

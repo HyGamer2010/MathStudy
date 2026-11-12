@@ -529,6 +529,9 @@ function generate_problem(){
                 var in_vals = gen_poly_deriv(degree=degree, min_exp=0)
                 inside = in_vals[0].replaceAll("**", "^").replaceAll("*x", "x")
                 in_deriv = in_vals[1].replaceAll("**", "^").replaceAll("*x", "x")
+                var highout = `<span class='bold'>\`${outside.replace("x", `\"(\"\`</span>\`${inside}\`<span class='bold'>\`\")\"`)}\`</span>`
+                console.log(highout)
+                var highin = outside.replace("x", `(\`<span class='bold'>\`${inside}\`</span>\`)`)
                 var eq = outside.replaceAll("x", `(${inside})`).replaceAll("**", "^").replaceAll("*x", "x")
                 var deriv = `${out_deriv.replaceAll("x", `(${inside})`)}*(${in_deriv})`.replaceAll("**", "^").replaceAll("*x", "x")
 
@@ -540,6 +543,8 @@ function generate_problem(){
                 replacement_values["inside"] = inside
                 replacement_values["eq"] = eq
                 replacement_values["deriv"] = deriv
+                replacement_values["highout"] = highout
+                replacement_values["highin"] = highin
             }
         }
         else if(problem_type == "ImplicitDifferentiation"){
@@ -554,6 +559,9 @@ function generate_problem(){
 
                 var yChance = 1
 
+                var leftbreakdown = ""
+                var rightbreakdown = ""
+
                 for(i = 0; i < termsLeftCount; i++){
                     var constant = Math.floor(Math.random() * 5 + 1)
                     var xpow = termsLeftCount - i + 1
@@ -564,8 +572,13 @@ function generate_problem(){
                     } else {
                         ypow = 0
                     }
-                    termsLeft.push(`${constant}x^${xpow}y^${ypow}`)
-                    derivsLeft.push(`${xpow * constant}x^${xpow-1}y^${ypow}`, `${constant*ypow}x^${xpow}y^${ypow - 1}y'`)
+                    var term = `${constant}x^${xpow}y^${ypow}`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                    var deriv1 = `${xpow * constant}x^${xpow-1}y^${ypow}`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                    var deriv2 = `${constant*ypow}x^${xpow}y^${ypow - 1}y'`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                    console.log(deriv1, deriv2)
+                    leftbreakdown += `<br>\`d/dx[${term}] = ${constant}(${xpow}x^${xpow-1}y^${ypow}${deriv2.includes("0") ? "" : `+${ypow}x^${xpow}y^${ypow - 1}y'`})\`<br>\`d/dx[${term}] = ${deriv1}${deriv2.includes("0") ? "" : `+${deriv2}`}\``.replaceAll("x^0", "").replaceAll("y^0", "")
+                    termsLeft.push(term)
+                    derivsLeft.push(deriv1, deriv2)
                 }
                 for(i = 0; i < termsRightCount; i++){
                     var constant = Math.floor(Math.random() * 5 + 1)
@@ -577,76 +590,82 @@ function generate_problem(){
                     } else {
                         ypow = 0
                     }
-                    termsRight.push(`${constant}x^${xpow}y^${ypow}`)
-                    derivsRight.push(`${xpow * constant**2}x^${xpow-1}y^${ypow}`, `${constant**2*ypow}x^${xpow}y^${ypow - 1}y'`)
+                    var term = `${constant}x^${xpow}y^${ypow}`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                    var deriv1 = `${xpow * constant}x^${xpow-1}y^${ypow}`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                    var deriv2 = `${constant*ypow}x^${xpow}y^${ypow - 1}y'`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                    console.log(deriv1, deriv2)
+                    rightbreakdown += `<br>\`d/dx[${term}] = ${constant}(${xpow}x^${xpow-1}y^${ypow}${deriv2.includes("0") ? "" : `+${ypow}x^${xpow}y^${ypow - 1}y'`})\`<br>\`d/dx[${term}] = ${deriv1}${deriv2.includes("0") ? "" : `+${deriv2}`}\`<br>`.replaceAll("x^0", "").replaceAll("y^0", "")
+                    termsRight.push(term)
+                    derivsRight.push(deriv1, deriv2)
                 }
-                
-            }
-            var left_str = ""
-            var right_str = ""
-            for(term of termsLeft){
-                term = term.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
-                if(!term.includes("0"))
-                    left_str += `+${term}`
-            }
-            for(term of termsRight){
-                term = term.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
-                if(!term.includes("0"))
-                    right_str += `+${term}`
-            }
-            left_str = left_str.substring(1)
-            right_str = right_str.substring(1)
-            replacement_values["termsLeft"] = left_str
-            replacement_values["termsRight"] = right_str
-            left_str = ""
-            right_str = ""
-            movedLeft = ""
-            movedRight = ""
-            for(deriv of derivsLeft){
-                console.log(deriv)
-                deriv = deriv.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
-                if(deriv.includes("0")){
-                    continue
+                replacement_values["leftbreakdown"] = leftbreakdown
+                replacement_values["rightbreakdown"] = rightbreakdown
+                var left_str = ""
+                var right_str = ""
+                for(term of termsLeft){
+                    term = term.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                    if(!term.includes("0"))
+                        left_str += `+${term}`
                 }
-                left_str += `+${deriv}`
-                if(deriv.includes("y'")){
-                    movedLeft += `+${deriv}`
-                } else {
-                    movedRight += `-(${deriv})`
+                for(term of termsRight){
+                    term = term.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                    if(!term.includes("0"))
+                        right_str += `+${term}`
                 }
-            }
-            for(deriv of derivsRight){
-                console.log(deriv)
-                deriv = deriv.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
-                if(deriv.includes("0")){
-                    continue
-                }
-                right_str += `+${deriv}`
-                if(deriv.includes("y'")){
-                    movedLeft += `-(${deriv})`
-                } else {
-                    movedRight += `+${deriv}`
-                }
-            }
-            if(left_str.startsWith("+")){
                 left_str = left_str.substring(1)
-            }
-            if(right_str.startsWith("+")){
                 right_str = right_str.substring(1)
+                replacement_values["termsLeft"] = left_str
+                replacement_values["termsRight"] = right_str
+                left_str = ""
+                right_str = ""
+                movedLeft = ""
+                movedRight = ""
+                for(deriv of derivsLeft){
+                    console.log(deriv)
+                    deriv = deriv.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                    if(deriv.includes("0")){
+                        continue
+                    }
+                    left_str += `+${deriv}`
+                    if(deriv.includes("y'")){
+                        movedLeft += `+${deriv}`
+                    } else {
+                        movedRight += `-(${deriv})`
+                    }
+                }
+                for(deriv of derivsRight){
+                    console.log(deriv)
+                    deriv = deriv.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
+                    if(deriv.includes("0")){
+                        continue
+                    }
+                    right_str += `+${deriv}`
+                    if(deriv.includes("y'")){
+                        movedLeft += `-(${deriv})`
+                    } else {
+                        movedRight += `+${deriv}`
+                    }
+                }
+                if(left_str.startsWith("+")){
+                    left_str = left_str.substring(1)
+                }
+                if(right_str.startsWith("+")){
+                    right_str = right_str.substring(1)
+                }
+                if(movedLeft.startsWith("+")){
+                    movedLeft = movedLeft.substring(1)
+                }
+                if(movedRight.startsWith("+")){
+                    movedRight = movedRight.substring(1)
+                }
+                replacement_values["derivsLeft"] = left_str
+                replacement_values["derivsRight"] = right_str
+                replacement_values["movedLeft"] = movedLeft
+                replacement_values["movedRight"] = movedRight
+    
+                var deriv = `(${movedRight})/(${movedLeft.replaceAll("y'", "")})`
+                replacement_values["deriv"] = deriv
             }
-            if(movedLeft.startsWith("+")){
-                movedLeft = movedLeft.substring(1)
-            }
-            if(movedRight.startsWith("+")){
-                movedRight = movedRight.substring(1)
-            }
-            replacement_values["derivsLeft"] = left_str
-            replacement_values["derivsRight"] = right_str
-            replacement_values["movedLeft"] = movedLeft
-            replacement_values["movedRight"] = movedRight
-
-            var deriv = `(${movedRight})/(${movedLeft.replaceAll("y'", "")})`
-            replacement_values["deriv"] = deriv
         }
     }
     else if(cur_selected_subject == "AdvancedMath"){
@@ -1166,8 +1185,12 @@ function generate_problem(){
         inner += `${line}<br>`
     }
     problem_explanation.innerHTML = replace_values(inner, replacement_values)
+    console.log(problem_explanation.innerHTML)
 
-    MathJax.typeset()
+    renderMath()
+}
+async function renderMath(){
+    await MathJax.typesetPromise()
 }
 
 async function begin(){
