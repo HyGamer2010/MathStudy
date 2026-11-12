@@ -8,6 +8,9 @@ problem_sets = {
         "Unit4": [
             "Linearization",
             "RelatedRates"
+        ],
+        "Unit5": [
+            "SVAGraph"
         ]
     },
     "AdvancedMath": {
@@ -663,6 +666,45 @@ function generate_problem(){
                 replacement_values["deriv"] = deriv
             }
         }
+        else if(problem_type == "SVAGraph"){
+            if(index == 0){
+                var points_ct = Math.floor(Math.random() * 2 + 5)
+                var dist_between_pts = 10/(points_ct - 1)
+                var pts = []
+                var derivs = []
+
+                for(i = 0; i < points_ct; i++){
+                    pts.push([i * dist_between_pts, Math.floor(Math.random() * 10 + 1) * (Math.random() > .5 ? 1 : -1)])
+                }
+
+                var pts_str = ""
+                var deriv_str = ""
+
+                for(i = 0; i < points_ct; i++){
+                    pts_str += `,[${pts[i][0]},${pts[i][1]}]`
+                    if(i < points_ct - 1){
+                        var slope = (pts[i + 1][1] - pts[i][1]) / (pts[i + 1][0] - pts[i][0])
+                        derivs.push(slope)
+                        deriv_str += `,[[${pts[i][0]},${slope}],[${pts[i+1][0]},${slope}]]`
+                    }
+                }
+
+                var explanation = ""
+                for(i = 0; i < points_ct - 1; i++){
+                    explanation += `The slope on the interval \`(${pts[i][0]},${pts[i + 1][0]})\` is \`${pts[i + 1][1] - pts[i][1]}/${pts[i + 1][0] - pts[i][0]}\` or \`${derivs[i]}\`<br>`
+                }
+
+                var op = Math.floor(Math.random() * 2)
+                var f = op == 0 ? "s" : "v"
+                var d = op == 0 ? "v" : "a"
+
+                replacement_values["f"] = f
+                replacement_values["d"] = d
+                replacement_values["fpoints"] = `[${pts_str.substring(1)}]`
+                replacement_values["dpoints"] = `[${deriv_str.substring(1)}]`
+                replacement_values["explanation"] = explanation
+            }
+        }
     }
     else if(cur_selected_subject == "AdvancedMath"){
         if(problem_type == "Laws" || problem_type == "AOBT"){
@@ -1210,7 +1252,7 @@ async function begin(){
     generate_problem()
 }
 
-function draw_graph(xaxis, yaxis, funcs){
+function draw_graph(id, xaxis, yaxis, funcs){
     data = []
     for(func of funcs){
         data.push({
@@ -1223,7 +1265,7 @@ function draw_graph(xaxis, yaxis, funcs){
     var container = document.querySelector("#graph")
 
     functionPlot({
-        target: '#graph',
+        target: "#" + id,
         width: container.clientWidth,
         height: container.clientWidth,
         grid: true,
@@ -1232,27 +1274,51 @@ function draw_graph(xaxis, yaxis, funcs){
         data: data
     })
 }
-function draw_picture(xaxis, yaxis, points){
-    var container = document.querySelector("#picture")
+function draw_picture(id, xaxis, yaxis, grid, points){
+    var container = document.querySelector("#" + id)
 
     functionPlot({
-        target: "#picture",
+        target: "#" + id,
         width: container.clientWidth,
         height: container.clientHeight,
-        grid: false,
+        grid: grid,
         xAxis:xaxis,
         yAxis:yaxis,
         data: [
             {
                 points: points,
                 fnType: 'points',
+                color: '#0071e3',
                 graphType: 'polyline'
             }
         ]
     })
 }
-function draw_vectors(xaxis, yaxis, vectors){
-    var container = document.querySelector("#vectors")
+function draw_segmented(id, xaxis, yaxis, grid, segments){
+    var container = document.querySelector("#" + id)
+
+    data = []
+    for(segment of segments){
+        data.push({
+            points: segment,
+            fnType: 'points',
+            color: '#0071e3',
+            graphType: 'polyline'
+        })
+    }
+
+    functionPlot({
+        target: "#" + id,
+        width: container.clientWidth,
+        height: container.clientHeight,
+        grid: grid,
+        xAxis:xaxis,
+        yAxis:yaxis,
+        data: data
+    })
+}
+function draw_vectors(id, xaxis, yaxis, vectors){
+    var container = document.querySelector("#" + id)
 
     var data = []
     vectors.forEach(vector => {
@@ -1265,7 +1331,7 @@ function draw_vectors(xaxis, yaxis, vectors){
     })
 
     functionPlot({
-        target: "#vectors",
+        target: "#" + id,
         width: container.clientWidth,
         height: container.clientHeight,
         grid: false,

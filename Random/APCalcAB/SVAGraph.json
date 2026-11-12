@@ -1,0 +1,20 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "`%f%(t)` is shown on this graph.",
+                "<div id='pic1'></div>",
+                "<button onclick='draw_picture(`pic1`, { domain: [-10, 10] }, { domain: [-10, 10] }, true, %fpoints%)'>Show picture</button>",
+                "What is the graph of `%d%(t)`?"
+            ],
+            "Answer": [
+                "Graph of `%d%(t)`:",
+                "<div id='pic2'></div>",
+                "<button onclick='draw_segmented(`pic2`, { domain: [-10, 10] }, { domain: [-10, 10] }, true, %dpoints%)'>Show picture</button>"
+            ],
+            "Explanation": [
+                "%explanation%"
+            ]
+        }
+    ]
+}
