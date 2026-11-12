@@ -4,6 +4,7 @@
 -Added footer for contact info(will be further modified later)
 -Added Implicit differentiation problems
 -Greatly improved explanations for implicit differentiation and chain rule problems
+-Added a page telling people how to contribute
 |11/10/2026
 -Added rounding
 -Added Area of oblique triangle, vector, and imaginary number problems to Advanced Math Unit 6

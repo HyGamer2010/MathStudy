@@ -1,9 +1,126 @@
 <!DOCTYPE html>
 <head>
     <link rel="stylesheet" href="style.css">
-    <script src="main.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    
+    <header class="title" id="MainHeader">
+        <h1>Math Study App</h1>
+    </header>
+    <!-- <div id="initial">
+        <button onclick='select_menu("initial", "APCalcAB")'>AP Calc AB</button>
+    </div> -->
+    <section>
+        <nav>
+            <button onclick='window.location.href="index.html"'>Back</button>
+        </nav>
+        <main>
+            <header class="title"><h2>How to Contribute</h2></header>
+            <pre>
+If you are interested in contributing to the website and helping add content you would find useful, there are 2 main ways to go about doing so.
+<span class="sep">1. Tell me what to add</span>
+This one is pretty simple. Simply send me an email containing 4 pieces of information:
+1. The subject
+2. The unit
+3. The topic
+4. What kinds of problems fall under the category
+
+This will allow me to input info in the format I already use for the website as seen on the main page. 
+For example:
+
+1. Advanced Math
+2. Unit 6
+3. Law of Sines and Cosines
+4. Types of problems:
+- Side/angle pair with extra side law of sines
+- Side/angle pair with extra angle law of sines
+- Ambiguous case problems
+- Side angle side law of cosines
+- Side side side law of cosines
+
+With this info, I would be able to create the problems found on the website
+<span class="sep">2. Send me a json file with problems already made in it</span>
+If you want more control over what goes onto the website, you can create a json file with the problem formats already created in it.
+
+The format for creating the json files follows this format: 
+<pre class="code"><code lang="json">
+{
+    "Types": [
+        {
+            "Problem": [
+                //Problem lines
+            ],
+            "Answer": [
+                //Answer lines
+            ],
+            "Explanation": [
+                //Explanation lines
+            ]
+        },
+        {
+            //Repeat for every problem type
+        }
+    ]
+}
+</code></pre>
+
+To see this format in action, let's take a look at a problem type found in <span class="bold">Linearization.json</span>
+<pre class="code"><code lang="json">
+{
+    "Types"  [
+        {
+            "Problem": [
+                "`f(x) = %eq%`",
+                "`a = %a%`&lt;br>",
+                "a) Find `L(x)` of `f(x)`",
+                "b) Find `L(%x%)`"
+            ],
+            "Answer":[
+                "a) `L(x) = %f(a)% + %f'(a)%(x-%a%)`",
+                "b) `%ans%`"
+            ],
+            "Explanation":[
+                "&lt;span class='sep'>a)&lt;/span>",
+                "`f(x) = %eq%`",
+                "`f'(x) = %deriv%`",
+                "We use these to find at a",
+                "`f(%a%) = %eqa%`",
+                "`f(%a%) = %f(a)%`",
+                "`f'(%a%) = %deriva%`",
+                "`f'(%a%) = %f'(a)%`",
+                "Plug into `L(x) = f(a) + f'(a)(x-a)`",
+                "`L(x) = f(%a%) + f'(%a%)(x-%a%)`",
+                "`L(x) = %f(a)% + %f'(a)%(x-%a%)`",
+                "&lt;span class='sep'>b)&lt;/span>",
+                "Plug into `L(x) = %f(a)% + %f'(a)%(x-%a%)`",
+                "`L(%x%) = %f(a)% + %f'(a)%(%x%-%a%)`",
+                "`L(%x%) = %ans%`"
+            ]
+        }
+    ]
+}
+</code></pre>
+
+As you can see in this problem type, Problem is split into 4 strings, thus meaning there are 4 lines. Same applies to the Answer and explanation parts.
+
+Everywhere where you see % signs surrounding a word/letter, that is a variable that will be randomly generated when the problem. For example, %eq% is the randomly generated equation and %deriv% is the derivative of the equation.
+
+For any of these, just explain what each variable means and which ones should be generated randomly as well as their range. For example, if you had a side length of a triangle, the desired range could be [2, 10] to make sure the numbers aren't too large.
+
+For stuff like &lt;span class='sep'>b)&lt;/span>, these are separators created by using an HTML tag. When creating the json files, you don't have to worry about typing out the proper HTML tags for things like separators, special fonts, or pictures. Just signify what they are and I will fix it when implementing it since I will be reviewing all json files before uploading them anyway.
+
+Finally, make sure you surround anything that has to do with the math behind it with graves(`). That is what tells the website what to render as math equations.
+
+If there is more nuance to it, I would probably prefer you just tell me what I should do rather than trying to create a json file in all honesty.
+
+Once you create the json file, you can then send it to me via email.
+            </pre>
+        </main>
+        <aside></aside>
+    </section>
+    <footer>
+        <div>
+            Contact me at sonict2010@gmail.com
+        </div>
+    </footer>
 </body>
