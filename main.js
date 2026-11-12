@@ -575,7 +575,6 @@ function generate_problem(){
                     var term = `${constant}x^${xpow}y^${ypow}`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
                     var deriv1 = `${xpow * constant}x^${xpow-1}y^${ypow}`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
                     var deriv2 = `${constant*ypow}x^${xpow}y^${ypow - 1}y'`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
-                    console.log(deriv1, deriv2)
                     leftbreakdown += `<br>\`d/dx[${term}] = ${constant}(${xpow}x^${xpow-1}y^${ypow}${deriv2.includes("0") ? "" : `+${ypow}x^${xpow}y^${ypow - 1}y'`})\`<br>\`d/dx[${term}] = ${deriv1}${deriv2.includes("0") ? "" : `+${deriv2}`}\``.replaceAll("x^0", "").replaceAll("y^0", "")
                     termsLeft.push(term)
                     derivsLeft.push(deriv1, deriv2)
@@ -593,7 +592,6 @@ function generate_problem(){
                     var term = `${constant}x^${xpow}y^${ypow}`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
                     var deriv1 = `${xpow * constant}x^${xpow-1}y^${ypow}`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
                     var deriv2 = `${constant*ypow}x^${xpow}y^${ypow - 1}y'`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
-                    console.log(deriv1, deriv2)
                     rightbreakdown += `<br>\`d/dx[${term}] = ${constant}(${xpow}x^${xpow-1}y^${ypow}${deriv2.includes("0") ? "" : `+${ypow}x^${xpow}y^${ypow - 1}y'`})\`<br>\`d/dx[${term}] = ${deriv1}${deriv2.includes("0") ? "" : `+${deriv2}`}\`<br>`.replaceAll("x^0", "").replaceAll("y^0", "")
                     termsRight.push(term)
                     derivsRight.push(deriv1, deriv2)
@@ -604,12 +602,12 @@ function generate_problem(){
                 var right_str = ""
                 for(term of termsLeft){
                     term = term.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
-                    if(!term.includes("0"))
+                    if(!term.startsWith("0"))
                         left_str += `+${term}`
                 }
                 for(term of termsRight){
                     term = term.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
-                    if(!term.includes("0"))
+                    if(!term.startsWith("0"))
                         right_str += `+${term}`
                 }
                 left_str = left_str.substring(1)
@@ -621,9 +619,8 @@ function generate_problem(){
                 movedLeft = ""
                 movedRight = ""
                 for(deriv of derivsLeft){
-                    console.log(deriv)
                     deriv = deriv.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
-                    if(deriv.includes("0")){
+                    if(deriv.startsWith("0")){
                         continue
                     }
                     left_str += `+${deriv}`
@@ -634,9 +631,8 @@ function generate_problem(){
                     }
                 }
                 for(deriv of derivsRight){
-                    console.log(deriv)
                     deriv = deriv.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
-                    if(deriv.includes("0")){
+                    if(deriv.startsWith("0")){
                         continue
                     }
                     right_str += `+${deriv}`
