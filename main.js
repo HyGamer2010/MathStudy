@@ -719,20 +719,30 @@ function generate_problem(){
                     }
                 }
 
+                var velo = [...derivs].sort((a, b) => b - a)[0]
+                var speed = Math.abs([...derivs].sort((a, b) => Math.abs(b) - Math.abs(a))[0])
+
+                console.log(derivs)
+                var velo_intervals = ""
+                var speed_intervals = ""
                 var explanation = ""
                 for(i = 0; i < points_ct - 1; i++){
                     explanation += `The slope on the interval \`(${pts[i][0]},${pts[i + 1][0]})\` is \`${pts[i + 1][1] - pts[i][1]}/${pts[i + 1][0] - pts[i][0]}\` or \`${derivs[i]}\`<br>`
+                    if(derivs[i] == velo){
+                        velo_intervals += `uu(${pts[i][0]},${pts[i + 1][0]})`
+                    }
+                    if(Math.abs(derivs[i]) == speed){
+                        speed_intervals += `uu(${pts[i][0]},${pts[i + 1][0]})`
+                    }
                 }
 
-                var op = Math.floor(Math.random() * 2)
-                var f = op == 0 ? "s" : "v"
-                var d = op == 0 ? "v" : "a"
-
-                replacement_values["f"] = f
-                replacement_values["d"] = d
                 replacement_values["fpoints"] = `[${pts_str.substring(1)}]`
                 replacement_values["dpoints"] = `[${deriv_str.substring(1)}]`
                 replacement_values["explanation"] = explanation
+                replacement_values["veloints"] = `\`${velo_intervals.substring(2)}\``
+                replacement_values["speedints"] = `\`${speed_intervals.substring(2)}\``
+                replacement_values["velo"] = velo
+                replacement_values["speed"] = speed
             }
             else if(index == 1){
                 var change_ct = Math.floor(Math.random() * 2 + 1)
@@ -841,6 +851,35 @@ function generate_problem(){
                 replacement_values["displacement"] = sb - sa
                 replacement_values["avg"] = (sb - sa)/(b - a)
                 replacement_values["s(t)"] = gen.replaceAll("**", "^").replaceAll("*t", "t")
+            }
+            else if(index == 3){
+                var st = ""
+                var vt = ""
+                var at = ""
+                var t = Math.floor(Math.random() * 5 + 1) * (Math.random() > .5 ? 1 : -1)
+                for(i = 3; i >= 0; i--){
+                    var coeff = Math.floor(Math.random() * 4 + 1) * (Math.random() > .5 ? 1 : -1)
+                    var vpow = i - 1
+                    var apow = vpow - 1
+                    st += `${coeff > 0 ? "+" : ""}${coeff}${i == 0 ? "" : `*t${i == 1 ? "" : `**${i}`}`}`
+                    if(vpow >= 0){
+                        vt += `${coeff > 0 ? "+" : ""}${coeff * i}${vpow == 0 ? "" : `*t${vpow == 1 ? "" : `**${vpow}`}`}`
+                    }
+                    if(apow >= 0){
+                        at += `${coeff > 0 ? "+" : ""}${coeff * i * vpow}${apow == 0 ? "" : `*t${apow == 1 ? "" : `**${apow}`}`}`
+                    }
+                }
+                var invt = vt.replaceAll("t", `(${t})`)
+                var inat = at.replaceAll("t", `(${t})`)
+    
+                replacement_values["s(t)"] = st.replaceAll("**", "^").replaceAll("*t", "t")
+                replacement_values["v(t)"] = vt.replaceAll("**", "^").replaceAll("*t", "t")
+                replacement_values["a(t)"] = at.replaceAll("**", "^").replaceAll("*t", "t")
+                replacement_values["inv(t)"] = invt.replaceAll("**", "^").replaceAll("*(", "(")
+                replacement_values["ina(t)"] = inat.replaceAll("**", "^").replaceAll("*(", "(")
+                replacement_values["t"] = t
+                replacement_values["velo"] = eval(invt)
+                replacement_values["acc"] = eval(inat)
             }
         }
     }
@@ -1342,6 +1381,29 @@ function generate_problem(){
                 replacement_values["angle2"] = angle2
                 replacement_values["angle3"] = angle3
             }
+            else if(index == 4){
+                var r1 = Math.floor(Math.random() * 4 + 2) * (Math.random() > .5 ? 1 : -1)
+                var angle1 = Math.floor(Math.random() * 360)
+                var n = Math.floor(Math.random() * 4 + 2)
+
+                var r2 = r1**n
+                var nangle1 = angle1 * n
+
+                var angle2 = nangle1
+                while(angle2 >= 360){
+                    angle2 -= 360
+                }
+                while(angle2 < 0){
+                    angle2 += 360
+                }
+
+                replacement_values["r1"] = r1
+                replacement_values["r2"] = r2
+                replacement_values["n"] = n
+                replacement_values["angle1"] = angle1
+                replacement_values["angle2"] = angle2
+                replacement_values["nangle1"] = nangle1
+            }
         }
     }
     inner = ""
@@ -1560,7 +1622,6 @@ function reset(){
     // })
     document.getElementById("topicselect").hidden = true
 }
-
 async function load_json(subject, problem_set) {
     const problems_file = await fetch(`./Random/${subject}/${problem_set}.json`)
     return await problems_file.json()

@@ -62,6 +62,22 @@
                 "`z_3 = (%r1% * %r2%)(cos(%angle1%+%angle2%)+isin(%angle1%+%angle2%))`",
                 "`z_3 = %r3%(cos(%angle3%)+isin(%angle3%))`"
             ]
+        },
+        {
+            "Problem": [
+                "`z = %r1%(cos(%angle1%)+isin(%angle1%))`",
+                "What is `z^%n%`?"
+            ],
+            "Answer": [
+                "`%r2%(cos(%angle2%)+isin(%angle2%))`"
+            ],
+            "Explanation": [
+                "Demoivre's Theorem: `r^n(cos(ntheta)+isin(ntheta))`",
+                "Plugging in: `%r1%^%n%(cos(%n% * %angle1%)+isin(%n% * %angle1%))`",
+                "`%r2%(cos(%nangle1%)+isin(%nangle1%))`",
+                "Finding the coterminal angle:",
+                "`%r2%(cos(%angle2%)+isin(%angle2%))`"
+            ]
         }
     ]
 }

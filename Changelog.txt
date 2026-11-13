@@ -2,6 +2,7 @@
 -Added Distance, velocity, and acceleration problems under AP Calc AB Unit 5
 -Reworked how the topic selection menu is created
 -Added cummulative as an option
+-Added Demoivre's theorem to Advanced Math Unit 6 Imaginary Numbers
 |11/11/2026
 -Changed how website is structured
 -Removed V1

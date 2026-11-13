@@ -2,18 +2,27 @@
     "Types": [
         {
             "Problem": [
-                "`%f%(t)` is shown on this graph.",
+                "`s(t)` is shown on this graph.",
                 "<div id='pic1' class='graph'></div>",
                 "<button onclick='draw_picture(`pic1`, { domain: [-10, 10] }, { domain: [-10, 10] }, true, %fpoints%)'>Show picture</button>",
-                "What is the graph of `%d%(t)`?"
+                "a) What is the graph of `v(t)`?",
+                "b) Where is the velocity the highest?",
+                "c) Where is the speed the highest?"
             ],
             "Answer": [
-                "Graph of `%d%(t)`:",
+                "a) Graph of `v(t)`:",
                 "<div id='pic2' class='graph'></div>",
-                "<button onclick='draw_segmented(`pic2`, { domain: [-10, 10] }, { domain: [-10, 10] }, true, %dpoints%)'>Show picture</button>"
+                "<button onclick='draw_segmented(`pic2`, { domain: [-10, 10] }, { domain: [-10, 10] }, true, %dpoints%)'>Show picture</button>",
+                "b) %veloints%",
+                "c) %speedints%"
             ],
             "Explanation": [
-                "%explanation%"
+                "<span class='sep'>a)</span>",
+                "%explanation%",
+                "<span class='sep'>b)</span>",
+                "The highest velocity is `%velo%` on the interval(s) %veloints%",
+                "<span class='sep'>c)</span>",
+                "Speed is the absolute value of velocity, so the highest speed is %speed% on the interval(s) %speedints%"
             ]
         },
         {
@@ -63,6 +72,29 @@
                 "`%s(b)% - %s(a)% = %displacement%`",
                 "<span class='sep'>b)</span>",
                 "`(%s(b)% - %s(a)%)/(%b%-%a%)=%avg%`"
+            ]
+        },
+        {
+            "Problem": [
+                "`s(t) = %s(t)%`",
+                "a) Find `v(%t%)`",
+                "b) Find `a(%t%)`"
+            ],
+            "Answer": [
+                "a) `%velo%`",
+                "b) `%acc%`"
+            ],
+            "Explanation": [
+                "<span class='sep'>a)</span>",
+                "Find the derivative of `s(t)` to find `v(t)`",
+                "`s'(t) = %v(t)%`",
+                "Plug in `%t%`",
+                "`%inv(t)% = %velo%`",
+                "<span class='sep'>b)</span>",
+                "Find the derivative of `v(t)` to find `a(t)`",
+                "`v'(t) = %a(t)%`",
+                "Plug in `%t%`",
+                "`%ina(t)% = %acc%`"
             ]
         }
     ]
