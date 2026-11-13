@@ -19,17 +19,26 @@
         {
             "Problem": [
                 "`s(t) = %s(t)%`",
-                "Across the interval (0, %end%),<br>",
+                "Across the interval (%start%, %end%),<br>",
                 "a) Where does it change direction?",
                 "b) What are the minimum and maximum positions on the graph?"
             ],
             "Answer": [
-                "a) %positions%",
-                "b) Min: `%min%`, Max: `%max`"
+                "a) `t=%positions%`",
+                "b) Min: `%min%`, Max: `%max%`"
             ],
             "Explanation": [
                 "`v(t) = s'(t)`",
-                "`v(t) = %v(t)%`"
+                "`v(t) = %v(t)%`",
+                "<span class='sep'>a)</span>",
+                "To see where it changes direction, we set `v(t) = 0`",
+                "`%v(t)%=0`",
+                "Factor `v(t)`",
+                "`%factors%` = 0",
+                "`t=%positions%`",
+                "<span class='sep'>b)</span>",
+                "Check `s(t)` at `t = %start%, %positions%, %end%`",
+                "%distcalcs%"
             ]
         }
     ]

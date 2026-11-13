@@ -190,6 +190,7 @@ function generate_problem(){
     problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
     problems = problems_json_files[problem_type].Types
     index = Math.floor(Math.random() * problems.length)
+    index = 1
     problem = problems[index]
 
     replacement_values = {}
@@ -667,7 +668,6 @@ function generate_problem(){
             }
         }
         else if(problem_type == "SVA"){
-            index = 0
             if(index == 0){
                 var points_ct = Math.floor(Math.random() * 2 + 5)
                 var dist_between_pts = 10/(points_ct - 1)
@@ -707,38 +707,81 @@ function generate_problem(){
             }
             else if(index == 1){
                 var change_ct = Math.floor(Math.random() * 2 + 1)
-                var change_ct = 1
+                var start = -Math.floor(Math.random() * 5 + (5 * change_ct))
                 var end = Math.floor(Math.random() * 5 + (5 * change_ct) + 1)
 
-                var changes_str
+                var changes = []
+                var changes_str = ""
                 var factors = []
                 var factors_str = ""
 
                 for(i = 0; i < change_ct; i++){
-                    var change = Math.floor(Math.random() * (4 + (4 * change_ct)) * (i + 1) / change_ct + 1)
-                    var coefficient = Math.floor(Math.random() * 3 + 1)
+                    if(change_ct == 1){
+                        var change = Math.floor(Math.random() * (end - start - 1) + start + 1)
+                        var coefficient = Math.floor(Math.random() * 3 + 1)
+                    } 
+                    else{
+                        var coefficient = 1
+                        if(i == 0) {
+                            var change = Math.floor(Math.random() * ((end - start)/2 - 1) + start + 1)
+                        }
+                        else if(i == 1) {
+                            var change = Math.floor(Math.random() * ((end - start)/2 - 1) + (end - start)/2 + start + 1)
+                        }
+                    }
+                    changes.push(change)
                     factors.push({
                         coefficient: coefficient,
-                        constant: change * coefficient
+                        constant: -(change * coefficient)
                     })
                     changes_str += `, ${change}`
-                    factors_str += `(${coefficient}t - ${change * coefficient})`
+                    factors_str += `(${coefficient}t${coefficient * change > 0 ? "" : "+"}${-(change * coefficient)})`
                 }
+                factors_str = factors_str.replaceAll("+0", "")
+                console.log(factors_str)
 
                 var st
                 var vt
                 if(factors.length == 1){
                     var first = factors[0].coefficient/2
-                    st = `${Math.round(first) == first ? first : `${factors[0].coefficient}/2`}t^2-${factors[0].constant}t+${Math.floor(Math.random() * 10 + 1)}`
+                    var b = factors[0].constant
+                    st = `${Math.round(first) == first ? first : `${factors[0].coefficient}/2`}t^2${b > 0 ? "+" : ""}${b}t+${Math.floor(Math.random() * 10 + 1)}`
                     vt = factors_str
                 } else {
-                    vt = `${factors[0].coefficient * factors[1].coefficient}t^2-${factors[0].coefficient * factors[1].constant + factors[1].coefficient * factors[0].constant}t+${factors[1].coefficient * factors[1].constant}`
+                    var va = factors[0].coefficient * factors[1].coefficient
+                    var vb = factors[0].coefficient * factors[1].constant + factors[1].coefficient * factors[0].constant
+                    var vc = factors[0].constant * factors[1].constant
+
+                    var sa = va/3
+                    var sb = vb/2
+                    st = `${Math.round(sa) == sa ? sa : `${va}/2`}t^3${sb > 0 ? "+" : ""}${Math.round(sb) == sb ? sb : `${vb}/2`}t^2${vc > 0 ? "+" : ""}${vc}t+${Math.floor(Math.random() * 20 + 1)}`
+                    vt = `${va}t^2${vb > 0 ? "+" : ""}${vb}t${vc >= 0 ? "+" : ""}${vc}`
                 }
 
+                console.log(st)
+
+                st = st.replaceAll("0t^3", "").replaceAll("0t^2", "").replaceAll("0t", "")
+                vt = vt.replaceAll("0t^2", "").replaceAll("0t", "").replaceAll("+0", "")
+
+                var st_eval_eq = st.replaceAll("^", "**").replaceAll("t", "*t")
+                var distcalcs = [[start, eval(st_eval_eq.replaceAll("t", `(${start})`))], [end, eval(st_eval_eq.replaceAll("t", `(${end})`))]]
+                var middle_str = ""
+                for(i = 0; i < change_ct; i++){
+                    var val = eval(st_eval_eq.replaceAll("t", `(${changes[i]})`))
+                    distcalcs.push([changes[i], val])
+                    middle_str += `\`s(${changes[i]}) = ${val}\`<br>`
+                }
+                var dist_calcs_str = `\`s(${start}) = ${distcalcs[0][1]}\`<br>${middle_str}\`s(${end}) = ${distcalcs[1][1]}\``
+                distcalcs = distcalcs.sort((a, b) => a[1] - b[1])
                 replacement_values["positions"] = changes_str.substring(2)
+                replacement_values["factors"] = factors_str
+                replacement_values["distcalcs"] = dist_calcs_str
+                replacement_values["min"] = distcalcs[0][1]
+                replacement_values["max"] = distcalcs[distcalcs.length - 1][1]
                 replacement_values["s(t)"] = st
                 replacement_values["v(t)"] = vt
                 replacement_values["end"] = end
+                replacement_values["start"] = start
             }
         }
     }
@@ -1259,7 +1302,6 @@ function generate_problem(){
         inner += `${line}<br>`
     }
     problem_explanation.innerHTML = replace_values(inner, replacement_values)
-    console.log(problem_explanation.innerHTML)
 
     renderMath()
 }
