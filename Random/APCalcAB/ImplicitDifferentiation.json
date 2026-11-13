@@ -9,7 +9,7 @@
             ],
             "Explanation": [
                 "`%termsLeft%=%termsRight%`",
-                "Take the derivative of both side (Remember to do chain rule for any `y'`s)",
+                "Take the derivative of both sides (Remember to do chain rule for any `y'`s)",
                 "`d/dx[%termsLeft%]=d/dx[%termsRight%]`",
                 "Going term by term:",
                 "Left:%leftbreakdown%",

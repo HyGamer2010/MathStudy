@@ -14,6 +14,8 @@
                 "`%si1% = %s1v%`",
                 "`%si2% = %s2v%`",
                 "`%an3% = %a3v%`",
+                "Formula for area of oblique triangles:",
+                "`Area = (%si1%*%si2%sin(%an3%))/2`",
                 "`Area = (%s1v%*%s2v%sin(%a3v%))/2`",
                 "`Area = %A%`"
             ]
@@ -32,6 +34,9 @@
                 "`%si1% = %s1v%`",
                 "`%si2% = %s2v%`",
                 "`%si3% = %s3v%`",
+                "Heron's formula:",
+                "`Area = sqrt(s(s-%si1%)(s-%si2%)(s-%si3%))`",
+                "`s = (%si1%+%si2%+%si3%)/2`",
                 "`s = (%s1v%+%s2v%+%s3v%)/2`",
                 "`s = %s%`",
                 "`Area = sqrt(%s%(%s%-%s1v%)(%s%-%s2v%)(%s%-%s3v%))`",

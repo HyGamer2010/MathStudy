@@ -9,10 +9,13 @@
                 "`z = %r%(cos(%angle%)+isin(%angle%))`"
             ],
             "Explanation": [
+                "Trignometric form:",
+                "`z = r(cos(theta)+isin(theta))`",
                 "`r = sqrt((%a%)^2+(%b%)^2)`",
                 "`tan(theta) = %b%/%a%`",
                 "`theta = tan^-1(%b%/%a%)`",
-                "`theta = %angle%`"
+                "`theta = %angle%`",
+                "`z = %r%(cos(%angle%)+isin(%angle%))`"
             ]
         },
         {
@@ -24,8 +27,13 @@
                 "`z = %a%%sign%%b%i`"
             ],
             "Explanation": [
+                "Standard form:",
+                "`a+bi`",
+                "You can use distributive property to solve for a and b",
+                "`z = `<span class='bold'>`%r%`</span>`(`<span class='bold'>`cos(%angle%)`</span>`+isin(%angle%))`",
                 "`a = %r%cos(%angle%)`",
                 "`a = %a%`",
+                "`z = `<span class='bold'>`%r%`</span>`(cos(%angle%)+`<span class='bold'>`isin(%angle%)`</span>`)`",
                 "`b = %r%isin(%angle%)`",
                 "`b = %b%`",
                 "`z = %a%%sign%%b%i`"
@@ -43,6 +51,7 @@
             ],
             "Explanation": [
                 "`z_3 = (%a1%%sign1%%b1%i)(%a2%%sign2%%b2%i)`",
+                "FOIL:",
                 "`z_3 = (%a1%*%a2%)+(%a1%*%b2%i)+(%b1%i*%a2%)+(%b1%i*%b2%i)`",
                 "`z_3 = (%f%)+(%o%i)+(%i%i)+(%l%i^2)`",
                 "`z_3 = %a3%%sign3%%b3%i`"
@@ -59,6 +68,8 @@
                 "`z_3 = %r3%(cos(%angle3%)+isin(%angle3%))`"
             ],
             "Explanation": [
+                "You multiply the triginometric form of imaginary numbers by doing the following:",
+                "`z_3 = (r_1 * r_2)(cos(theta_1+theta_2)+isin(theta_1+theta_2))`",
                 "`z_3 = (%r1% * %r2%)(cos(%angle1%+%angle2%)+isin(%angle1%+%angle2%))`",
                 "`z_3 = %r3%(cos(%angle3%)+isin(%angle3%))`"
             ]

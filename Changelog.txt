@@ -1,5 +1,5 @@
 |11/13/2026
--Improved Implicit Differentiation explanation
+-Improved Implicit Differentiation, Area of Oblique Triangles, and Imaginary Numbers explanations
 -Added a choice between ordered and random
 -Made begin only appear after selecting a topic
 -Added L'Hopital's problems
