@@ -1019,7 +1019,7 @@ function generate_problem(){
             }
 
             var step = steps[num_of_steps - 1]
-            var ans = eval(step.replaceAll("x", `(${n})`))
+            var ans = Math.round(eval(step.replaceAll("x", `(${n})`)) * 100) / 100
             explanation += `Substitute \`${n}\` into the equation:<br>
             \`${step.replaceAll("**", "^").replaceAll("*x", "x").replaceAll("1x", "x").replaceAll("x", `(${n})`)}\`<br>
             \`!=0/0\`
