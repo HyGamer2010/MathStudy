@@ -58,7 +58,11 @@
             <div id="topicselect" hidden="true">
                 <fieldset>
                 </fieldset>
-                <button onclick="begin()">Begin</button>
+                <select id="orderedselect">
+                    <option value="ordered">Ordered</option>
+                    <option value="random">Random</option>
+                </select><br>
+                <button onclick="begin()" hidden="true" id="begin_button">Begin</button>
             </div>
             <div class="sect" id="problems" hidden="true">
                 <div id="problem_display"></div>
@@ -70,7 +74,7 @@
                 </div>
                 <p id="problem_explanation" hidden="true"></p>
                 <button onclick='generate_problem()'>Next</button>
-                <button onclick='select_menu("problems", problem_set + category)'>Back</button>
+                <button onclick='select_menu("problems", "topicselect")'>Back</button>
             </div>
         </main>
         <aside>

@@ -43,6 +43,8 @@ var category = ""
 var problem_display
 var problem_answer
 var problem_explanation
+var ordered_select
+var begin_button
 var body
 var nav
 var aside
@@ -51,9 +53,13 @@ var fieldset
 var deg2rad = Math.PI/180
 var rad2deg = 180/Math.PI
 var problems_json_files = {}
+var ordered = true
 
 var lenunits = ["m", "ft", "\"in\"", "cm", "km", "mi"]
 var timeunits = ["s", "min", "hr"]
+
+var index
+var type_index
 
 document.addEventListener('DOMContentLoaded', (event) => {
     problem_display = document.getElementById("problem_display")
@@ -64,6 +70,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     body = document.querySelector("body")
     section = document.querySelector("section")
     fieldset = document.querySelector("fieldset")
+    ordered_select = document.querySelector("#orderedselect")
+    begin_button = document.querySelector("#begin_button")
 
     load_changelog()
 })
@@ -85,16 +93,20 @@ async function load_changelog(){
     })
 }
 
-function select_all_box(){
+function select_box(index){
     elements = document.getElementsByClassName("topic")
-    if(elements[0].value == "All" && elements[0].checked){
-        for (var el of elements){
+
+    var one_selected = false
+    for (var el of elements){
+        if(elements[0].value == "All" && elements[0].checked){
             el.checked = true
+            one_selected = true
+        }
+        else if(el.checked){
+            one_selected = true
         }
     }
-}
-function deselect_all_box(index){
-    elements = document.getElementsByClassName("topic")
+    begin_button.hidden = !one_selected
     if(!elements[index].checked){
         elements[0].checked = false
     }
@@ -110,12 +122,12 @@ function select_menu(from_id, to_id){
 function select_category(problem_set, category){
     select_menu(problem_set, "topicselect")
 
-    var inner = "<legend>Choose Topics to Include</legend>\n<input type='checkbox' value='All' class='topic' onchange='select_all_box()'><label>All</label><br>\n"
+    var inner = `<legend>Choose Topics to Include</legend>\n<input type='checkbox' value='All' class='topic' onchange='select_box(0)'><label>All</label><br>\n`
 
     if(category != "Cummulative"){
         var i = 1
         problem_sets[problem_set][category].forEach(topic => {
-            inner += `<input type='checkbox' value='${topic}' class='topic' onchange='deselect_all_box(${i})'><label>${cat_to_readable_string[topic]}</label><br>\n`
+            inner += `<input type='checkbox' value='${topic}' class='topic' onchange='select_box(${i})'><label>${cat_to_readable_string[topic]}</label><br>\n`
             i++
         })
     }else {
@@ -123,7 +135,7 @@ function select_category(problem_set, category){
         Object.entries(problem_sets[problem_set]).forEach(category => {
             if(category[0] != "rounding"){
                 problem_sets[problem_set][category[0]].forEach(topic => {
-                    inner += `<input type='checkbox' value='${topic}' class='topic' onchange='deselect_all_box(${i})'><label>${cat_to_readable_string[topic]}</label><br>\n`
+                    inner += `<input type='checkbox' value='${topic}' class='topic' onchange='select_box(${i})'><label>${cat_to_readable_string[topic]}</label><br>\n`
                     i++
                 })
             }
@@ -217,10 +229,26 @@ function generate_problem(){
     problem_explanation.hidden = true
     document.getElementById("answer_div").hidden = true 
 
-    problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
-    problems = problems_json_files[problem_type].Types
-    index = Math.floor(Math.random() * problems.length)
-    problem = problems[index]
+    if(ordered){
+        index++
+        if(index > 0){
+            if(index >= problems.length){
+                index = 0
+                type_index++
+                if(type_index >= problem_types_selected.length){
+                    type_index = 0
+                }
+                problem_type = problem_types_selected[type_index]
+                problems = problems_json_files[problem_type].Types
+            }
+        }
+        problem = problems[index]
+    } else {
+        problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
+        problems = problems_json_files[problem_type].Types
+        index = Math.floor(Math.random() * problems.length)
+        problem = problems[index]
+    }
 
     replacement_values = {}
     if(cur_selected_subject == "APCalcAB"){
@@ -257,7 +285,6 @@ function generate_problem(){
                 while(true){
                     degree = Math.floor(Math.random() * 2 + 2)
                     gen = gen_poly_deriv(degree)
-                    console.log(gen)
                     var eq = gen[0]
                     var deriv = gen[1]
 
@@ -278,8 +305,6 @@ function generate_problem(){
                     next_val = Math.ceil(cur_val**(1/root))**root
 
                     desired_val = Math.random() > .5 ? prev_val : next_val
-
-                    console.log(desired_val)
 
                     offset = desired_val - cur_val
                     if(offset == 0){
@@ -570,12 +595,9 @@ function generate_problem(){
                 inside = in_vals[0].replaceAll("**", "^").replaceAll("*x", "x")
                 in_deriv = in_vals[1].replaceAll("**", "^").replaceAll("*x", "x")
                 var highout = `<span class='bold'>\`${outside.replace("x", `\"(\"\`</span>\`${inside}\`<span class='bold'>\`\")\"`)}\`</span>`
-                console.log(highout)
                 var highin = outside.replace("x", `(\`<span class='bold'>\`${inside}\`</span>\`)`)
                 var eq = outside.replaceAll("x", `(${inside})`).replaceAll("**", "^").replaceAll("*x", "x")
                 var deriv = `${out_deriv.replaceAll("x", `(${inside})`)}*(${in_deriv})`.replaceAll("**", "^").replaceAll("*x", "x")
-
-                console.log(eq)
 
                 replacement_values["out_deriv"] = out_deriv
                 replacement_values["in_deriv"] = in_deriv
@@ -615,7 +637,9 @@ function generate_problem(){
                     var term = `${constant}x^${xpow}y^${ypow}`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
                     var deriv1 = `${xpow * constant}x^${xpow-1}y^${ypow}`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
                     var deriv2 = `${constant*ypow}x^${xpow}y^${ypow - 1}y'`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
-                    leftbreakdown += `<br>\`d/dx[${term}] = ${constant}(${xpow}x^${xpow-1}y^${ypow}${deriv2.includes("0") ? "" : `+${ypow}x^${xpow}y^${ypow - 1}y'`})\`<br>\`d/dx[${term}] = ${deriv1}${deriv2.includes("0") ? "" : `+${deriv2}`}\``.replaceAll("x^0", "").replaceAll("y^0", "")
+                    leftbreakdown += `<br>--<br>
+                    \`d/dx[${term}] = ${constant}(${xpow}x^${xpow-1}y^${ypow}${deriv2.includes("0") ? "" : `+${ypow}x^${xpow}y^${ypow - 1}y'`})\`<br>
+                    \`d/dx[${term}] = ${deriv1}${deriv2.includes("0") ? "" : `+${deriv2}`}\``.replaceAll("x^0", "").replaceAll("y^0", "")
                     termsLeft.push(term)
                     derivsLeft.push(deriv1, deriv2)
                 }
@@ -632,9 +656,33 @@ function generate_problem(){
                     var term = `${constant}x^${xpow}y^${ypow}`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
                     var deriv1 = `${xpow * constant}x^${xpow-1}y^${ypow}`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
                     var deriv2 = `${constant*ypow}x^${xpow}y^${ypow - 1}y'`.replaceAll("^1", "").replaceAll("x^0", "").replaceAll("y^0", "")
-                    rightbreakdown += `<br>\`d/dx[${term}] = ${constant}(${xpow}x^${xpow-1}y^${ypow}${deriv2.includes("0") ? "" : `+${ypow}x^${xpow}y^${ypow - 1}y'`})\`<br>\`d/dx[${term}] = ${deriv1}${deriv2.includes("0") ? "" : `+${deriv2}`}\`<br>`.replaceAll("x^0", "").replaceAll("y^0", "")
+                    rightbreakdown += `<br>--<br>\`d/dx[${term}] = ${constant}(${xpow}x^${xpow-1}y^${ypow}${deriv2.includes("0") ? "" : `+${ypow}x^${xpow}y^${ypow - 1}y'`})\`<br>\`d/dx[${term}] = ${deriv1}${deriv2.includes("0") ? "" : `+${deriv2}`}\`<br>`.replaceAll("x^0", "").replaceAll("y^0", "")
                     termsRight.push(term)
                     derivsRight.push(deriv1, deriv2)
+                }
+                for(i = 0; i < termsLeftCount; i++){
+                    var highlighted = ""
+                    for(f = 0; f < termsLeftCount; f++){
+                        var term = termsLeft[f]
+                        if(i == f){
+                            highlighted += `\`+\`<span class='bold'>\`${term}\`</span>`
+                        } else{
+                            highlighted += `\`+\`\`${term}\``
+                        }
+                    }
+                    leftbreakdown = leftbreakdown.replace("--", `\`d/dx[\`${highlighted.substring(3)}\`]\``)
+                }
+                for(i = 0; i < termsRightCount; i++){
+                    var highlighted = ""
+                    for(f = 0; f < termsRightCount; f++){
+                        var term = termsRight[f]
+                        if(i == f){
+                            highlighted += `\`+\`<span class='bold'>\`${term}\`</span>`
+                        } else{
+                            highlighted += `\`+\`\`${term}\``
+                        }
+                    }
+                    rightbreakdown = rightbreakdown.replace("--", `\`d/dx[\`${highlighted.substring(3)}\`]\``)
                 }
                 replacement_values["leftbreakdown"] = leftbreakdown
                 replacement_values["rightbreakdown"] = rightbreakdown
@@ -729,7 +777,6 @@ function generate_problem(){
                 var velo = [...derivs].sort((a, b) => b - a)[0]
                 var speed = Math.abs([...derivs].sort((a, b) => Math.abs(b) - Math.abs(a))[0])
 
-                console.log(derivs)
                 var velo_intervals = ""
                 var speed_intervals = ""
                 var explanation = ""
@@ -1453,7 +1500,13 @@ async function begin(){
             problems_json_files[el.value] = await load_json(problem_set, el.value)
         }
     }
-    console.log(problems_json_files)
+    ordered = ordered_select.value == "ordered"
+    if(ordered){
+        index = -1
+        type_index = 0
+        problem_type = problem_types_selected[0]
+        problems = problems_json_files[problem_type].Types
+    }
 
     generate_problem()
 }
@@ -1549,6 +1602,10 @@ function draw_vectors(id, xaxis, yaxis, vectors){
 function draw_triangle(id, A, B, C, a, b, c){
     var container = document.querySelector("#" + id)
 
+    var corner_color = "#000000"
+    var angle_color = "#11008e"
+    var side_color = "#880000"
+
     functionPlot({
         target: "#" + id,
         width: container.clientWidth,
@@ -1565,46 +1622,55 @@ function draw_triangle(id, A, B, C, a, b, c){
             {
                 graphType: 'text',
                 location: [-.1, -.1],
+                color: corner_color,
                 text: 'A'
             },
             {
                 graphType: 'text',
                 location: [3.1, -.1],
+                color: corner_color,
                 text: 'B'
             },
             {
                 graphType: 'text',
                 location: [1.5, 3.1],
+                color: corner_color,
                 text: 'C'
             },
             {
                 graphType: 'text',
                 location: [.15, .1],
+                color: angle_color,
                 text: A
             },
             {
                 graphType: 'text',
-                location: [2.7, .1],
+                location: [2.6, .1],
+                color: angle_color,
                 text: B
             },
             {
                 graphType: 'text',
-                location: [1.4, 2.8],
+                location: [1.4, 2.6],
+                color: angle_color,
                 text: C
             },
             {
                 graphType: 'text',
                 location: [2.3, 1.6],
+                color: side_color,
                 text: a
             },
             {
                 graphType: 'text',
                 location: [.6, 1.6],
+                color: side_color,
                 text: b
             },
             {
                 graphType: 'text',
                 location: [1.4, -.2],
+                color: side_color,
                 text: c
             }
         ]
