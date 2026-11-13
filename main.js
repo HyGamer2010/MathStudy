@@ -255,8 +255,9 @@ function generate_problem(){
             } 
             else if(index == 1){
                 while(true){
-                    degree = Math.round(Math.random()) + 2
-                    gen = gen_poly_deriv(Math.round(Math.random()) + 2)
+                    degree = Math.floor(Math.random() * 2 + 2)
+                    gen = gen_poly_deriv(degree)
+                    console.log(gen)
                     var eq = gen[0]
                     var deriv = gen[1]
 
@@ -269,10 +270,16 @@ function generate_problem(){
 
                     cur_val = eval(eq_a)
 
+                    if(cur_val <= 0){
+                        continue
+                    }
+
                     prev_val = Math.floor(cur_val**(1/root))**root
                     next_val = Math.ceil(cur_val**(1/root))**root
 
                     desired_val = Math.random() > .5 ? prev_val : next_val
+
+                    console.log(desired_val)
 
                     offset = desired_val - cur_val
                     if(offset == 0){
@@ -293,17 +300,17 @@ function generate_problem(){
 
                     fprimea = eval(deriv_a)
 
-                    x = a + Math.round(Math.random() * 10) / 10 - .5
+                    x = a + Math.round(Math.random() * 10) / 20 * (Math.random() > .5 ? 1 : -1)
                     fa = desired_val**(1/root)
 
                     replacement_values["a"] = a
                     replacement_values["x"] = x
                     replacement_values["f(a)"] = fa
                     replacement_values["f'(a)"] = fprimea
-                    replacement_values["eq"] = final_eq.replaceAll("**", "^")
-                    replacement_values["deriv"] = final_deriv.replaceAll("**", "^")
-                    replacement_values["eqa"] = eq_a.replaceAll("**", "^")
-                    replacement_values["deriva"] = deriv_a.replaceAll("**", "^")
+                    replacement_values["eq"] = final_eq.replaceAll("**", "^").replaceAll("*x", "x").replaceAll("*(", "(")
+                    replacement_values["deriv"] = final_deriv.replaceAll("**", "^").replaceAll("*x", "x").replaceAll("*(", "(")
+                    replacement_values["eqa"] = eq_a.replaceAll("**", "^").replaceAll("*x", "x").replaceAll("*(", "(")
+                    replacement_values["deriva"] = deriv_a.replaceAll("**", "^").replaceAll("*x", "x").replaceAll("*(", "(")
                     replacement_values["ans"] = fa + fprimea * (x - a)
 
                     break;
