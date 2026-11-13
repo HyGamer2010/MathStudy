@@ -21,11 +21,13 @@
                 "`s(t) = %s(t)%`",
                 "Across the interval (%start%, %end%),<br>",
                 "a) Where does it change direction?",
-                "b) What are the minimum and maximum positions on the graph?"
+                "b) What are the minimum and maximum positions on the graph?",
+                "c) What is the total distance traveled?"
             ],
             "Answer": [
                 "a) `t=%positions%`",
-                "b) Min: `%min%`, Max: `%max%`"
+                "b) Min: `%min%`, Max: `%max%`",
+                "c) %distance%"
             ],
             "Explanation": [
                 "`v(t) = s'(t)`",
@@ -38,7 +40,29 @@
                 "`t=%positions%`",
                 "<span class='sep'>b)</span>",
                 "Check `s(t)` at `t = %start%, %positions%, %end%`",
-                "%distcalcs%"
+                "%funccalcs%",
+                "Min: `%min%`, Max: `%max%`",
+                "<span class='sep'>c)</span>",
+                "Using the points at `t=%positions%`, we can find the distance between each point:%distcalcs%"
+            ]
+        },
+        {
+            "Problem": [
+                "`s(t) = %s(t)%`",
+                "a) Find the displacement from `%a%` to `%b%`",
+                "b) Find the average velocity from `%a%` to `%b%`"
+            ],
+            "Answer":[
+                "a) %displacement%",
+                "b) %avg%"
+            ],
+            "Explanation": [
+                "<span class='sep'>a)</span>",
+                "`s(%a%) = %s(a)%`",
+                "`s(%b%) = %s(b)%`",
+                "`%s(b)% - %s(a)% = %displacement%`",
+                "<span class='sep'>b)</span>",
+                "`(%s(b)% - %s(a)%)/(%b%-%a%)=%avg%`"
             ]
         }
     ]

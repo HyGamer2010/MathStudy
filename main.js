@@ -213,9 +213,6 @@ function gen_poly_deriv(degree, min_exp = 1, step = 1, first_const = 1){
     }
     return [eq, deriv]
 }
-function gen_eq_deriv(){
-    
-}
 function generate_problem(){
     problem_explanation.hidden = true
     document.getElementById("answer_div").hidden = true 
@@ -770,7 +767,6 @@ function generate_problem(){
                     factors_str += `(${coefficient}t${coefficient * change > 0 ? "" : "+"}${-(change * coefficient)})`
                 }
                 factors_str = factors_str.replaceAll("+0", "")
-                console.log(factors_str)
 
                 var st
                 var vt
@@ -790,30 +786,61 @@ function generate_problem(){
                     vt = `${va}t^2${vb > 0 ? "+" : ""}${vb}t${vc >= 0 ? "+" : ""}${vc}`
                 }
 
-                console.log(st)
-
                 st = st.replaceAll("0t^3", "").replaceAll("0t^2", "").replaceAll("0t", "")
                 vt = vt.replaceAll("0t^2", "").replaceAll("0t", "").replaceAll("+0", "")
 
                 var st_eval_eq = st.replaceAll("^", "**").replaceAll("t", "*t")
-                var distcalcs = [[start, eval(st_eval_eq.replaceAll("t", `(${start})`))], [end, eval(st_eval_eq.replaceAll("t", `(${end})`))]]
+                var func_calcs = [[start, eval(st_eval_eq.replaceAll("t", `(${start})`))], [end, eval(st_eval_eq.replaceAll("t", `(${end})`))]]
                 var middle_str = ""
                 for(i = 0; i < change_ct; i++){
                     var val = eval(st_eval_eq.replaceAll("t", `(${changes[i]})`))
-                    distcalcs.push([changes[i], val])
+                    func_calcs.push([changes[i], val])
                     middle_str += `\`s(${changes[i]}) = ${val}\`<br>`
                 }
-                var dist_calcs_str = `\`s(${start}) = ${distcalcs[0][1]}\`<br>${middle_str}\`s(${end}) = ${distcalcs[1][1]}\``
-                distcalcs = distcalcs.sort((a, b) => a[1] - b[1])
+                var func_calcs_str = `\`s(${start}) = ${func_calcs[0][1]}\`<br>${middle_str}\`s(${end}) = ${func_calcs[1][1]}\``
+                var dist_calcs = []
+                var dist_calcs_str = ""
+                var dist_str = ""
+                ordered_funcs = func_calcs.sort((a, b) => b[0] - a[0])
+                for(i = ordered_funcs.length - 1; i > 0; i--){
+                    var dist = Math.abs(ordered_funcs[i][1] - ordered_funcs[i - 1][1])
+                    dist_calcs_str += `<br>\`abs(${ordered_funcs[i][1]} - (${ordered_funcs[i - 1][1]})) = ${dist}\``
+                    dist_calcs.push(dist)
+                    dist_str += `+${dist}`
+                }
+                dist = 0
+                for(d of dist_calcs){
+                    dist += d
+                }
+                dist_calcs_str += `<br>\`${dist_str.substring(1)}=${dist}\``
+                func_calcs = func_calcs.sort((a, b) => a[1] - b[1])
                 replacement_values["positions"] = changes_str.substring(2)
                 replacement_values["factors"] = factors_str
+                replacement_values["funccalcs"] = func_calcs_str
                 replacement_values["distcalcs"] = dist_calcs_str
-                replacement_values["min"] = distcalcs[0][1]
-                replacement_values["max"] = distcalcs[distcalcs.length - 1][1]
+                replacement_values["min"] = func_calcs[0][1]
+                replacement_values["max"] = func_calcs[func_calcs.length - 1][1]
                 replacement_values["s(t)"] = st
                 replacement_values["v(t)"] = vt
                 replacement_values["end"] = end
                 replacement_values["start"] = start
+                replacement_values["distance"] = dist
+            }
+            else if(index == 2){
+                var gen = gen_poly_deriv(Math.floor(Math.random() * 2 + 2))[0].replaceAll("x", "t")
+                var a = Math.floor(Math.random() * 11) * (Math.random() > .5 ? 1 : -1)
+                var b = Math.floor(Math.random() * 20 + a + 5)
+
+                var sa = eval(gen.replaceAll("t", `(${a})`))
+                var sb = eval(gen.replaceAll("t", `(${b})`))
+
+                replacement_values["a"] = a
+                replacement_values["b"] = b
+                replacement_values["s(a)"] = sa
+                replacement_values["s(b)"] = sb
+                replacement_values["displacement"] = sb - sa
+                replacement_values["avg"] = (sb - sa)/(b - a)
+                replacement_values["s(t)"] = gen.replaceAll("**", "^").replaceAll("*t", "t")
             }
         }
     }
