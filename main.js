@@ -1022,6 +1022,7 @@ function generate_problem(){
             var ans = eval(step.replaceAll("x", `(${n})`))
             explanation += `Substitute \`${n}\` into the equation:<br>
             \`${step.replaceAll("**", "^").replaceAll("*x", "x").replaceAll("1x", "x").replaceAll("x", `(${n})`)}\`<br>
+            \`!=0/0\`
             Evaluate<br>
             \`${ans}\`<br>`
             
