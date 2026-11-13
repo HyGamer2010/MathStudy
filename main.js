@@ -24,6 +24,18 @@ problem_sets = {
     }
 }
 
+var cat_to_readable_string = {
+    "ChainRule": "Chain rule",
+    "ImplicitDifferentiation": "Implicit Differentiation",
+    "Linearization": "Linearization",
+    "RelatedRates": "Related Rates",
+    "SVA": "Distance, velocity, acceleration",
+    "Laws": "Laws of Sines and Cosines",
+    "AOBT": "Area of Oblique Triangles",
+    "Vectors": "Vectors",
+    "Imaginary": "Imaginary numbers"
+}
+
 var cur_rounding = 0
 var cur_selected_subject = null
 var problem_set = ""
@@ -35,6 +47,7 @@ var body
 var nav
 var aside
 var section
+var fieldset
 var deg2rad = Math.PI/180
 var rad2deg = 180/Math.PI
 var problems_json_files = {}
@@ -43,17 +56,6 @@ var lenunits = ["m", "ft", "\"in\"", "cm", "km", "mi"]
 var timeunits = ["s", "min", "hr"]
 
 document.addEventListener('DOMContentLoaded', (event) => {
-    Object.entries(problem_sets).forEach(set => {
-        Object.entries(set[1]).forEach(category => {
-            if(category[0] != "rounding"){
-                document.getElementsByClassName(set[0] + category[0])[0].addEventListener('change', (event) => {
-                    if(event.target.checked){
-                        select_all_box()
-                    }
-                })
-            }
-        })
-    });
     problem_display = document.getElementById("problem_display")
     problem_answer = document.getElementById("problem_answer")
     problem_explanation = document.getElementById("problem_explanation")
@@ -61,6 +63,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     aside = document.querySelector("aside")
     body = document.querySelector("body")
     section = document.querySelector("section")
+    fieldset = document.querySelector("fieldset")
 
     load_changelog()
 })
@@ -83,9 +86,17 @@ async function load_changelog(){
 }
 
 function select_all_box(){
-    elements = document.getElementsByClassName(problem_set + category)
-    for (var el of elements){
-        el.checked = true
+    elements = document.getElementsByClassName("topic")
+    if(elements[0].value == "All" && elements[0].checked){
+        for (var el of elements){
+            el.checked = true
+        }
+    }
+}
+function deselect_all_box(index){
+    elements = document.getElementsByClassName("topic")
+    if(!elements[index].checked){
+        elements[0].checked = false
     }
 }
 
@@ -97,7 +108,29 @@ function select_menu(from_id, to_id){
     to.hidden = false
 }
 function select_category(problem_set, category){
-    select_menu(problem_set, problem_set + category)
+    select_menu(problem_set, "topicselect")
+
+    var inner = "<legend>Choose Topics to Include</legend>\n<input type='checkbox' value='All' class='topic' onchange='select_all_box()'><label>All</label><br>\n"
+
+    if(category != "Cummulative"){
+        var i = 1
+        problem_sets[problem_set][category].forEach(topic => {
+            inner += `<input type='checkbox' value='${topic}' class='topic' onchange='deselect_all_box(${i})'><label>${cat_to_readable_string[topic]}</label><br>\n`
+            i++
+        })
+    }else {
+        var i = 1
+        Object.entries(problem_sets[problem_set]).forEach(category => {
+            if(category[0] != "rounding"){
+                problem_sets[problem_set][category[0]].forEach(topic => {
+                    inner += `<input type='checkbox' value='${topic}' class='topic' onchange='deselect_all_box(${i})'><label>${cat_to_readable_string[topic]}</label><br>\n`
+                    i++
+                })
+            }
+        })
+    }
+
+    fieldset.innerHTML = inner
 
     this.problem_set = problem_set
     this.category = category
@@ -190,7 +223,6 @@ function generate_problem(){
     problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
     problems = problems_json_files[problem_type].Types
     index = Math.floor(Math.random() * problems.length)
-    index = 1
     problem = problems[index]
 
     replacement_values = {}
@@ -1310,9 +1342,9 @@ async function renderMath(){
 }
 
 async function begin(){
-    select_menu(problem_set + category, "problems")
+    select_menu("topicselect", "problems")
 
-    elements = document.getElementsByClassName(problem_set + category)
+    elements = document.getElementsByClassName("topic")
     all = false
     problems_json_files = {}
     problem_types_selected = []
@@ -1491,14 +1523,15 @@ function reset(){
     document.getElementById("answer_div").hidden = true
     problem_explanation.hidden = true
 
-    Object.entries(problem_sets).forEach(set => {
-        Object.entries(set[1]).forEach(category => {
-            if(category[0] != "rounding"){
-                document.getElementById(set[0] + category[0]).hidden = true
-            }
-        })
-        document.getElementById(set[0]).hidden = true
-    })
+    // Object.entries(problem_sets).forEach(set => {
+    //     Object.entries(set[1]).forEach(category => {
+    //         if(category[0] != "rounding"){
+    //             document.getElementById(set[0] + category[0]).hidden = true
+    //         }
+    //     })
+    //     document.getElementById(set[0]).hidden = true
+    // })
+    document.getElementById("topicselect").hidden = true
 }
 
 async function load_json(subject, problem_set) {

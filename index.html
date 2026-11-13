@@ -36,6 +36,7 @@
             <header class="title" id="APCalcABHeader" hidden="true"><h2>AP Calc AB</h2></header>
             <div id="APCalcAB" hidden="true">
                 <div class="sect">
+                    <button class="category" onclick='select_category("APCalcAB", "Cummulative")'>Cummulative</button>
                     <button class="category" onclick='select_category("APCalcAB", "Unit3")'>Unit 3</button>
                     <button class="category" onclick='select_category("APCalcAB", "Unit4")'>Unit 4</button>
                     <button class="category" onclick='select_category("APCalcAB", "Unit5")'>Unit 5</button>
@@ -45,6 +46,7 @@
             <header class="title" id="AdvancedMathHeader" hidden="true"><h2>Advanced Math</h2></header>
             <div id="AdvancedMath" hidden="true">
                 <div class="sect">
+                    <button class="category" onclick='select_category("AdvancedMath", "Cummulative")'>Cummulative</button>
                     <button class="category" onclick='select_category("AdvancedMath", "Unit6")'>Unit 6</button>
                 </div>
             </div>
@@ -53,81 +55,8 @@
             <div class="sect" id="Changelog" hidden="true">
                 
             </div>
-            <!-- AP Calc Units -->
-            <div class="sect" id="APCalcABUnit3" hidden="true">
+            <div id="topicselect" hidden="true">
                 <fieldset>
-                    <legend>Choose Topics to Include</legend>
-    
-                    <input type="checkbox" value="All" class="APCalcABUnit3">
-                    <label>All</label>
-                    <br>
-    
-                    <input type="checkbox" value="ChainRule" class="APCalcABUnit3">
-                    <label>Chain Rule</label>
-                    <br>
-    
-                    <input type="checkbox" value="ImplicitDifferentiation" class="APCalcABUnit3">
-                    <label>Implicit Differentiation</label>
-                    <br>
-                </fieldset>
-                <button onclick="begin()">Begin</button>
-            </div>
-            <div class="sect" id="APCalcABUnit4" hidden="true">
-                <fieldset>
-                    <legend>Choose Topics to Include</legend>
-    
-                    <input type="checkbox" value="All" class="APCalcABUnit4">
-                    <label>All</label>
-                    <br>
-    
-                    <input type="checkbox" value="Linearization" class="APCalcABUnit4">
-                    <label>Linearization</label>
-                    <br>
-    
-                    <input type="checkbox" value="RelatedRates" class="APCalcABUnit4">
-                    <label>Related Rates</label>
-                    <br>
-                </fieldset>
-                <button onclick="begin()">Begin</button>
-            </div>
-            <div class="sect" id="APCalcABUnit5" hidden="true">
-                <fieldset>
-                    <legend>Choose Topics to Include</legend>
-    
-                    <input type="checkbox" value="All" class="APCalcABUnit5">
-                    <label>All</label>
-                    <br>
-
-                    <input type="checkbox" value="SVA" class="APCalcABUnit5">
-                    <label>Distance, Velocity, Acceleration</label>
-                    <br>
-                </fieldset>
-                <button onclick="begin()">Begin</button>
-            </div>
-            <!-- Advanced Math Units -->
-            <div class="sect" id="AdvancedMathUnit6" hidden="true">
-                <fieldset>
-                    <legend>Choose Topics to Include</legend>
-    
-                    <input type="checkbox" value="All" class="AdvancedMathUnit6">
-                    <label>All</label>
-                    <br>
-    
-                    <input type="checkbox" value="Laws" class="AdvancedMathUnit6">
-                    <label>Law of Sines and Cosines</label>
-                    <br>
-
-                    <input type="checkbox" value="AOBT" class="AdvancedMathUnit6">
-                    <label>Area of oblique triangles</label>
-                    <br>
-
-                    <input type="checkbox" value="Vectors" class="AdvancedMathUnit6">
-                    <label>Vectors</label>
-                    <br>
-
-                    <input type="checkbox" value="Imaginary" class="AdvancedMathUnit6">
-                    <label>Imaginary Numbers</label>
-                    <br>
                 </fieldset>
                 <button onclick="begin()">Begin</button>
             </div>
