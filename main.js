@@ -7,7 +7,8 @@ problem_sets = {
         ],
         "Unit4": [
             "Linearization",
-            "RelatedRates"
+            "RelatedRates",
+            "LHopitals"
         ],
         "Unit5": [
             "SVA"
@@ -33,7 +34,8 @@ var cat_to_readable_string = {
     "Laws": "Laws of Sines and Cosines",
     "AOBT": "Area of Oblique Triangles",
     "Vectors": "Vectors",
-    "Imaginary": "Imaginary numbers"
+    "Imaginary": "Imaginary numbers",
+    "LHopitals": "L\'Hopitals"
 }
 
 var cur_rounding = 0
@@ -134,6 +136,7 @@ function select_category(problem_set, category){
         var i = 1
         Object.entries(problem_sets[problem_set]).forEach(category => {
             if(category[0] != "rounding"){
+                inner += `<span class='unitlabel'>--${category[0]}--</span><br>`
                 problem_sets[problem_set][category[0]].forEach(topic => {
                     inner += `<input type='checkbox' value='${topic}' class='topic' onchange='select_box(${i})'><label>${cat_to_readable_string[topic]}</label><br>\n`
                     i++
@@ -599,6 +602,8 @@ function generate_problem(){
                 var eq = outside.replaceAll("x", `(${inside})`).replaceAll("**", "^").replaceAll("*x", "x")
                 var deriv = `${out_deriv.replaceAll("x", `(${inside})`)}*(${in_deriv})`.replaceAll("**", "^").replaceAll("*x", "x")
 
+                console.log(highout, highin)
+
                 replacement_values["out_deriv"] = out_deriv
                 replacement_values["in_deriv"] = in_deriv
                 replacement_values["outside"] = outside
@@ -935,6 +940,95 @@ function generate_problem(){
                 replacement_values["velo"] = eval(invt)
                 replacement_values["acc"] = eval(inat)
             }
+        }
+        else if(problem_type == "LHopitals"){
+            var num_of_steps = Math.floor(Math.random() * 2 + 2)
+            
+            var num_op = Math.floor(Math.random() * 1)
+            if(num_op == 0){
+                while(true){
+                    var n = Math.floor(Math.random() * 3) * (Math.random() > .5 ? 1 : -1)
+                    var numers = []
+                    var pow = Math.floor(Math.random() * num_of_steps + 1)
+                    var consts = []
+                    for(i = 3; i >= 0; i--){
+                        consts.push(Math.floor(Math.random() * i**1.8 + 1) * (Math.random() > .5 ? 1 : -1))
+                    }
+                    for(i = 0; i < num_of_steps; i++){
+                        var numer = ""
+                        for(p = pow - i; p >= 0; p--){
+                            var constant = consts[p + i]
+                            numer += `${constant > 0 ? "+" : ""}${constant}${p == 0 ? "" : `*x${p == 1 ? "" : `**${p}`}`}`
+                            constant *= p
+                            consts[p + i] = constant
+                        }
+                        var val = eval(numer.replaceAll("x", `(${n})`))
+                        if(val != 0 && i < num_of_steps - 1){
+                            break
+                        }else {
+                            numers.push(numer.startsWith("-") ? numer : numer.substring(1))
+                        }
+                    }
+                    console.log(numers)
+                    if(numers.length == num_of_steps){
+                        break
+                    }
+                }
+            }
+            var den_op = Math.floor(Math.random() * 1)
+            if(den_op == 0){
+                while(true){
+                    var steps = []
+                    var pow = Math.floor(Math.random() * num_of_steps + 2)
+                    var consts = []
+                    var done = 0
+                    for(i = 4; i >= 0; i--){
+                        consts.push(Math.floor(Math.random() * i**1.8 + 1) * (Math.random() > .5 ? 1 : -1))
+                    }
+                    for(i = 0; i < num_of_steps; i++){
+                        var denom = ""
+                        for(p = pow - i; p >= 0; p--){
+                            var constant = consts[p + i]
+                            denom += `${constant > 0 ? "+" : ""}${constant}${p == 0 ? "" : `*x${p == 1 ? "" : `**${p}`}`}`
+                            constant *= p
+                            consts[p + i] = constant
+                        }
+                        var val = eval(denom.replaceAll("x", `(${n})`))
+                        if((val == 0 && i == num_of_steps - 1) || (val != 0 && i < num_of_steps - 1) || (denom == numers[i])){
+                            console.log(denom, numers[i])
+                            break
+                        }else {
+                            steps[i] = `(${numers[i]})/(${denom.startsWith("-") ? denom : denom.substring(1)})`
+                            done++
+                        }
+                    }
+                    if(done == num_of_steps){
+                        break
+                    }
+                }
+            }
+
+            explanation = ""
+            for(i = 0; i < num_of_steps - 1; i++){
+                var step = steps[i]
+                explanation += `Substitute \`${n}\` into the equation:<br>
+                \`${step.replaceAll("**", "^").replaceAll("*x", "x").replaceAll("1x", "x").replaceAll("x", `(${n})`)}\`<br>
+                \`0/0\`<br>
+                So take the derivative:<br>
+                \`${steps[i + 1].replaceAll("**", "^").replaceAll("*x", "x").replaceAll("1x", "x")}\`<br>`
+            }
+
+            var step = steps[num_of_steps - 1]
+            var ans = eval(step.replaceAll("x", `(${n})`))
+            explanation += `Substitute \`${n}\` into the equation:<br>
+            \`${step.replaceAll("**", "^").replaceAll("*x", "x").replaceAll("1x", "x").replaceAll("x", `(${n})`)}\`<br>
+            Evaluate<br>
+            \`${ans}\`<br>`
+            
+            replacement_values["eq"] = steps[0].replaceAll("**", "^").replaceAll("*x", "x").replaceAll("1x", "x")
+            replacement_values["n"] = n
+            replacement_values["ans"] = ans
+            replacement_values["explanation"] = explanation
         }
     }
     else if(cur_selected_subject == "AdvancedMath"){

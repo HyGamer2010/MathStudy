@@ -133,6 +133,10 @@ code {
     background-color: white;
     color: black;
 }
+.unitlabel{
+    font-size: 1.5rem;
+    text-shadow: .4px 0 0 currentColor, -.4px 0 0 currentColor;
+}
 @media (max-width: 1000px){
     aside {
         width: 0;

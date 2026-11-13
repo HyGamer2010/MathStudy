@@ -1,0 +1,16 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "`lim_(x->%n%) %eq%`",
+                "Find the limit using L'Hoptital's theorem."
+            ],
+            "Answer": [
+                "`%ans%`"
+            ],
+            "Explanation": [
+                "%explanation%"
+            ]
+        }
+    ]
+}
