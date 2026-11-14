@@ -1,6 +1,9 @@
 problem_sets = {
     "APCalcAB": {
         rounding: 2,
+        "Unit1": [
+            "Limits"
+        ],
         "Unit3": [
             "ChainRule",
             "ImplicitDifferentiation"
@@ -37,7 +40,8 @@ var cat_to_readable_string = {
     "Vectors": "Vectors",
     "Imaginary": "Imaginary numbers",
     "LHopitals": "L\'Hopitals",
-    "Extrema": "Extrema"
+    "Extrema": "Extrema",
+    "Limits": "Limits"
 }
 
 var cur_rounding = 0
@@ -945,68 +949,74 @@ function generate_problem(){
             }
         }
         else if(problem_type == "LHopitals"){
-            var num_of_steps = Math.floor(Math.random() * 2 + 2)
-            
-            var num_op = Math.floor(Math.random() * 1)
-            if(num_op == 0){
-                while(true){
-                    var n = Math.floor(Math.random() * 3) * (Math.random() > .5 ? 1 : -1)
-                    var numers = []
-                    var pow = Math.floor(Math.random() * num_of_steps + 1)
-                    var consts = []
-                    for(i = 3; i >= 0; i--){
-                        consts.push(Math.floor(Math.random() * i**1.8 + 1) * (Math.random() > .5 ? 1 : -1))
-                    }
-                    for(i = 0; i < num_of_steps; i++){
-                        var numer = ""
-                        for(p = pow - i; p >= 0; p--){
-                            var constant = consts[p + i]
-                            numer += `${constant > 0 ? "+" : ""}${constant}${p == 0 ? "" : `*x${p == 1 ? "" : `**${p}`}`}`
-                            constant *= p
-                            consts[p + i] = constant
+            var indet_form = Math.floor(Math.random() * 1)
+            var indet_forms = {
+                0: "0/0",
+                1: "oo/oo"
+            }
+            if(indet_form == 0){
+                var num_of_steps = Math.floor(Math.random() * 2 + 2)
+                var num_op = Math.floor(Math.random() * 1)
+                if(num_op == 0){
+                    while(true){
+                        var n = Math.floor(Math.random() * 3) * (Math.random() > .5 ? 1 : -1)
+                        var numers = []
+                        var pow = Math.floor(Math.random() * num_of_steps + 1)
+                        var consts = []
+                        for(i = 3; i >= 0; i--){
+                            consts.push(Math.floor(Math.random() * i**1.8 + 1) * (Math.random() > .5 ? 1 : -1))
                         }
-                        var val = eval(numer.replaceAll("x", `(${n})`))
-                        if(val != 0 && i < num_of_steps - 1){
+                        for(i = 0; i < num_of_steps; i++){
+                            var numer = ""
+                            for(p = pow - i; p >= 0; p--){
+                                var constant = consts[p + i]
+                                numer += `${constant > 0 ? "+" : ""}${constant}${p == 0 ? "" : `*x${p == 1 ? "" : `**${p}`}`}`
+                                constant *= p
+                                consts[p + i] = constant
+                            }
+                            var val = eval(numer.replaceAll("x", `(${n})`))
+                            if(val != 0 && i < num_of_steps - 1){
+                                break
+                            }else {
+                                numers.push(numer.startsWith("-") ? numer : numer.substring(1))
+                            }
+                        }
+                        console.log(numers)
+                        if(numers.length == num_of_steps){
                             break
-                        }else {
-                            numers.push(numer.startsWith("-") ? numer : numer.substring(1))
                         }
-                    }
-                    console.log(numers)
-                    if(numers.length == num_of_steps){
-                        break
                     }
                 }
-            }
-            var den_op = Math.floor(Math.random() * 1)
-            if(den_op == 0){
-                while(true){
-                    var steps = []
-                    var pow = Math.floor(Math.random() * num_of_steps + 2)
-                    var consts = []
-                    var done = 0
-                    for(i = 4; i >= 0; i--){
-                        consts.push(Math.floor(Math.random() * i**1.8 + 1) * (Math.random() > .5 ? 1 : -1))
-                    }
-                    for(i = 0; i < num_of_steps; i++){
-                        var denom = ""
-                        for(p = pow - i; p >= 0; p--){
-                            var constant = consts[p + i]
-                            denom += `${constant > 0 ? "+" : ""}${constant}${p == 0 ? "" : `*x${p == 1 ? "" : `**${p}`}`}`
-                            constant *= p
-                            consts[p + i] = constant
+                var den_op = Math.floor(Math.random() * 1)
+                if(den_op == 0){
+                    while(true){
+                        var steps = []
+                        var pow = Math.floor(Math.random() * num_of_steps + 2)
+                        var consts = []
+                        var done = 0
+                        for(i = 4; i >= 0; i--){
+                            consts.push(Math.floor(Math.random() * i**1.8 + 1) * (Math.random() > .5 ? 1 : -1))
                         }
-                        var val = eval(denom.replaceAll("x", `(${n})`))
-                        if((val == 0 && i == num_of_steps - 1) || (val != 0 && i < num_of_steps - 1) || (denom == numers[i])){
-                            console.log(denom, numers[i])
+                        for(i = 0; i < num_of_steps; i++){
+                            var denom = ""
+                            for(p = pow - i; p >= 0; p--){
+                                var constant = consts[p + i]
+                                denom += `${constant > 0 ? "+" : ""}${constant}${p == 0 ? "" : `*x${p == 1 ? "" : `**${p}`}`}`
+                                constant *= p
+                                consts[p + i] = constant
+                            }
+                            var val = eval(denom.replaceAll("x", `(${n})`))
+                            if((val == 0 && i == num_of_steps - 1) || (val != 0 && i < num_of_steps - 1) || (denom == numers[i])){
+                                console.log(denom, numers[i])
+                                break
+                            }else {
+                                steps[i] = `(${numers[i]})/(${denom.startsWith("-") ? denom : denom.substring(1)})`
+                                done++
+                            }
+                        }
+                        if(done == num_of_steps){
                             break
-                        }else {
-                            steps[i] = `(${numers[i]})/(${denom.startsWith("-") ? denom : denom.substring(1)})`
-                            done++
                         }
-                    }
-                    if(done == num_of_steps){
-                        break
                     }
                 }
             }
@@ -1016,16 +1026,16 @@ function generate_problem(){
                 var step = steps[i]
                 explanation += `Substitute \`${n}\` into the equation:<br>
                 \`${step.replaceAll("**", "^").replaceAll("*x", "x").replaceAll("1x", "x").replaceAll("x", `(${n})`)}\`<br>
-                \`0/0\`<br>
+                \`${indet_forms[indet_form]}\`<br>
                 So take the derivative:<br>
                 \`${steps[i + 1].replaceAll("**", "^").replaceAll("*x", "x").replaceAll("1x", "x")}\`<br>`
             }
 
             var step = steps[num_of_steps - 1]
-            var ans = Math.round(eval(step.replaceAll("x", `(${n})`)) * 100) / 100
+            var ans = Math.round(eval(step.replaceAll("x", `(${n})`).replaceAll("ln", "Math.log")) * 100) / 100
             explanation += `Substitute \`${n}\` into the equation:<br>
             \`${step.replaceAll("**", "^").replaceAll("*x", "x").replaceAll("1x", "x").replaceAll("x", `(${n})`)}\`<br>
-            \`!=0/0\`
+            \`!=${indet_forms[indet_form]}\`
             Evaluate<br>
             \`${ans}\`<br>`
             
@@ -1060,7 +1070,7 @@ function generate_problem(){
             var global_max = []
             var global_min = []
             points_to_check.forEach(pt => {
-                var val = eval(eq.replaceAll("x", `(${pt})`))
+                var val = Math.round(eval(eq.replaceAll("x", `(${pt})`)) * 100) / 100
                 if(val < min){
                     min = val
                 }
@@ -1071,7 +1081,7 @@ function generate_problem(){
             eq = eq + `-(${min})`
             max -= min
             points_to_check.forEach(pt => {
-                var val = eval(eq.replaceAll("x", `(${pt})`))
+                var val = Math.round(eval(eq.replaceAll("x", `(${pt})`)) * 100) / 100
                 if(pt > 0 && pt < 15){
                     if(max_first){
                         local_maxes.push([pt, val])
@@ -1100,25 +1110,42 @@ function generate_problem(){
 
             global_max.forEach(val => {
                 gmaxes_str += `, (${val[0]}, ${val[1]})`
-                breakdown_lines.push([val[0], `\`f(${val[0]}) = ${val[1]}\`, which is the highest any point reaches on the graph, so \`(${val[0]}, ${val[1]})\` is a global maximum.`])
             })
             global_min.forEach(val => {
                 gmins_str += `, (${val[0]}, ${val[1]})`
-                breakdown_lines.push([val[0], `\`f(${val[0]}) = ${val[1]}\`, which is the lowest any point reaches on the graph, so \`(${val[0]}, ${val[1]})\` is a global minimum.`])
             })
             local_maxes.forEach(val => {
                 lmaxes_str += `, (${val[0]}, ${val[1]})`
-                breakdown_lines.push([val[0], `At \`t = ${val[0]}\`, the point is at the top of a curve, thus making \`(${val[0]}, ${val[1]})\` a local maximum`])
             })
             local_mins.forEach(val => {
                 lmins_str += `, (${val[0]}, ${val[1]})`
-                breakdown_lines.push([val[0], `At \`t = ${val[0]}\`, the point is at the bottom of a curve, thus making \`(${val[0]}, ${val[1]})\` a local minimum`])
             })
+            
+            points_to_check.forEach(pt => {
+                var gmax = global_max.find(obj => obj[0] == pt)
+                var gmin = global_min.find(obj => obj[0] == pt)
+                var lmax = local_maxes.find(obj => obj[0] == pt)
+                var lmin = local_mins.find(obj => obj[0] == pt)
+                var isgmax = gmax != undefined
+                var isgmin = gmin != undefined
+                var islmax = lmax != undefined
+                var islmin = lmin != undefined
 
-            breakdown_lines.sort((a, b) => a[0] - b[0]).forEach(line => {
-                breakdown += `<br>${line[1]}`
+                if(isgmax && islmax){
+                    breakdown += `<br>\`(${gmax[0]}, ${gmax[1]})\` is both the highest point on the graph and appears to be the top of a hill, so it is both a global max and a local max.<br>`
+                } else if(isgmax){
+                    breakdown += `<br>\`(${gmax[0]}, ${gmax[1]})\` is the highest point on the graph, so it is a global max.<br>`
+                } else if(islmax){
+                    breakdown += `<br>\`(${lmax[0]}, ${lmax[1]})\` appears to be the top of a hill, so it is a local max.<br>`
+                }
+                else if(isgmin && islmin){
+                    breakdown += `<br>\`(${gmin[0]}, ${gmin[1]})\` is both the lowest point on the graph and appears to be the bottom of a valley, so it is both a global min and a local min.<br>`
+                } else if(isgmin){
+                    breakdown += `<br>\`(${gmin[0]}, ${gmin[1]})\` is the lowest point on the graph, so it is a global min.<br>`
+                } else if(islmin){
+                    breakdown += `<br>\`(${lmin[0]}, ${lmin[1]})\` appears to be the bottom of a valley, so it is a local min.<br>`
+                }
             })
-
 
             replacement_values["eq"] = eq.replaceAll("**", "^")
             replacement_values["gmaxes"] = gmaxes_str.substring(2)
@@ -1127,6 +1154,12 @@ function generate_problem(){
             replacement_values["lmins"] = lmins_str.substring(2)
             replacement_values["breakdown"] = breakdown.substring(4)
             replacement_values["crit"] = points_to_check.toString().replaceAll("[", "").replaceAll("]", "")
+        }
+        else if(problem_type == "Limits"){
+            var n = Math.floor(Math.random() * 6) * (Math.random() > .5 ? 1 : -1)
+
+            var num_factor_str = ""
+            var denom_factor_str = ""
         }
     }
     else if(cur_selected_subject == "AdvancedMath"){
