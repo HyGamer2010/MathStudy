@@ -2,7 +2,89 @@
     "Types": [
         {
             "Problem": [
-                "Find `lim_x->%n%(%eq%)`"
+                "Find `lim_(x->%n%)%eq%`"
+            ],
+            "Answer": [
+                "`%ans%`"
+            ],
+            "Explanation": [
+                "First, we do direct substitution",
+                "`%nineq%`",
+                "`0/0`",
+                "Since it equals `0/0`, there must be a limit",
+                "Factor out the top and bottom",
+                "`(%num_factor_str%)/(%denom_factor_str%)`",
+                "Cancel out shared factors",
+                "`(%canceling_num%)/(%canceling_denom%)`",
+                "`(%canceled_num%)/(%canceled_denom%)`",
+                "Now substite in the `%n%`",
+                "`(%innumf%)/(%indenomf%)`",
+                "%ans%"
+            ]
+        },
+        {
+            "Problem": [
+                "Find `lim_(x->%n%)%eq%`"
+            ],
+            "Answer": [
+                "`%ans%`"
+            ],
+            "Explanation": [
+                "Do direct substitution",
+                "`%nineq%`",
+                "`%numval%/%denomval%`",
+                "`%ans%`"
+            ]
+        },
+        {
+            "Problem": [
+                "Find `lim_(x->%n%)%eq%`"
+            ],
+            "Answer": [
+                "`oo`"
+            ],
+            "Explanation": [
+                "Do direct substitution",
+                "`%nineq%`",
+                "`%numval%/0`",
+                "Since the denominator equals `0`, then `lim_(x->%n%)%eq% = oo`"
+            ]
+        },
+        {
+            "Problem": [
+                "Find `lim_(x->0)%eq%`"
+            ],
+            "Answer": [
+                "`%nconst%/%dconst%`"
+            ],
+            "Explanation": [
+                "Do direct substitution",
+                "`%nineq%`",
+                "`0/0`",
+                "Since it equals `0/0`, there must be a limit",
+                "To find the limit, keep in mind that `lim_(x->0)(sin u)/u = 1`",
+                "So, we can rewrite `%eq%` as `%nconst%/%dconst%*sin(%in_sin_const%x)/(%in_sin_const%x)`",
+                "Then we can cancel out the `sin(%in_sin_const%x)/(%in_sin_const%x)`",
+                "`%nconst%/%dconst%*cancel(sin(%in_sin_const%x)/(%in_sin_const%x))`",
+                "`%nconst%/%dconst%`"
+            ]
+        },
+        {
+            "Problem": [
+                "Find `lim_(x->0)%eq%`"
+            ],
+            "Answer": [
+                "`0`"
+            ],
+            "Explanation": [
+                "Do direct substitution",
+                "`%nineq%`",
+                "`0/0`",
+                "Since it equals `0/0`, there must be a limit",
+                "To find the limit, keep in mind that `lim_(x->0)(1-cos u)/u = 0`",
+                "So, we can rewrite `%eq%` as `%nconst%/%dconst%*(1-cos(%in_sin_const%x))/(%in_sin_const%x)`",
+                "`(1-cos(%in_sin_const%x))/(%in_sin_const%x) = 0`, so",
+                "`%nconst%/%dconst%*0=0`"
             ]
         }
     ]

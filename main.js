@@ -1156,10 +1156,146 @@ function generate_problem(){
             replacement_values["crit"] = points_to_check.toString().replaceAll("[", "").replaceAll("]", "")
         }
         else if(problem_type == "Limits"){
-            var n = Math.floor(Math.random() * 6) * (Math.random() > .5 ? 1 : -1)
+            if(index <= 2){
+                var n = Math.floor(Math.random() * 6) * (Math.random() > .5 ? 1 : -1)
+                if(index == 0){
+                    var n_factor_str = `(x${n < 0 ? "+" : ""}${n == 0 ? "" : -n})`
+                    var num_factor_str = `(x${n < 0 ? "+" : ""}${n == 0 ? "" : -n})`
+                    var denom_factor_str = `(x${n < 0 ? "+" : ""}${n == 0 ? "" : -n})`
 
-            var num_factor_str = ""
-            var denom_factor_str = ""
+                    var num_factors = [n]
+                    var denom_factors = [n]
+                }
+                if(index == 1){
+                    var num_factors = []
+                    var denom_factors = []
+                }
+                if(index == 2){
+                    var num_factors = []
+                    var denom_factors = [n]
+                    var num_factor_str = ``
+                    var denom_factor_str = `(x${n < 0 ? "+" : ""}${n == 0 ? "" : -n})`
+                }
+
+                var num_degree = Math.floor(Math.random() * 2 + 2)
+                var denom_degree = Math.floor(Math.random() * 2 + 2)
+
+                for(i = num_factors.length; i < num_degree; i++){
+                    var factor = n
+                    while(factor == n || num_factors.includes(factor) || denom_factors.includes(factor)){
+                        factor = Math.floor(Math.random() * 9 + 1) * (Math.random() > .5 ? 1 : -1)
+                    }
+                    num_factors.push(factor)
+                    num_factor_str += `(x${factor < 0 ? "+" : ""}${-factor})`
+                }
+                for(i = denom_factors.length; i < denom_degree; i++){
+                    var factor = n
+                    while(factor == n || num_factors.includes(factor) || denom_factors.includes(factor)){
+                        factor = Math.floor(Math.random() * 9 + 1) * (Math.random() > .5 ? 1 : -1)
+                    }
+                    denom_factors.push(factor)
+                    denom_factor_str += `(x${factor < 0 ? "+" : ""}${-factor})`
+                }
+
+                var numer = ""
+                var denom = ""
+
+                if(num_degree == 2){
+                    var a = num_factors[0]
+                    var b = num_factors[1]
+                    var new_b = a + b
+                    var new_c = a * b
+                    var numer = `x**2${new_b == 0 ? "" : `${new_b >= 0 ? "" : "+"}${-new_b}*x`}${new_c == 0 ? "" : `${new_c > 0 ? "+" : ""}${new_c}`}`
+                } else {
+                    var a = num_factors[0]
+                    var b = num_factors[1]
+                    var c = num_factors[2]
+                    var new_b = a + b + c
+                    var new_c = a*b+a*c+b*c
+                    var new_d = a*b*c
+                    var numer = `x**3${new_b == 0 ? "" : `${new_b >= 0 ? "" : "+"}${-new_b}*x**2`}${new_c == 0 ? "" : `${new_c > 0 ? "+" : ""}${new_c}*x`}${new_d == 0 ? "" : `${new_d >= 0 ? "" : "+"}${-new_d}`}`
+                }
+                if(denom_degree == 2){
+                    var a = denom_factors[0]
+                    var b = denom_factors[1]
+                    var new_b = a + b
+                    var new_c = a * b
+                    var denom = `x**2${new_b == 0 ? "" : `${new_b >= 0 ? "" : "+"}${-new_b}*x`}${new_c == 0 ? "" : `${new_c > 0 ? "+" : ""}${new_c}`}`
+                } else {
+                    var a = denom_factors[0]
+                    var b = denom_factors[1]
+                    var c = denom_factors[2]
+                    var new_b = a + b + c
+                    var new_c = a*b+a*c+b*c
+                    var new_d = a*b*c
+                    var denom = `x**3${new_b == 0 ? "" : `${new_b >= 0 ? "" : "+"}${-new_b}*x**2`}${new_c == 0 ? "" : `${new_c > 0 ? "+" : ""}${new_c}*x`}${new_d == 0 ? "" : `${new_d >= 0 ? "" : "+"}${-new_d}`}`
+                }
+                var eq = `(${numer})/(${denom})`
+                var nineq = eq.replaceAll("x", `(${n})`)
+                replacement_values["eq"] = eq.replaceAll("**", "^").replaceAll("*x", "x")
+                replacement_values["nineq"] = nineq.replaceAll("**", "^").replaceAll("*(", "(")
+                replacement_values["n"] = n
+                if(index == 0){
+                    var canceling_num = num_factor_str.replaceAll(n_factor_str, `cancel(${n_factor_str})`)
+                    var canceled_num = num_factor_str.replaceAll(n_factor_str, ``)
+                    var canceling_denom = denom_factor_str.replaceAll(n_factor_str, `cancel(${n_factor_str})`)
+                    var canceled_denom = denom_factor_str.replaceAll(n_factor_str, ``)
+
+                    var innumf = canceled_num.replaceAll("x", n)
+                    var indenomf = canceled_denom.replaceAll("x", n)
+
+                    var ans = eval(innumf.replaceAll(")(", ")*(")) / eval(indenomf.replaceAll(")(", ")*("))
+                    replacement_values["ans"] = ans
+                    replacement_values["innumf"] = innumf
+                    replacement_values["indenomf"] = indenomf
+                    replacement_values["num_factor_str"] = num_factor_str
+                    replacement_values["denom_factor_str"] = denom_factor_str
+                    replacement_values["canceled_num"] = canceled_num
+                    replacement_values["canceled_denom"] = canceled_denom
+                    replacement_values["canceling_num"] = canceling_num
+                    replacement_values["canceling_denom"] = canceling_denom
+                }
+                else if(index == 1){
+                    var numval = eval(numer.replaceAll("x", `(${n})`))
+                    var denomval = eval(denom.replaceAll("x", `(${n})`))
+                    var ans = eval(nineq)
+
+                    replacement_values["numval"] = numval
+                    replacement_values["denomval"] = denomval
+                    replacement_values["ans"] = ans
+                }
+                else if(index == 2){
+                    var numval = eval(numer.replaceAll("x", `(${n})`))
+
+                    replacement_values["numval"] = numval
+                }
+            }
+            else if(index == 3){
+                var in_sin_const = Math.floor(Math.random() * 7 + 1) * (Math.random() > .5 ? 1 : -1)
+                var nconst = Math.floor(Math.random() * 9 + 1) * (Math.random() > .5 ? 1 : -1)
+                var dconst = Math.floor(Math.random() * 9 + 1) * (Math.random() > .5 ? 1 : -1)
+
+                var eq = `(${nconst}sin(${in_sin_const}x))/(${dconst * in_sin_const}x)`
+                var nineq = eq.replaceAll("x", "(0)")
+                replacement_values["eq"] = eq
+                replacement_values["nineq"] = nineq
+                replacement_values["nconst"] = nconst
+                replacement_values["dconst"] = dconst
+                replacement_values["in_sin_const"] = in_sin_const
+            }
+            else if(index == 4){
+                var in_sin_const = Math.floor(Math.random() * 7 + 1) * (Math.random() > .5 ? 1 : -1)
+                var nconst = Math.floor(Math.random() * 9 + 1) * (Math.random() > .5 ? 1 : -1)
+                var dconst = Math.floor(Math.random() * 9 + 1) * (Math.random() > .5 ? 1 : -1)
+
+                var eq = `(${nconst}${nconst > 0 ? "" : "+"}${-nconst}cos(${in_sin_const}x))/(${dconst * in_sin_const}x)`
+                var nineq = eq.replaceAll("x", "(0)")
+                replacement_values["eq"] = eq
+                replacement_values["nineq"] = nineq
+                replacement_values["nconst"] = nconst
+                replacement_values["dconst"] = dconst
+                replacement_values["in_sin_const"] = in_sin_const
+            }
         }
     }
     else if(cur_selected_subject == "AdvancedMath"){
