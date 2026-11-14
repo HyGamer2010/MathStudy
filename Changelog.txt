@@ -4,6 +4,7 @@
 -Made begin only appear after selecting a topic
 -Added L'Hopital's problems
 -Added angle between vector problems
+-Added extrema problems
 |11/12/2026
 -Added Distance, velocity, and acceleration problems under AP Calc AB Unit 5
 -Reworked how the topic selection menu is created

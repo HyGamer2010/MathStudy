@@ -1,0 +1,26 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "Graph of f(x):",
+                "<div id='pic1' class='graph'></div>",
+                "<button onclick='draw_graph_range(\"pic1\", { domain: [0, 15] }, { domain: [0, 15] }, `%eq%`, [0, 15])'>Show picture</button>",
+                "What are the mins and maxes of the graph?"
+            ],
+            "Answer": [
+                "<span class='sep'>Global</span>",
+                "Maxes = %gmaxes%",
+                "Mins = %gmins%",
+                "<span class='sep'>Local</span>",
+                "Maxes = %lmaxes%",
+                "Mins = %lmins%"
+            ],
+            "Explanation": [
+                "In order to find the global maxes on the graph, we need to look at critical points on the graph.",
+                "The critical points always include the start and endpoint, as well as every time the slope becomes 0.",
+                "Here, the critical points are at `t = %crit%`",
+                "%breakdown%"
+            ]
+        }
+    ]
+}

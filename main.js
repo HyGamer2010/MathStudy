@@ -11,7 +11,8 @@ problem_sets = {
             "LHopitals"
         ],
         "Unit5": [
-            "SVA"
+            "SVA",
+            "Extrema"
         ]
     },
     "AdvancedMath": {
@@ -35,7 +36,8 @@ var cat_to_readable_string = {
     "AOBT": "Area of Oblique Triangles",
     "Vectors": "Vectors",
     "Imaginary": "Imaginary numbers",
-    "LHopitals": "L\'Hopitals"
+    "LHopitals": "L\'Hopitals",
+    "Extrema": "Extrema"
 }
 
 var cur_rounding = 0
@@ -1032,6 +1034,100 @@ function generate_problem(){
             replacement_values["ans"] = ans
             replacement_values["explanation"] = explanation
         }
+        else if(problem_type == "Extrema"){
+            var extrema_ct = Math.floor(Math.random() * 2 + 2)
+            var extrema = []
+            var range_per_extrema = 15/extrema_ct
+            for(i = 0; i < extrema_ct; i++){
+                extrema.push(Math.floor(Math.random() * (range_per_extrema - 2) + (range_per_extrema * i + 1)))
+            }
+            var max_first = Math.random() > .5
+            if(extrema_ct == 2){
+                var a = extrema[0]
+                var b = extrema[1]
+                var eq = `${max_first ? "1" : "-1"}*((1/96)*x**3-(${a + b}/64)*x**2+(${a * b}/32)*x)`
+            } else {
+                var a = extrema[0]
+                var b = extrema[1]
+                var c = extrema[2]
+                var eq = `${!max_first ? "1" : "-1"}*((1/128)*x**4-(${a + b + c}/96)*x**3+(${a*b + a*c + b*c}/64)*x**2-(${a*b*c}/32)*x)`
+            }
+            var points_to_check = [0, ...extrema, 15]
+            var min = 10000
+            var max = -10000
+            var local_mins = []
+            var local_maxes = []
+            var global_max = []
+            var global_min = []
+            points_to_check.forEach(pt => {
+                var val = eval(eq.replaceAll("x", `(${pt})`))
+                if(val < min){
+                    min = val
+                }
+                if(val > max){
+                    max = val
+                }
+            })
+            eq = eq + `-(${min})`
+            max -= min
+            points_to_check.forEach(pt => {
+                var val = eval(eq.replaceAll("x", `(${pt})`))
+                if(pt > 0 && pt < 15){
+                    if(max_first){
+                        local_maxes.push([pt, val])
+                    }else {
+                        local_mins.push([pt, val])
+                    }
+                    max_first = !max_first
+                }
+                if(val == 0){
+                    global_min.push([pt, val])
+                }
+                if(val == max){
+                    global_max.push([pt, val])
+                }
+
+            })
+
+            var gmaxes_str = ""
+            var gmins_str = ""
+            var lmaxes_str = ""
+            var lmins_str = ""
+
+            var breakdown_lines = []
+
+            var breakdown = ""
+
+            global_max.forEach(val => {
+                gmaxes_str += `, (${val[0]}, ${val[1]})`
+                breakdown_lines.push([val[0], `\`f(${val[0]}) = ${val[1]}\`, which is the highest any point reaches on the graph, so \`(${val[0]}, ${val[1]})\` is a global maximum.`])
+            })
+            global_min.forEach(val => {
+                gmins_str += `, (${val[0]}, ${val[1]})`
+                breakdown_lines.push([val[0], `\`f(${val[0]}) = ${val[1]}\`, which is the lowest any point reaches on the graph, so \`(${val[0]}, ${val[1]})\` is a global minimum.`])
+            })
+            local_maxes.forEach(val => {
+                lmaxes_str += `, (${val[0]}, ${val[1]})`
+                breakdown_lines.push([val[0], `At \`t = ${val[0]}\`, the point is at the top of a curve, thus making \`(${val[0]}, ${val[1]})\` a local maximum`])
+            })
+            local_mins.forEach(val => {
+                lmins_str += `, (${val[0]}, ${val[1]})`
+                breakdown_lines.push([val[0], `At \`t = ${val[0]}\`, the point is at the bottom of a curve, thus making \`(${val[0]}, ${val[1]})\` a local minimum`])
+            })
+
+            breakdown_lines.sort((a, b) => a[0] - b[0]).forEach(line => {
+                breakdown += `<br>${line[1]}`
+            })
+
+
+            replacement_values["eq"] = eq.replaceAll("**", "^")
+            replacement_values["gmaxes"] = gmaxes_str.substring(2)
+            replacement_values["gmins"] = gmins_str.substring(2)
+            replacement_values["lmaxes"] = lmaxes_str.substring(2)
+            replacement_values["lmins"] = lmins_str.substring(2)
+            replacement_values["breakdown"] = breakdown.substring(4)
+            replacement_values["crit"] = points_to_check.toString().replaceAll("[", "").replaceAll("]", "")
+        }
     }
     else if(cur_selected_subject == "AdvancedMath"){
         if(problem_type == "Laws" || problem_type == "AOBT"){
@@ -1639,7 +1735,7 @@ function draw_graph(id, xaxis, yaxis, funcs){
         })
     }
 
-    var container = document.querySelector("#graph")
+    var container = document.querySelector("#" + id)
 
     functionPlot({
         target: "#" + id,
@@ -1649,6 +1745,24 @@ function draw_graph(id, xaxis, yaxis, funcs){
         xAxis: xaxis,
         yAxis: yaxis,
         data: data
+    })
+}
+function draw_graph_range(id, xaxis, yaxis, func, range){
+    var container = document.querySelector("#" + id)
+
+    functionPlot({
+        target: "#" + id,
+        width: container.clientWidth,
+        height: container.clientWidth,
+        grid: true,
+        xAxis: xaxis,
+        yAxis: yaxis,
+        data: [{
+            fn: func,
+            color: '#0071e3',
+            graphType: 'polyline',
+            range: range
+        }]
     })
 }
 function draw_picture(id, xaxis, yaxis, grid, points){
