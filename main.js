@@ -246,7 +246,8 @@ function generate_problem(){
             }
         }
         problem = problems[index]
-    } else {
+    } 
+    else {
         problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
         problems = problems_json_files[problem_type].Types
         index = Math.floor(Math.random() * problems.length)
@@ -1440,6 +1441,28 @@ function generate_problem(){
                 replacement_values["x2"] = x2
                 replacement_values["y2"] = y2
                 replacement_values["dot"] = dot
+            }
+            else if(index == 6){
+                var x1 = Math.floor(Math.random() * 20 + 1) - 10
+                var y1 = Math.floor(Math.random() * 20 + 1) - 10
+                var x2 = Math.floor(Math.random() * 20 + 1) - 10
+                var y2 = Math.floor(Math.random() * 20 + 1) - 10
+
+                var magnitude1 = (x1**2+y1**2)**(1/2)
+                var magnitude2 = (x2**2+y2**2)**(1/2)
+
+                var dot = (x1 * x2) + (y1 * y2)
+
+                var angle = Math.acos(dot/(magnitude1 * magnitude2)) * rad2deg
+                replacement_values["x1"] = x1
+                replacement_values["y1"] = y1
+                replacement_values["x2"] = x2
+                replacement_values["y2"] = y2
+                replacement_values["magnitude1"] = magnitude1
+                replacement_values["magnitude2"] = magnitude2
+                replacement_values["dot"] = dot
+                replacement_values["angle"] = angle
+
             }
         }
         else if(problem_type == "Imaginary"){

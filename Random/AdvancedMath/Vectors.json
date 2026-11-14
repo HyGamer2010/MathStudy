@@ -115,6 +115,30 @@
                 "`vec u * vec v = (%x1% * %x2%) + (%y1% * %y2%)`",
                 "`vec u * vec v = %dot%`"
             ]
+        },
+        {
+            "Problem": [
+                "`vec u = < %x1%,%y1% > `",
+                "`vec v = < %x2%,%y2% > `",
+                "Find the angle between the vectors"
+            ],
+            "Answer": [
+                "`%angle%^@`"
+            ],
+            "Explanation": [
+                "Formula for finding the angle between:",
+                "`cos(theta) = (vec u * vec v)/(||vec u||||vec v||)`",
+                "`vec u * vec v = (%x1% * %x2%) + (%y1% * %y2%)`",
+                "`vec u * vec v = %dot%`",
+                "`||vec u|| = sqrt((%x1%)^2 + (%y1%)^2)`",
+                "`||vec u|| = %magnitude1%`",
+                "`||vec v|| = sqrt((%x2%)^2 + (%y2%)^2)`",
+                "`||vec v|| = %magnitude2%`",
+                "Plugging into formula:",
+                "`cos(theta) = %dot%/((%magnitude1%)(%magnitude2%))`",
+                "`theta = cos^-1(%dot%/((%magnitude1%)(%magnitude2%)))`",
+                "`theta = %angle%^@`"
+            ]
         }
     ]
 }
