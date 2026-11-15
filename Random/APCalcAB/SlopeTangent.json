@@ -1,0 +1,33 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "Find the instantaneous rate of change of `f(x) = %eq%` at `x = %a%`"
+            ],
+            "Answer": [
+                "`%ans%`"
+            ],
+            "Explanation": [
+                "Formula for finding instantaneous rate of change:",
+                "`lim_(h->0)(f(a+h)-f(a))/h`",
+                "Plugging a in:",
+                "`lim_(h->0)(f(%a%+h)-f(%a%))/h`",
+                "Now, expand `f(%a%+h)` and `f(%a%)`",
+                "`lim_(h->0)(class(bold)(f(%a%+h))-f(%a%))/h`",
+                "`%pre_simplify_fa%`",
+                "`lim_(h->0)(f(%a%+h)-class(bold)(f(%a%)))/h`",
+                "`%fa_val%`",
+                "Putting it together:",
+                "`(%pre_simplify%)/h`",
+                "Combine like terms",
+                "%steps%",
+                "Cancel out the `h`",
+                "`%canceling%`",
+                "`%canceled%`",
+                "Plug in `0` for `h`",
+                "`%0inh%`",
+                "`%ans%`"
+            ]
+        }
+    ]
+}

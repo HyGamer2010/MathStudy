@@ -4,7 +4,8 @@ problem_sets = {
         "Unit1": [
             "Limits",
             "Continuity",
-            "ExtendedFuncs"
+            "ExtendedFuncs",
+            "SlopeTangent"
         ],
         "Unit3": [
             "ChainRule",
@@ -45,7 +46,8 @@ var cat_to_readable_string = {
     "Extrema": "Extrema",
     "Limits": "Limits",
     "Continuity": "Continuity",
-    "ExtendedFuncs": "Extended Functions"
+    "ExtendedFuncs": "Extended Functions",
+    "SlopeTangent": "Slope and Tangent Line"
 }
 
 var cur_rounding = 0
@@ -280,7 +282,6 @@ function multiply_factors(factors){
 }
 function terms_to_string(terms){
     var out = ""
-    console.log(terms)
     for(var term of terms){
         if(term.coeff == 0){
             continue
@@ -1671,6 +1672,115 @@ function generate_problem(){
             replacement_values["breakdown"] = breakdown
             replacement_values["num_factor_str"] = num_factor_str
             replacement_values["denom_factor_str"] = denom_factor_str
+        }
+        else if(problem_type == "SlopeTangent"){
+            if(index == 0){
+                var a = Math.floor(Math.random() * 5 + 1) * (Math.random() > .5 ? 1 : -1)
+
+                var degree = Math.floor(Math.random() * 2 + 1)
+                var terms = []
+
+                for(i = degree; i >= 0; i--){
+                    terms.push({
+                        coeff:Math.floor(Math.random() * 15 / (i + 1) + 1),
+                        xpow: i
+                    })
+                }
+
+                var eq = terms_to_string(terms)
+
+                var fterms = []
+                var afunc_val = 0
+                for(term of terms){
+                    afunc_val += term.coeff * a**term.xpow
+                    if(term.xpow == 2){
+                        fterms.push({
+                            coeff:term.coeff * (a**2),
+                            xpow: 0
+                        },{
+                            coeff:term.coeff * 2*a,
+                            xpow: 1
+                        },{
+                            coeff: term.coeff,
+                            xpow: 2
+                        })
+                    } else if(term.xpow == 1){
+                        fterms.push({
+                            coeff:term.coeff * a,
+                            xpow:0
+                        },{
+                            coeff:term.coeff,
+                            xpow:1
+                        })
+                    } else {
+                        fterms.push({
+                            coeff:term.coeff,
+                            xpow:0
+                        })
+                    }
+                }
+                var pre_simplify_fa = terms_to_string(fterms).replaceAll("x", "h")
+                fterms.push({
+                    coeff:-afunc_val,
+                    xpow:0
+                })
+                var pre_simplify = terms_to_string(fterms).replaceAll("x", "h")
+
+                var steps = ""
+                for(i = 0; i <= degree; i++){
+                    var num = ""
+                    var coeff = 0
+                    for(term of [...fterms]){
+                        if(term.xpow == i){
+                            num += `${term.coeff > 0 ? "+" : ""}class(bold)(${term.coeff == 0 ? "" : term.coeff}${term.xpow == 0 ? "" : `h${term.xpow == 1 ? "" : `^${term.xpow}`}`})`
+                            fterms = fterms.filter(term_ => term_ != term)
+                            coeff += term.coeff
+                        } else {
+                            num += `${term.coeff >= 0 ? "+" : ""}${term.coeff == 0 ? "" : term.coeff}${term.xpow == 0 ? "" : `h${term.xpow == 1 ? "" : `^${term.xpow}`}`}`
+                        }
+                    }
+                    if(coeff != 0){
+                        fterms.push({
+                            coeff:coeff,
+                            xpow:i
+                        })
+                    }
+                    num = num.startsWith("+") ? num.substring(1) : num
+                    steps += `\`(${num})/h\`<br>\`(${terms_to_string(fterms).replaceAll("x", "h")})/h\`<br>`
+                }
+
+                var canceling = ""
+                var canceled = ""
+                var ans = 0
+
+                for(term of fterms){
+                    canceling += `${term.coeff > 0 ? "+" : ""}${term.coeff == 0 ? "" : term.coeff}${term.xpow == 0 ? "" : `h${term.xpow == 1 ? "" : `^${term.xpow}`}`}`
+
+                    if(term.xpow == 2){
+                        canceling = canceling.replaceAll("^2", "^cancel(2)")
+                    }
+                    else if(term.xpow == 1){
+                        canceling = canceling.replaceAll("h", "cancel(h)")
+                        ans += term.coeff
+                    }
+
+                    canceled += `${term.coeff > 0 ? "+" : ""}${term.coeff == 0 ? "" : term.coeff}${term.xpow - 1 == 0 ? "" : `h${term.xpow - 1 == 1 ? "" : `^${term.xpow - 1}`}`}`
+                }
+
+                canceling = canceling.startsWith("+") ? canceling.substring(1) : canceling
+                canceled = canceled.startsWith("+") ? canceled.substring(1) : canceled
+
+                replacement_values["pre_simplify_fa"] = pre_simplify_fa
+                replacement_values["pre_simplify"] = pre_simplify
+                replacement_values["a"] = a
+                replacement_values["fa_val"] = afunc_val
+                replacement_values["eq"] = eq
+                replacement_values["steps"] = steps
+                replacement_values["canceling"] = `(${canceling})/cancel(h)`
+                replacement_values["canceled"] = canceled
+                replacement_values["0inh"] = canceled.replaceAll("h", "(0)")
+                replacement_values["ans"] = ans
+            }
         }
     }
     else if(cur_selected_subject == "AdvancedMath"){
