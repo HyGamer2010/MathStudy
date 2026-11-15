@@ -124,6 +124,21 @@
                 "`%ans2%`",
                 "Since `lim_(x->%n%^-)%eq1% != lim_(x->%n%^+)%eq2%`, then `lim_(x->%n%)f(x)` = DNE"
             ]
+        },
+        {
+            "Problem": [
+                "Find `lim_(x->oo)%eq%`"
+            ],
+            "Answer": [
+                "`%ans%`"
+            ],
+            "Explanation": [
+                "In order to find `lim_(x->oo)`, we must find its end behavior model by dividing the highest degree term on the top by the highest degree term on the bottom.",
+                "`%higheq%`",
+                "`%model%`",
+                "%explanation%",
+                "`%ans%`"
+            ]
         }
     ]
 }

@@ -3,7 +3,8 @@ problem_sets = {
         rounding: 2,
         "Unit1": [
             "Limits",
-            "Continuity"
+            "Continuity",
+            "ExtendedFuncs"
         ],
         "Unit3": [
             "ChainRule",
@@ -43,7 +44,8 @@ var cat_to_readable_string = {
     "LHopitals": "L\'Hopitals",
     "Extrema": "Extrema",
     "Limits": "Limits",
-    "Continuity": "Continuity"
+    "Continuity": "Continuity",
+    "ExtendedFuncs": "Extended Functions"
 }
 
 var cur_rounding = 0
@@ -611,8 +613,6 @@ function generate_problem(){
                 var eq = outside.replaceAll("x", `(${inside})`).replaceAll("**", "^").replaceAll("*x", "x")
                 var deriv = `${out_deriv.replaceAll("x", `(${inside})`)}*(${in_deriv})`.replaceAll("**", "^").replaceAll("*x", "x")
 
-                console.log(highout, highin)
-
                 replacement_values["out_deriv"] = out_deriv
                 replacement_values["in_deriv"] = in_deriv
                 replacement_values["outside"] = outside
@@ -679,24 +679,24 @@ function generate_problem(){
                     for(f = 0; f < termsLeftCount; f++){
                         var term = termsLeft[f]
                         if(i == f){
-                            highlighted += `\`+\`<span class='bold'>\`${term}\`</span>`
+                            highlighted += `+class(bold)(${term})`
                         } else{
-                            highlighted += `\`+\`\`${term}\``
+                            highlighted += `+${term}`
                         }
                     }
-                    leftbreakdown = leftbreakdown.replace("--", `\`d/dx[\`${highlighted.substring(3)}\`]\``)
+                    leftbreakdown = leftbreakdown.replace("--", `\`d/dx[${highlighted.substring(1)}]\``)
                 }
                 for(i = 0; i < termsRightCount; i++){
                     var highlighted = ""
                     for(f = 0; f < termsRightCount; f++){
                         var term = termsRight[f]
                         if(i == f){
-                            highlighted += `\`+\`<span class='bold'>\`${term}\`</span>`
+                            highlighted += `+class(bold)(${term})`
                         } else{
-                            highlighted += `\`+\`\`${term}\``
+                            highlighted += `+${term}`
                         }
                     }
-                    rightbreakdown = rightbreakdown.replace("--", `\`d/dx[\`${highlighted.substring(3)}\`]\``)
+                    rightbreakdown = rightbreakdown.replace("--", `\`d/dx[${highlighted.substring(1)}]\``)
                 }
                 replacement_values["leftbreakdown"] = leftbreakdown
                 replacement_values["rightbreakdown"] = rightbreakdown
@@ -1387,6 +1387,50 @@ function generate_problem(){
                 replacement_values["ans1"] = ans1
                 replacement_values["ans2"] = ans2
                 replacement_values["ans"] = ans
+            }
+            else if(index == 7){
+                var num_degree = Math.floor(Math.random() * 2 + 2)
+                var denom_degree = Math.floor(Math.random() * 2 + 2)
+                var num_leading_const = Math.floor(Math.random() * 10 + 1) * (Math.random() > .5 ? 1 : -1)
+                var denom_leading_const = Math.floor(Math.random() * 10 + 1) * (Math.random() > .5 ? 1 : -1)
+
+                var end_num = `${num_leading_const}x^${num_degree}`
+                var end_denom = `${denom_leading_const}x^${denom_degree}`
+
+                var numerator = end_num
+                var denominator = end_denom
+
+                for(i = num_degree - 1; i >= 0; i--){
+                    var constant = Math.floor(Math.random() * 10 + 1) * (Math.random() > .5 ? 1 : -1)
+                    numerator += `${constant > 0 ? "+" : ""}${constant}${i == 0 ? "" : `x${i == 1 ? "" : `^${i}`}`}`
+                }
+                for(i = denom_degree - 1; i >= 0; i--){
+                    var constant = Math.floor(Math.random() * 10 + 1) * (Math.random() > .5 ? 1 : -1)
+                    denominator += `${constant > 0 ? "+" : ""}${constant}${i == 0 ? "" : `x${i == 1 ? "" : `^${i}`}`}`
+                }
+                
+                if(num_degree > denom_degree){
+                    var ans = "oo"
+                    var explanation = "Since the exponent in the numerator is higher than the exponent in the denominator, we will have a slant asymptote, meaning that it approaches infinity."
+                }
+                else if(num_degree == denom_degree){
+                    var ans = `${num_leading_const}/${denom_leading_const}`
+                    var explanation = "Since both the numerator and the denominator have the same exponent, they cancel each other out and we are just left with the constants."
+                }
+                else if(num_degree < denom_degree){
+                    var ans = 0
+                    var explanation = "Since the exponent in the denominator is higher than the exponent in the numerator, it means that the denoninator is growing at a much faster rate, thus making it approach 0."
+                }
+
+                var eq = `(${numerator})/(${denominator})`
+
+                console.log(end_num, end_denom, eq)
+
+                replacement_values["eq"] = eq
+                replacement_values["ans"] = ans
+                replacement_values["higheq"] = eq.replace(end_num, `class(bold)(${end_num})`).replace(end_denom, `class(bold)(${end_denom})`)
+                replacement_values["model"] = `(${end_num})/(${end_denom})`
+                replacement_values["explanation"] = explanation
             }
         }
         else if(problem_type == "Continuity"){

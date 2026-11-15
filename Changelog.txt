@@ -1,3 +1,5 @@
+|11/15/2026
+-Added end behavior model to limit problems
 |11/14/2026
 -Improved extrema explanation
 -Added limit and continuity problems
