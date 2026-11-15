@@ -28,6 +28,42 @@
                 "`%0inh%`",
                 "`%ans%`"
             ]
+        },
+        {
+            "Problem": [
+                "Find the equation of the tangent line of `f(x) = %eq%` at `x = %a%`"
+            ],
+            "Answer": [
+                "`%eot%`"
+            ],
+            "Explanation": [
+                "Formula for finding instantaneous rate of change:",
+                "`lim_(h->0)(f(a+h)-f(a))/h`",
+                "Plugging a in:",
+                "`lim_(h->0)(f(%a%+h)-f(%a%))/h`",
+                "Now, expand `f(%a%+h)` and `f(%a%)`",
+                "`lim_(h->0)(class(bold)(f(%a%+h))-f(%a%))/h`",
+                "`%pre_simplify_fa%`",
+                "`lim_(h->0)(f(%a%+h)-class(bold)(f(%a%)))/h`",
+                "`%fa_val%`",
+                "Putting it together:",
+                "`(%pre_simplify%)/h`",
+                "Combine like terms",
+                "%steps%",
+                "Cancel out the `h`",
+                "`%canceling%`",
+                "`%canceled%`",
+                "Plug in `0` for `h`",
+                "`%0inh%`",
+                "`%ans%`",
+                "Equation of the tangent line:",
+                "`y - f(a) = m(x - a)`",
+                "Plugging a in:",
+                "`y-f(%a%)=%ans%(x-%a%)`",
+                "`f(%a%)=%fa_val%`",
+                "`y-(%fa_val%)=%ans%(x-%a%)`",
+                "`%eot%`"
+            ]
         }
     ]
 }

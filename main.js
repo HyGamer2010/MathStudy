@@ -1674,7 +1674,7 @@ function generate_problem(){
             replacement_values["denom_factor_str"] = denom_factor_str
         }
         else if(problem_type == "SlopeTangent"){
-            if(index == 0){
+            if(index <= 1){
                 var a = Math.floor(Math.random() * 5 + 1) * (Math.random() > .5 ? 1 : -1)
 
                 var degree = Math.floor(Math.random() * 2 + 1)
@@ -1780,6 +1780,10 @@ function generate_problem(){
                 replacement_values["canceled"] = canceled
                 replacement_values["0inh"] = canceled.replaceAll("h", "(0)")
                 replacement_values["ans"] = ans
+                if(index == 1){
+                    var constant = ans * -a + afunc_val
+                    replacement_values["eot"] = `y=${ans}x${constant == 0 ? "" : `${constant > 0 ? "+" : ""}${constant}`}`
+                }
             }
         }
     }
