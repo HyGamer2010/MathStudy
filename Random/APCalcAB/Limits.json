@@ -103,7 +103,26 @@
                 "`lim_(x->%n%^+)%eq2%`",
                 "`%nineq2%`",
                 "`%ans%`",
-                "Since `lim_(x->%n%^-)%eq1% = lim_(x->%n%^+)%eq2%`, then `lim_(x->%n%)f(x)` = %ans%"
+                "Since `lim_(x->%n%^-)%eq1% = lim_(x->%n%^+)%eq2%`, then `lim_(x->%n%)f(x) = %ans%`"
+            ]
+        },
+        {
+            "Problem": [
+                "`f(x) = {(%eq1%, %dom1%),(%eq2%, %dom2%):}`",
+                "Find `lim_(x->%n%)f(x)`"
+            ],
+            "Answer": [
+                "DNE"
+            ],
+            "Explanation": [
+                "In order to find the limit, we must check it from both sides",
+                "`lim_(x->%n%^-)%eq1%`",
+                "`%nineq1%`",
+                "`%ans1%`",
+                "`lim_(x->%n%^+)%eq2%`",
+                "`%nineq2%`",
+                "`%ans2%`",
+                "Since `lim_(x->%n%^-)%eq1% != lim_(x->%n%^+)%eq2%`, then `lim_(x->%n%)f(x)` = DNE"
             ]
         }
     ]
