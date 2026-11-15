@@ -89,13 +89,21 @@
         },
         {
             "Problem": [
-                "Find `lim_(x->%n%){(%eq1%, %dom1%),(%eq2%, %dom2%):}`"
+                "`f(x) = {(%eq1%, %dom1%),(%eq2%, %dom2%):}`",
+                "Find `lim_(x->%n%)f(x)`"
             ],
             "Answer": [
                 "%ans%"
             ],
             "Explanation": [
-                ""
+                "In order to find the limit, we must check it from both sides",
+                "`lim_(x->%n%^-)%eq1%`",
+                "`%nineq1%`",
+                "`%ans%`",
+                "`lim_(x->%n%^+)%eq2%`",
+                "`%nineq2%`",
+                "`%ans%`",
+                "Since `lim_(x->%n%^-)%eq1% = lim_(x->%n%^+)%eq2%`, then `lim_(x->%n%)f(x)` = %ans%"
             ]
         }
     ]

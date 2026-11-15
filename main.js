@@ -1298,7 +1298,7 @@ function generate_problem(){
             }
             else if(index == 5){
                 var n = Math.floor(Math.random() * 6) * (Math.random() > .5 ? 1 : -1)
-                var ans = Math.floor(Math.random() * 11) * (Math.random() > .5 ? 1 : -1)
+                var ans = Math.floor(Math.random() * 21) * (Math.random() > .5 ? 1 : -1)
 
                 var eqs = []
                 for(ct = 0; ct < 2; ct++){
@@ -1317,12 +1317,23 @@ function generate_problem(){
                     var offset = ans - cur_val
                     if(offset != 0)
                         eq += `${offset > 0 ? "+" : ""}${offset}`
+                    if(eqs.includes(eq)){
+                        ct--
+                        continue
+                    }
                     eqs.push(eq)
                 }
                 console.log(eqs)
 
-                replacement_values["eq1"] = eqs[0].replaceAll("**", "^").replaceAll("*x", "x")
-                replacement_values["eq2"] = eqs[1].replaceAll("**", "^").replaceAll("*x", "x")
+                var eq1 = eqs[0].replaceAll("**", "^").replaceAll("*x", "x")
+                var eq2 = eqs[1].replaceAll("**", "^").replaceAll("*x", "x")
+                var nineq1 = eq1.replaceAll("x", `(${n})`)
+                var nineq2 = eq2.replaceAll("x", `(${n})`)
+
+                replacement_values["eq1"] = eq1
+                replacement_values["eq2"] = eq2
+                replacement_values["nineq1"] = nineq1
+                replacement_values["nineq2"] = nineq2
                 replacement_values["n"] = n
                 replacement_values["dom1"] = `x< ${n}`
                 replacement_values["dom2"] = `x> ${n}`
