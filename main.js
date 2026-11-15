@@ -238,6 +238,60 @@ function gen_poly_deriv(degree, min_exp = 1, step = 1, first_const = 1){
     }
     return [eq, deriv]
 }
+function multiply_factors(factors){
+    var terms = [{xpow:1, coeff:1}, {xpow:0, coeff:-factors[0]}]
+    for(i = 1; i < factors.length; i++){
+        var factor = -factors[i]
+
+        var cur_terms = [...terms]
+        cur_terms.forEach(term => {
+            terms = terms.filter(item => item != term)
+
+            terms.push({
+                xpow: term.xpow + 1,
+                coeff: term.coeff
+            },{
+                xpow: term.xpow,
+                coeff: term.coeff * factor
+            })
+        })
+        var new_sorted = [...terms.sort((a, b) => b.xpow - a.xpow)]
+        terms = []
+        var cur_pow = new_sorted[0].xpow
+        var cur_coeff = 0
+        for(sorted of new_sorted){
+            if(sorted.xpow != cur_pow){
+                terms.push({
+                    xpow:cur_pow,
+                    coeff:cur_coeff
+                })
+                cur_pow = sorted.xpow
+                cur_coeff = sorted.coeff
+            }else {
+                cur_coeff += sorted.coeff
+            }
+        }
+        terms.push({
+            xpow:cur_pow,
+            coeff:cur_coeff
+        })
+    }
+    return terms
+}
+function terms_to_string(terms){
+    var out = ""
+    console.log(terms)
+    for(var term of terms){
+        if(term.coeff == 0){
+            continue
+        }
+        out += `${term.coeff > 0 ? "+" : ""}${term.coeff}${term.xpow == 0 ? "" : `x${term.xpow == 1 ? "" : `^${term.xpow}`}`}`
+    }
+    if(out.startsWith("+")){
+        out = out.substring(1)
+    }
+    return out
+}
 function generate_problem(){
     problem_explanation.hidden = true
     document.getElementById("answer_div").hidden = true 
@@ -1453,10 +1507,7 @@ function generate_problem(){
                 num_factor_str += str
                 denom_factor_str += str
 
-                var term = {
-                    xpow: 1,
-                    constant: -disc
-                }
+                var term = disc
                 num_factors.push(term)
                 denom_factors.push(term)
             }
@@ -1467,10 +1518,7 @@ function generate_problem(){
                     if(disc != other){
                         num_factor_str += `(x${other > 0 ? "" : "+"}${-other})`
 
-                        num_factors.push({
-                            xpow: 1,
-                            constant: -other
-                        })
+                        num_factors.push(other)
                         break
                     }
                 }
@@ -1478,112 +1526,20 @@ function generate_problem(){
 
                 denom_factor_str += `(x${disc > 0 ? "" : "+"}${-disc})`
 
-                denom_factors.push({
-                    xpow: 1,
-                    constant: -disc
-                })
+                denom_factors.push(disc)
             }
             for(i = rem_discs_ct + inf_discs_ct; i < 3; i++){
                 var factor = Math.floor(Math.random() * 9 + 1) * (Math.random() > .5 ? 1 : -1)
 
-                num_factors.push({
-                    xpow: 1,
-                    constant: -factor
-                })
+                num_factors.push(factor)
                 num_factor_str += `(x${factor > 0 ? "" : "+"}${-factor})`
             }
-            var num_terms = [{xpow:num_factors[0].xpow, coeff:1}, {xpow:0, coeff:num_factors[0].constant}]
+            var num_terms = multiply_factors(num_factors)
             if(denom_factors.length > 0)
-                var denom_terms = [{xpow:denom_factors[0].xpow, coeff:1}, {xpow:0, coeff:denom_factors[0].constant}]
+                var denom_terms = multiply_factors(denom_factors)
 
-            for(i = 1; i < num_factors.length; i++){
-                var factor = num_factors[i]
-
-                var cur_terms = [...num_terms]
-                cur_terms.forEach(term => {
-                    num_terms = num_terms.filter(item => item != term)
-
-                    num_terms.push({
-                        xpow: term.xpow + factor.xpow,
-                        coeff: term.coeff
-                    },{
-                        xpow: term.xpow,
-                        coeff: term.coeff * factor.constant
-                    })
-                })
-                var new_sorted = [...num_terms.sort((a, b) => b.xpow - a.xpow)]
-                num_terms = []
-                var cur_pow = new_sorted[0].xpow
-                var cur_coeff = 0
-                for(sorted of new_sorted){
-                    if(sorted.xpow != cur_pow){
-                        num_terms.push({
-                            xpow:cur_pow,
-                            coeff:cur_coeff
-                        })
-                        cur_pow = sorted.xpow
-                        cur_coeff = sorted.coeff
-                    }else {
-                        cur_coeff += sorted.coeff
-                    }
-                }
-                num_terms.push({
-                    xpow:cur_pow,
-                    coeff:cur_coeff
-                })
-            }
-            for(i = 1; i < denom_factors.length; i++){
-                var factor = denom_factors[i]
-
-                var cur_terms = [...denom_terms]
-                cur_terms.forEach(term => {
-                    denom_terms = denom_terms.filter(item => item != term)
-
-                    denom_terms.push({
-                        xpow: term.xpow + factor.xpow,
-                        coeff: term.coeff
-                    },{
-                        xpow: term.xpow,
-                        coeff: term.coeff * factor.constant
-                    })
-                })
-                var new_sorted = [...denom_terms.sort((a, b) => b.xpow - a.xpow)]
-                denom_terms = []
-                var cur_pow = new_sorted[0].xpow
-                var cur_coeff = 0
-                for(sorted of new_sorted){
-                    if(sorted.xpow != cur_pow){
-                        denom_terms.push({
-                            xpow:cur_pow,
-                            coeff:cur_coeff
-                        })
-                        cur_pow = sorted.xpow
-                        cur_coeff = sorted.coeff
-                    }else {
-                        cur_coeff += sorted.coeff
-                    }
-                }
-                denom_terms.push({
-                    xpow:cur_pow,
-                    coeff:cur_coeff
-                })
-            }
-            var numer = ""
-            var denom = ""
-            for(term of num_terms){
-                numer += `${term.coeff > 0 ? "+" : ""}${term.coeff}${term.xpow == 0 ? "" : `x${term.xpow == 1 ? "" : `^${term.xpow}`}`}`
-            }
-            if(denom_factors.length > 0){
-                for(term of denom_terms){
-                    denom += `${term.coeff > 0 ? "+" : ""}${term.coeff}${term.xpow == 0 ? "" : `x${term.xpow == 1 ? "" : `^${term.xpow}`}`}`
-                }
-            }
-            if(numer.startsWith("+")){
-                numer = numer.substring(1)
-            }
-            if(denom.startsWith("+")){
-                denom = denom.substring(1)
-            }
+            var numer = terms_to_string(num_terms)
+            var denom = terms_to_string(denom_terms)
             var eq = `${denom == "" ? "" : `(`}${numer}${denom == "" ? "" : `)/(${denom})`}`
 
             var rem_discs_str = ""
@@ -1595,7 +1551,7 @@ function generate_problem(){
                 }else {
                     var breakdown_num = num_factor_str
                     var breakdown_denom = denom_factor_str
-                    var breakdown = `To find the discontinuities, first you must factor the equation<br>\`(${num_factor_str})/(${denom_factor_str})\`<br>` + rem_discs_ct == 0 ? "There are no removable discontinuities<br>" : "To find the removable discontinuities, we look at what values of x result in it equaling `0/0` by canceling out any factors in the denominator and their match in the numerator and flipping the sign<br>"
+                    var breakdown = `To find the discontinuities, first you must factor the equation<br>\`(${num_factor_str})/(${denom_factor_str})\`<br>` + (rem_discs_ct == 0 ? "There are no removable discontinuities<br>" : "To find the removable discontinuities, we look at what values of x result in it equaling `0/0` by canceling out any factors in the denominator and their match in the numerator and flipping the sign<br>")
 
                     rem_discs.forEach(disc => {
                         rem_discs_str += `${disc}, `
@@ -1605,7 +1561,7 @@ function generate_problem(){
                         breakdown_denom = breakdown_denom.replace(disc_str, ``)
                         breakdown += `\`${breakdown_denom == "" ? "" : "("}${breakdown_num}${breakdown_denom == "" ? "" : `)/(${breakdown_denom})`}\`<br>`
                     })
-                    breakdown += inf_discs_ct == 0 ? "There are no infinite discontinuities." : "To find the infinite discontinuities, we look at where the denominator becomes `0` and the numerator does not.<br>"
+                    breakdown += (inf_discs_ct == 0 ? "There are no infinite discontinuities." : "To find the infinite discontinuities, we look at where the denominator becomes `0` and the numerator does not.<br>")
 
                     inf_discs.forEach(disc => {
                         inf_discs_str += `${disc}, `
@@ -1639,6 +1595,82 @@ function generate_problem(){
             replacement_values["denom_factor_str"] = denom_factor_str
             replacement_values["remdiscs"] = rem_discs_str.substring(0, rem_discs_str.length - 2)
             replacement_values["infdiscs"] = inf_discs_str.substring(0, inf_discs_str.length - 2)
+        }
+        else if(problem_type == "ExtendedFuncs"){
+            var disc_ct = Math.floor(Math.random() * 3 + 1)
+            var discs = []
+            var num_degree = Math.max(disc_ct + 1, Math.floor(Math.random() * 3 + 2))
+            var denom_degree = Math.max(disc_ct, Math.floor(Math.random() * 3 + 2))
+
+            var num_factors = []
+            var denom_factors = []
+            var num_factor_str = ""
+            var denom_factor_str = ""
+
+            for(i = 0; i < disc_ct; i++){
+                var factor = Math.floor(Math.random() * 10 + 1) * (Math.random() > .5 ? 1 : -1)
+                var str = `(x${factor > 0 ? "" : "+"}${-factor})`
+
+                num_factors.push(factor)
+                denom_factors.push(factor)
+                discs.push(factor)
+
+                num_factor_str += str
+                denom_factor_str += str
+            }
+            for(i = disc_ct; i < num_degree; i++){
+                while(true){
+                    var factor = Math.floor(Math.random() * 10 + 1) * (Math.random() > .5 ? 1 : -1)
+                    if(!(num_factors.includes(factor) || denom_factors.includes(factor))){
+                        num_factors.push(factor)
+                        num_factor_str += `(x${factor > 0 ? "" : "+"}${-factor})`
+                        break
+                    }
+                }
+            }
+            for(i = disc_ct; i < denom_degree; i++){
+                while(true){
+                    var factor = Math.floor(Math.random() * 10 + 1) * (Math.random() > .5 ? 1 : -1)
+                    if(!(num_factors.includes(factor) || denom_factors.includes(factor))){
+                        denom_factors.push(factor)
+                        denom_factor_str += `(x${factor > 0 ? "" : "+"}${-factor})`
+                        break
+                    }
+                }
+            }
+            var num_terms = multiply_factors(num_factors)
+            var denom_terms = multiply_factors(denom_factors)
+
+            var numer = terms_to_string(num_terms)
+            var denom = terms_to_string(denom_terms)
+
+            var eq = `(${numer})/(${denom})`
+
+            var breakdown_num = num_factor_str
+            var breakdown_denom = denom_factor_str
+            var breakdown = "To find the removable discontinuities, we look at what values of x result in it equaling `0/0` by canceling out any factors in the denominator and their match in the numerator and flipping the sign<br>"
+
+            discs.forEach(disc => {
+                var disc_str = `(x${disc > 0 ? "" : "+"}${-disc})`
+                num_factors = num_factors.filter(factor => factor != disc)
+                denom_factors = denom_factors.filter(factor => factor != disc)
+                breakdown += `Cancel<br>\`(${breakdown_num.replace(disc_str, `cancel(${disc_str})`)})/(${breakdown_denom.replace(disc_str, `cancel(${disc_str})`)})\`<br>Removable discontinuity at \`x=${disc}\`<br>`
+                breakdown_num = breakdown_num.replace(disc_str, ``)
+                breakdown_denom = breakdown_denom.replace(disc_str, ``)
+                breakdown += `\`${breakdown_denom == "" ? "" : "("}${breakdown_num}${breakdown_denom == "" ? "" : `)/(${breakdown_denom})`}\`<br>`
+            })
+
+            var exteq_terms_num = multiply_factors(num_factors)
+            var exteq_terms_denom = denom_factors.length == 0 ? [] : multiply_factors(denom_factors)
+
+            var exteq_num = terms_to_string(exteq_terms_num)
+            var exteq_denom = exteq_terms_denom.length == 0 ? "" : `/(${terms_to_string(exteq_terms_denom)})`
+
+            replacement_values["eq"] = eq
+            replacement_values["exteq"] = `(${exteq_num})${exteq_denom}`
+            replacement_values["breakdown"] = breakdown
+            replacement_values["num_factor_str"] = num_factor_str
+            replacement_values["denom_factor_str"] = denom_factor_str
         }
     }
     else if(cur_selected_subject == "AdvancedMath"){
@@ -2454,15 +2486,6 @@ function reset(){
     document.getElementById("problems").hidden = true
     document.getElementById("answer_div").hidden = true
     problem_explanation.hidden = true
-
-    // Object.entries(problem_sets).forEach(set => {
-    //     Object.entries(set[1]).forEach(category => {
-    //         if(category[0] != "rounding"){
-    //             document.getElementById(set[0] + category[0]).hidden = true
-    //         }
-    //     })
-    //     document.getElementById(set[0]).hidden = true
-    // })
     document.getElementById("topicselect").hidden = true
 }
 async function load_json(subject, problem_set) {

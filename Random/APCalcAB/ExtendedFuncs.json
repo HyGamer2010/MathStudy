@@ -1,0 +1,20 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "Find the extended function of `%eq%`"
+            ],
+            "Answer": [
+                "`%exteq%`"
+            ],
+            "Explanation": [
+                "To find the extended function, we must remove all removable discontinuities",
+                "To find the discontinuities, first you must factor the equation",
+                "`(%num_factor_str%)/(%denom_factor_str%)`",
+                "%breakdown%",
+                "Since there are no removable discontinuities left, our extended function is",
+                "`%exteq%`"
+            ]
+        }
+    ]
+}
