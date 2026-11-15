@@ -2,7 +2,8 @@ problem_sets = {
     "APCalcAB": {
         rounding: 2,
         "Unit1": [
-            "Limits"
+            "Limits",
+            "Continuity"
         ],
         "Unit3": [
             "ChainRule",
@@ -41,7 +42,8 @@ var cat_to_readable_string = {
     "Imaginary": "Imaginary numbers",
     "LHopitals": "L\'Hopitals",
     "Extrema": "Extrema",
-    "Limits": "Limits"
+    "Limits": "Limits",
+    "Continuity": "Continuity"
 }
 
 var cur_rounding = 0
@@ -1340,6 +1342,213 @@ function generate_problem(){
                 replacement_values["ans"] = ans
             }
         }
+        else if(problem_type == "Continuity"){
+            var rem_discs = []
+            var inf_discs = []
+            var rem_discs_ct = Math.floor(Math.random() * 3)
+            var inf_discs_ct = Math.floor(Math.random() * 3)
+
+            var num_factors = []
+            var denom_factors = []
+
+            var num_factor_str = ""
+            var denom_factor_str = ""
+
+            for(i = 0; i < rem_discs_ct; i++){
+                var disc = Math.floor(Math.random() * 9 + 1) * (Math.random() > .5 ? 1 : -1)
+                rem_discs.push(disc)
+
+                var str = `(x${disc > 0 ? "" : "+"}${-disc})`
+                num_factor_str += str
+                denom_factor_str += str
+
+                var term = {
+                    xpow: 1,
+                    constant: -disc
+                }
+                num_factors.push(term)
+                denom_factors.push(term)
+            }
+            for(i = 0; i < inf_discs_ct; i++){
+                var disc = Math.floor(Math.random() * 9 + 1) * (Math.random() > .5 ? 1 : -1)
+                while(true){
+                    var other = Math.floor(Math.random() * 9 + 1) * (Math.random() > .5 ? 1 : -1)
+                    if(disc != other){
+                        num_factor_str += `(x${other > 0 ? "" : "+"}${-other})`
+
+                        num_factors.push({
+                            xpow: 1,
+                            constant: -other
+                        })
+                        break
+                    }
+                }
+                inf_discs.push(disc)
+
+                denom_factor_str += `(x${disc > 0 ? "" : "+"}${-disc})`
+
+                denom_factors.push({
+                    xpow: 1,
+                    constant: -disc
+                })
+            }
+            for(i = rem_discs_ct + inf_discs_ct; i < 3; i++){
+                var factor = Math.floor(Math.random() * 9 + 1) * (Math.random() > .5 ? 1 : -1)
+
+                num_factors.push({
+                    xpow: 1,
+                    constant: -factor
+                })
+                num_factor_str += `(x${factor > 0 ? "" : "+"}${-factor})`
+            }
+            var num_terms = [{xpow:num_factors[0].xpow, coeff:1}, {xpow:0, coeff:num_factors[0].constant}]
+            if(denom_factors.length > 0)
+                var denom_terms = [{xpow:denom_factors[0].xpow, coeff:1}, {xpow:0, coeff:denom_factors[0].constant}]
+
+            for(i = 1; i < num_factors.length; i++){
+                var factor = num_factors[i]
+
+                var cur_terms = [...num_terms]
+                cur_terms.forEach(term => {
+                    num_terms = num_terms.filter(item => item != term)
+
+                    num_terms.push({
+                        xpow: term.xpow + factor.xpow,
+                        coeff: term.coeff
+                    },{
+                        xpow: term.xpow,
+                        coeff: term.coeff * factor.constant
+                    })
+                })
+                var new_sorted = [...num_terms.sort((a, b) => b.xpow - a.xpow)]
+                num_terms = []
+                var cur_pow = new_sorted[0].xpow
+                var cur_coeff = 0
+                for(sorted of new_sorted){
+                    if(sorted.xpow != cur_pow){
+                        num_terms.push({
+                            xpow:cur_pow,
+                            coeff:cur_coeff
+                        })
+                        cur_pow = sorted.xpow
+                        cur_coeff = sorted.coeff
+                    }else {
+                        cur_coeff += sorted.coeff
+                    }
+                }
+                num_terms.push({
+                    xpow:cur_pow,
+                    coeff:cur_coeff
+                })
+            }
+            for(i = 1; i < denom_factors.length; i++){
+                var factor = denom_factors[i]
+
+                var cur_terms = [...denom_terms]
+                cur_terms.forEach(term => {
+                    denom_terms = denom_terms.filter(item => item != term)
+
+                    denom_terms.push({
+                        xpow: term.xpow + factor.xpow,
+                        coeff: term.coeff
+                    },{
+                        xpow: term.xpow,
+                        coeff: term.coeff * factor.constant
+                    })
+                })
+                var new_sorted = [...denom_terms.sort((a, b) => b.xpow - a.xpow)]
+                denom_terms = []
+                var cur_pow = new_sorted[0].xpow
+                var cur_coeff = 0
+                for(sorted of new_sorted){
+                    if(sorted.xpow != cur_pow){
+                        denom_terms.push({
+                            xpow:cur_pow,
+                            coeff:cur_coeff
+                        })
+                        cur_pow = sorted.xpow
+                        cur_coeff = sorted.coeff
+                    }else {
+                        cur_coeff += sorted.coeff
+                    }
+                }
+                denom_terms.push({
+                    xpow:cur_pow,
+                    coeff:cur_coeff
+                })
+            }
+            var numer = ""
+            var denom = ""
+            for(term of num_terms){
+                numer += `${term.coeff > 0 ? "+" : ""}${term.coeff}${term.xpow == 0 ? "" : `x${term.xpow == 1 ? "" : `^${term.xpow}`}`}`
+            }
+            if(denom_factors.length > 0){
+                for(term of denom_terms){
+                    denom += `${term.coeff > 0 ? "+" : ""}${term.coeff}${term.xpow == 0 ? "" : `x${term.xpow == 1 ? "" : `^${term.xpow}`}`}`
+                }
+            }
+            if(numer.startsWith("+")){
+                numer = numer.substring(1)
+            }
+            if(denom.startsWith("+")){
+                denom = denom.substring(1)
+            }
+            var eq = `${denom == "" ? "" : `(`}${numer}${denom == "" ? "" : `)/(${denom})`}`
+
+            var rem_discs_str = ""
+            var inf_discs_str = ""
+
+            if(index == 0){
+                if(rem_discs_ct == 0 && inf_discs_ct == 0){
+                    var breakdown = "There is nowhere where the denominator can equal `0`, so it is a continuous function"
+                }else {
+                    var breakdown_num = num_factor_str
+                    var breakdown_denom = denom_factor_str
+                    var breakdown = `To find the discontinuities, first you must factor the equation<br>\`(${num_factor_str})/(${denom_factor_str})\`<br>` + rem_discs_ct == 0 ? "There are no removable discontinuities<br>" : "To find the removable discontinuities, we look at what values of x result in it equaling `0/0` by canceling out any factors in the denominator and their match in the numerator and flipping the sign<br>"
+
+                    rem_discs.forEach(disc => {
+                        rem_discs_str += `${disc}, `
+                        var disc_str = `(x${disc > 0 ? "" : "+"}${-disc})`
+                        breakdown += `Cancel<br>\`(${breakdown_num.replace(disc_str, `cancel(${disc_str})`)})/(${breakdown_denom.replace(disc_str, `cancel(${disc_str})`)})\`<br>Removable discontinuity at \`x=${disc}\`<br>`
+                        breakdown_num = breakdown_num.replace(disc_str, ``)
+                        breakdown_denom = breakdown_denom.replace(disc_str, ``)
+                        breakdown += `\`${breakdown_denom == "" ? "" : "("}${breakdown_num}${breakdown_denom == "" ? "" : `)/(${breakdown_denom})`}\`<br>`
+                    })
+                    breakdown += inf_discs_ct == 0 ? "There are no infinite discontinuities." : "To find the infinite discontinuities, we look at where the denominator becomes `0` and the numerator does not.<br>"
+
+                    inf_discs.forEach(disc => {
+                        inf_discs_str += `${disc}, `
+                        var disc_str = `(x${disc > 0 ? "" : "+"}${-disc})`
+                        breakdown += `Cancel<br>\`(${breakdown_num.replace(disc_str, `cancel(${disc_str})`)})/(${breakdown_denom.replace(disc_str, `cancel(${disc_str})`)})\`<br>Infinite discontinuity at \`x=${disc}\`<br>`
+                        breakdown_num = breakdown_num.replace(disc_str, ``)
+                        breakdown_denom = breakdown_denom.replace(disc_str, ``)
+                        breakdown += `\`${breakdown_denom == "" ? "" : "("}${breakdown_num}${breakdown_denom == "" ? "" : `)/(${breakdown_denom})`}\`<br>`
+                    })
+                }
+            }
+            if(index == 1){
+                eq = `(${eq})/8`
+                var breakdown = rem_discs_ct == 0 ? "There are no gaps in the function, so there are no removable discontinuities<br>" : "To find the removable discontinuities, we look at where there is a gap in the function.<br>"
+
+                rem_discs.forEach(disc => {
+                    rem_discs_str += `${disc}, `
+                    breakdown += `Gap at \`${disc}\`<br>`
+                })
+                breakdown += inf_discs_ct == 0 ? "There are no vertical asymptotes, so there are no infinite discontinuities." : "To find the infinite discontinuities, we look at where there are vertical asymptotes.<br>"
+
+                inf_discs.forEach(disc => {
+                    inf_discs_str += `${disc}, `
+                    breakdown += `Horizontal asymptote at \`${disc}\``
+                })
+            }
+
+            replacement_values["eq"] = eq
+            replacement_values["breakdown"] = breakdown
+            replacement_values["num_factor_str"] = num_factor_str
+            replacement_values["denom_factor_str"] = denom_factor_str
+            replacement_values["remdiscs"] = rem_discs_str.substring(0, rem_discs_str.length - 2)
+            replacement_values["infdiscs"] = inf_discs_str.substring(0, inf_discs_str.length - 2)
+        }
     }
     else if(cur_selected_subject == "AdvancedMath"){
         if(problem_type == "Laws" || problem_type == "AOBT"){
@@ -1975,6 +2184,32 @@ function draw_graph_range(id, xaxis, yaxis, func, range){
             graphType: 'polyline',
             range: range
         }]
+    })
+}
+function draw_discontinuous_graph(id, xaxis, yaxis, func, discontinuities){
+    var container = document.querySelector("#" + id)
+
+    var data = []
+
+    discontinuities.sort((a, b) => a - b)
+    discontinuities = [-10, ...discontinuities, 10]
+    for(i = 1; i < discontinuities.length; i++){
+        data.push({
+            fn: func,
+            color: '#0071e3',
+            graphType: 'polyline',
+            range: [discontinuities[i - 1] + .2, discontinuities[i] - .2]
+        })
+    }
+
+    functionPlot({
+        target: "#" + id,
+        width: container.clientWidth,
+        height: container.clientWidth,
+        grid: true,
+        xAxis: xaxis,
+        yAxis: yaxis,
+        data: data
     })
 }
 function draw_picture(id, xaxis, yaxis, grid, points){

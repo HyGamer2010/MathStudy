@@ -1,0 +1,30 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "Identify the discontinuities in `%eq%`"
+            ],
+            "Answer": [
+                "Removable: `%remdiscs%`",
+                "Infinite: `%infdiscs%`"
+            ],
+            "Explanation": [
+                "%breakdown%"
+            ]
+        },
+        {
+            "Problem": [
+                "Identify the discontinuities across the interval `(10, -10)`",
+                "<div id='pic' class='graph'></div>",
+                "<button onclick='draw_discontinuous_graph(`pic`, { domain: [-10, 10] }, { domain: [-10, 10] }, `%eq%`, [%remdiscs%])'>Show picture</button>"
+            ],
+            "Answer": [
+                "Removable: `%remdiscs%`",
+                "Infinite: `%infdiscs%`"
+            ],
+            "Explanation": [
+                "%breakdown%"
+            ]
+        }
+    ]
+}
