@@ -86,6 +86,17 @@
                 "`(1-cos(%in_sin_const%x))/(%in_sin_const%x) = 0`, so",
                 "`%nconst%/%dconst%*0=0`"
             ]
+        },
+        {
+            "Problem": [
+                "Find `lim_(x->%n%){(%eq1%, %dom1%),(%eq2%, %dom2%):}`"
+            ],
+            "Answer": [
+                "%ans%"
+            ],
+            "Explanation": [
+                ""
+            ]
         }
     ]
 }

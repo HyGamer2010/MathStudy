@@ -1296,6 +1296,38 @@ function generate_problem(){
                 replacement_values["dconst"] = dconst
                 replacement_values["in_sin_const"] = in_sin_const
             }
+            else if(index == 5){
+                var n = Math.floor(Math.random() * 6) * (Math.random() > .5 ? 1 : -1)
+                var ans = Math.floor(Math.random() * 11) * (Math.random() > .5 ? 1 : -1)
+
+                var eqs = []
+                for(ct = 0; ct < 2; ct++){
+                    var degree = Math.floor(Math.random() * 2 + 2)
+                    var consts = []
+                    for(i = 1; i <= degree; i++){
+                        consts.push(Math.floor(Math.random() * i**2 + i) * (Math.random() > .5 ? 1 : -1))
+                    }
+                    if(degree == 2){
+                        var eq = `${consts[0]}*x**2${consts[1] > 0 ? "+" : ""}${consts[1]}*x`
+                    }
+                    if(degree == 3){
+                        var eq = `${consts[0]}*x**3${consts[1] > 0 ? "+" : ""}${consts[1]}*x**2${consts[2] > 0 ? "+" : ""}${consts[2]}*x`
+                    }
+                    var cur_val = eval(eq.replaceAll("x", `(${n})`))
+                    var offset = ans - cur_val
+                    if(offset != 0)
+                        eq += `${offset > 0 ? "+" : ""}${offset}`
+                    eqs.push(eq)
+                }
+                console.log(eqs)
+
+                replacement_values["eq1"] = eqs[0].replaceAll("**", "^").replaceAll("*x", "x")
+                replacement_values["eq2"] = eqs[1].replaceAll("**", "^").replaceAll("*x", "x")
+                replacement_values["n"] = n
+                replacement_values["dom1"] = `x< ${n}`
+                replacement_values["dom2"] = `x> ${n}`
+                replacement_values["ans"] = ans
+            }
         }
     }
     else if(cur_selected_subject == "AdvancedMath"){
