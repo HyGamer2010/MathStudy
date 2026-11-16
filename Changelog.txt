@@ -3,6 +3,7 @@
 -Added extended function problems
 -Added rate of change and EOT problems under Unit 1
 -Added derivative problems under unit 2
+-Added testing feature
 |11/14/2026
 -Improved extrema explanation
 -Added limit and continuity problems

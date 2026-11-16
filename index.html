@@ -58,13 +58,22 @@
             <div class="sect" id="Changelog" hidden="true">
                 
             </div>
+            <header class="title" id="ResultsHeader" hidden="true"><h2>Results</h2></header>
+            <div class="sect" id="Results" hidden="true">
+                
+            </div>
             <div id="topicselect" hidden="true">
                 <fieldset>
                 </fieldset>
-                <select id="orderedselect">
+                <select id="orderedselect" onchange="change_test_type()">
                     <option value="ordered">Ordered</option>
                     <option value="random">Random</option>
+                    <option value="test">Test</option>
                 </select><br>
+                <form id="test_opts" hidden="true">
+                    <label for="q_ct">Question Count: </label>
+                    <input type="number" id="q_ct" value="10">
+                </form>
                 <button onclick="begin()" hidden="true" id="begin_button">Begin</button>
             </div>
             <div class="sect" id="problems" hidden="true">
@@ -77,6 +86,7 @@
                 </div>
                 <p id="problem_explanation" hidden="true"></p>
                 <button onclick='generate_problem()'>Next</button>
+                <button onclick='wrong_answer_button()' id="correct_button" hidden="true">Click if you got it wrong!</button>
                 <button onclick='select_menu("problems", "topicselect")'>Back</button>
             </div>
         </main>

@@ -61,8 +61,11 @@ var category = ""
 var problem_display
 var problem_answer
 var problem_explanation
+var test_opts_menu
 var ordered_select
 var begin_button
+var results_menu
+var correct_button
 var body
 var nav
 var aside
@@ -71,13 +74,19 @@ var fieldset
 var deg2rad = Math.PI/180
 var rad2deg = 180/Math.PI
 var problems_json_files = {}
-var ordered = true
+var test_type = "ordered"
 
 var lenunits = ["m", "ft", "\"in\"", "cm", "km", "mi"]
 var timeunits = ["s", "min", "hr"]
 
 var index
 var type_index
+
+var answered_right = 0
+var wrong_topics = []
+
+var q_amts
+var q_ct
 
 document.addEventListener('DOMContentLoaded', (event) => {
     problem_display = document.getElementById("problem_display")
@@ -90,6 +99,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     fieldset = document.querySelector("fieldset")
     ordered_select = document.querySelector("#orderedselect")
     begin_button = document.querySelector("#begin_button")
+    test_opts_menu = document.querySelector("#test_opts")
+    results_menu = document.querySelector("#Results")
+    correct_button = document.querySelector("#correct_button")
 
     load_changelog()
 })
@@ -175,7 +187,7 @@ function select_subject(subject){
         set_element(cur_selected_subject + "Header", true)
     }
     reset()
-    if(subject != "Changelog")
+    if(subject != "Changelog" && subject != "Results")
         cur_rounding = problem_sets[subject].rounding
     set_element(subject, false)
     set_element(subject + "Header", false)
@@ -297,11 +309,20 @@ function terms_to_string(terms){
     }
     return out
 }
+function wrong_answer_button(){
+    if(wrong_pressed || wrong_topics.includes(problem_type)){
+        return
+    }
+    answered_right--
+    wrong_topics.push(problem_type)
+    wrong_pressed = true
+}
 function generate_problem(){
+    wrong_pressed = false
     problem_explanation.hidden = true
     document.getElementById("answer_div").hidden = true 
 
-    if(ordered){
+    if(test_type == "ordered"){
         index++
         if(index > 0){
             if(index >= problems.length){
@@ -316,11 +337,32 @@ function generate_problem(){
         }
         problem = problems[index]
     } 
-    else {
+    else if(test_type == "random") {
         problem_type = problem_types_selected[Math.floor(Math.random() * problem_types_selected.length)]
         problems = problems_json_files[problem_type].Types
         index = Math.floor(Math.random() * problems.length)
         problem = problems[index]
+    } else if(test_type == "test"){
+        if(qs_left == 0){
+            type_index++
+            if(type_index >= problem_types_selected.length){
+                end_test()
+                return
+            }
+            problem_type = problem_types_selected[type_index]
+            qs_left = q_amts[problem_type]
+            problems = problems_json_files[problem_type].Types
+        }
+        if(unused_indexes.length == 0){
+            for(i = 0; i < problems.length; i++){
+                unused_indexes.push(i)
+            }
+        }
+        qs_left--
+        ind = Math.floor(Math.random() * unused_indexes.length)
+        index = unused_indexes[ind]
+        problem = problems[index]
+        unused_indexes.splice(ind, 1)
     }
 
     replacement_values = {}
@@ -2387,6 +2429,21 @@ async function renderMath(){
     await MathJax.typesetPromise()
 }
 
+function change_test_type(){
+    test_type = ordered_select.value
+    test_opts_menu.hidden = test_type != "test"
+    correct_button.hidden = test_type != "test"
+}
+function end_test(){
+    reset()
+    select_subject("Results")
+
+    results_menu.innerHTML = `Correct: ${answered_right}/${q_ct}<br>Topics to review:<br><br>`
+    for(topic of wrong_topics){
+        results_menu.innerHTML += `${cat_to_readable_string[topic]}<br>`
+    }
+}
+
 async function begin(){
     select_menu("topicselect", "problems")
 
@@ -2403,13 +2460,37 @@ async function begin(){
             problems_json_files[el.value] = await load_json(problem_set, el.value)
         }
     }
-    ordered = ordered_select.value == "ordered"
-    if(ordered){
+    if(test_type == "ordered"){
         index = -1
         type_index = 0
         problem_type = problem_types_selected[0]
         problems = problems_json_files[problem_type].Types
     }
+    else if(test_type == "test"){
+        wrong_topics = []
+        q_ct = document.getElementById("q_ct").value
+        answered_right = q_ct
+        var q_per_cat = Math.floor(q_ct / problem_types_selected.length)
+
+        var rem = q_ct % problem_types_selected.length
+
+        var sorted = problem_types_selected.sort((a, b) => problems_json_files[a].Types.length - problems_json_files[b].Types.length)
+
+        q_amts = {}
+        for(type of sorted){
+            var num = q_per_cat
+            if(rem > 0){
+                num++
+                rem--
+            }
+            q_amts[type] = num
+        }
+        type_index = 0
+        problem_type = problem_types_selected[0]
+        qs_left = q_amts[problem_type]
+        problems = problems_json_files[problem_type].Types
+        unused_indexes = []
+    }   
 
     generate_problem()
 }
