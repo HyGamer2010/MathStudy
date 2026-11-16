@@ -1951,22 +1951,21 @@ function generate_problem(){
             if(index == 0){
                 var n = Math.floor(Math.random() * 6) * (Math.random() > .5 ? 1 : -1)
                 var slope_num = Math.floor(Math.random() * 5 + 1) * (Math.random() > .5 ? 1 : -1)
-                var slope_denom = Math.floor(Math.random() * 3 + 1)
-
-                var slope = slope_num/slope_denom
+                var matching_point = Math.floor(Math.random() * 6) * (Math.random() > .5 ? 1 : -1)
 
                 var eqs = []
 
-                for(i = 0; i < 2; i++){
+                for(ct = 0; ct < 2; ct++){
                     var degree = Math.floor(Math.random() * 3 + 2)
 
                     var eq = []
                     var cur_val = 0
+                    var denom_cur_val = 0
                     for(i = degree; i >= 2; i--){
                         var coeff = Math.floor(Math.random() * 15 + 1) * (Math.random() > .5 ? 1 : -1)
-                        coeff -= coeff % slope_denom
 
                         cur_val += coeff * n**i
+                        denom_cur_val += i * coeff * n**(i - 1)
 
                         eq.push({
                             coeff:coeff,
@@ -1974,11 +1973,19 @@ function generate_problem(){
                         })
                     }
 
-                    var offset = slope_num - cur_val
+                    var offset = slope_num - denom_cur_val
                     eq.push({
                         coeff:offset,
                         xpow:1
                     })
+                    cur_val += offset * n
+
+                    var offset = matching_point - cur_val
+                    eq.push({
+                        coeff:offset,
+                        xpow:0
+                    })
+                    eqs.push(eq)
                 }
             }
         }
