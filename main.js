@@ -1949,7 +1949,37 @@ function generate_problem(){
         }
         else if(problem_type == "Differentiability"){
             if(index == 0){
-                
+                var n = Math.floor(Math.random() * 6) * (Math.random() > .5 ? 1 : -1)
+                var slope_num = Math.floor(Math.random() * 5 + 1) * (Math.random() > .5 ? 1 : -1)
+                var slope_denom = Math.floor(Math.random() * 3 + 1)
+
+                var slope = slope_num/slope_denom
+
+                var eqs = []
+
+                for(i = 0; i < 2; i++){
+                    var degree = Math.floor(Math.random() * 3 + 2)
+
+                    var eq = []
+                    var cur_val = 0
+                    for(i = degree; i >= 2; i--){
+                        var coeff = Math.floor(Math.random() * 15 + 1) * (Math.random() > .5 ? 1 : -1)
+                        coeff -= coeff % slope_denom
+
+                        cur_val += coeff * n**i
+
+                        eq.push({
+                            coeff:coeff,
+                            xpow:i
+                        })
+                    }
+
+                    var offset = slope_num - cur_val
+                    eq.push({
+                        coeff:offset,
+                        xpow:1
+                    })
+                }
             }
         }
     }
