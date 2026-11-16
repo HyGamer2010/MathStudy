@@ -8,7 +8,8 @@ problem_sets = {
             "SlopeTangent"
         ],
         "Unit2": [
-            "Derivative"
+            "Derivative",
+            "Differentiability"
         ],
         "Unit3": [
             "ChainRule",
@@ -51,7 +52,8 @@ var cat_to_readable_string = {
     "Continuity": "Continuity",
     "ExtendedFuncs": "Extended Functions",
     "SlopeTangent": "Slope and Tangent Line",
-    "Derivative": "Derivative"
+    "Derivative": "Derivative",
+    "Differentiability": "Differentiability"
 }
 
 var cur_rounding = 0
