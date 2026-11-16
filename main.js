@@ -1325,7 +1325,7 @@ function generate_problem(){
                     denom_factor_str += `(x${factor < 0 ? "+" : ""}${-factor})`
                 }
 
-                var numer = ""
+                var numer = "" 
                 var denom = ""
 
                 if(num_degree == 2){
@@ -1945,6 +1945,11 @@ function generate_problem(){
                 replacement_values["breakdown"] = breakdown
                 replacement_values["func"] = func.startsWith("+") ? func.substring(1) : func
                 replacement_values["d_func"] = d_func.startsWith("+") ? d_func.substring(1) : d_func
+            }
+        }
+        else if(problem_type == "Differentiability"){
+            if(index == 0){
+                
             }
         }
     }
