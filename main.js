@@ -7,6 +7,9 @@ problem_sets = {
             "ExtendedFuncs",
             "SlopeTangent"
         ],
+        "Unit2": [
+            "Derivative"
+        ],
         "Unit3": [
             "ChainRule",
             "ImplicitDifferentiation"
@@ -47,7 +50,8 @@ var cat_to_readable_string = {
     "Limits": "Limits",
     "Continuity": "Continuity",
     "ExtendedFuncs": "Extended Functions",
-    "SlopeTangent": "Slope and Tangent Line"
+    "SlopeTangent": "Slope and Tangent Line",
+    "Derivative": "Derivative"
 }
 
 var cur_rounding = 0
@@ -286,7 +290,7 @@ function terms_to_string(terms){
         if(term.coeff == 0){
             continue
         }
-        out += `${term.coeff > 0 ? "+" : ""}${term.coeff}${term.xpow == 0 ? "" : `x${term.xpow == 1 ? "" : `^${term.xpow}`}`}`
+        out += `${term.coeff > 0 ? "+" : ""}${Math.abs(term.coeff) == 1 && term.xpow > 0 ? `${term.coeff}`.replace("1", "") : term.coeff}${term.xpow == 0 ? "" : `x${term.xpow == 1 ? "" : `^${term.xpow}`}`}`
     }
     if(out.startsWith("+")){
         out = out.substring(1)
@@ -1038,7 +1042,6 @@ function generate_problem(){
                                 numers.push(numer.startsWith("-") ? numer : numer.substring(1))
                             }
                         }
-                        console.log(numers)
                         if(numers.length == num_of_steps){
                             break
                         }
@@ -1064,7 +1067,6 @@ function generate_problem(){
                             }
                             var val = eval(denom.replaceAll("x", `(${n})`))
                             if((val == 0 && i == num_of_steps - 1) || (val != 0 && i < num_of_steps - 1) || (denom == numers[i])){
-                                console.log(denom, numers[i])
                                 break
                             }else {
                                 steps[i] = `(${numers[i]})/(${denom.startsWith("-") ? denom : denom.substring(1)})`
@@ -1380,7 +1382,6 @@ function generate_problem(){
                     }
                     eqs.push(eq)
                 }
-                console.log(eqs)
 
                 var eq1 = eqs[0].replaceAll("**", "^").replaceAll("*x", "x")
                 var eq2 = eqs[1].replaceAll("**", "^").replaceAll("*x", "x")
@@ -1423,7 +1424,6 @@ function generate_problem(){
                     }
                     eqs.push(eq)
                 }
-                console.log(eqs)
 
                 var eq1 = eqs[0]
                 var eq2 = eqs[1]
@@ -1478,8 +1478,6 @@ function generate_problem(){
                 }
 
                 var eq = `(${numerator})/(${denominator})`
-
-                console.log(end_num, end_denom, eq)
 
                 replacement_values["eq"] = eq
                 replacement_values["ans"] = ans
@@ -1784,6 +1782,39 @@ function generate_problem(){
                     var constant = ans * -a + afunc_val
                     replacement_values["eot"] = `y=${ans}x${constant == 0 ? "" : `${constant > 0 ? "+" : ""}${constant}`}`
                 }
+            }
+        }
+        else if(problem_type == "Derivative"){
+            if(index == 0){
+                var degree = Math.floor(Math.random() * 4 + 2)
+                var terms = []
+                for(i = degree; i >= 0; i--){
+                    terms.push({
+                        xpow:i,
+                        coeff:Math.floor(Math.random() * ((degree + 1)**2 / (i + 1)) + 1) * (Math.random() > .5 ? 1 : -1)
+                    })
+                }
+                var eq = terms_to_string(terms)
+
+                var breakdown = ""
+                var deriv_terms = []
+                for(term of terms){
+                    breakdown += `\`${terms_to_string([term])}->`
+                    if(term.xpow != 0){
+                        var new_term = {
+                            xpow:term.xpow - 1,
+                            coeff:term.coeff * term.xpow
+                        }
+                        deriv_terms.push(new_term)
+                    }
+                    breakdown += `${term.xpow != 0 ? terms_to_string([new_term]) : "0"}\`<br>`
+                }
+
+                var deriv = terms_to_string(deriv_terms)
+
+                replacement_values["eq"] = eq
+                replacement_values["deriv"] = deriv
+                replacement_values["breakdown"] = breakdown
             }
         }
     }
@@ -2593,6 +2624,12 @@ function draw_triangle(id, A, B, C, a, b, c){
     })
 }
 function reset(){
+    elements = document.getElementsByClassName("topic")
+
+    for(element of elements){
+        element.checked = false
+    }
+    problem_types_selected = []
     problem_answer.innerHTML = ""
     problem_explanation.innerHTML = ""
     problem_display.innerHTML = ""
@@ -2600,6 +2637,7 @@ function reset(){
     document.getElementById("problems").hidden = true
     document.getElementById("answer_div").hidden = true
     problem_explanation.hidden = true
+    begin_button.hidden = true
     document.getElementById("topicselect").hidden = true
 }
 async function load_json(subject, problem_set) {

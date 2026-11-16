@@ -1,0 +1,16 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "`%eq%`"
+            ],
+            "Answer": [
+                "`%deriv%`"
+            ],
+            "Explanation": [
+                "Because of the sum/difference rule, we can do each term individually. We can use power and constant rule on each term to solve.",
+                "%breakdown%"
+            ]
+        }
+    ]
+}
