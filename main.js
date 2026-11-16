@@ -2560,7 +2560,7 @@ async function update_q_per_cat(){
         }
         q_amts[type] = num
     }
-    per_cat_element.innerHTML = `(~${q_per_cat} questions per topic)`
+    per_cat_element.innerHTML = problem_types_selected.length == 0 ? "" : `(~${q_per_cat} questions per topic across ${problem_types_selected.length} topic(s))`
 }
 async function begin(){
     select_menu("topicselect", "problems")
