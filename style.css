@@ -29,6 +29,10 @@ input#q_ct{
 header, footer{
     width: 100%;
 }
+#Results{
+    font-size: 2rem;
+    text-align: center;
+}
 #MainHeader, nav, button, aside, footer{
     background-color:rgb(52, 49, 65);
     color:white;

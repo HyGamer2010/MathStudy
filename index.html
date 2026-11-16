@@ -70,9 +70,9 @@
                     <option value="random">Random</option>
                     <option value="test">Test</option>
                 </select><br>
-                <form id="test_opts" hidden="true">
+                <form id="test_opts" hidden="true" onsubmit="return false;">
                     <label for="q_ct">Question Count: </label>
-                    <input type="number" id="q_ct" value="10">
+                    <input type="number" id="q_ct" value="10" onchange="update_q_per_cat()"><span id="per_cat"></span>
                 </form>
                 <button onclick="begin()" hidden="true" id="begin_button">Begin</button>
             </div>

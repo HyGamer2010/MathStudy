@@ -66,6 +66,8 @@ var ordered_select
 var begin_button
 var results_menu
 var correct_button
+var q_ct_element
+var per_cat_element
 var body
 var nav
 var aside
@@ -87,6 +89,7 @@ var wrong_topics = []
 
 var q_amts
 var q_ct
+var q_per_cat
 
 document.addEventListener('DOMContentLoaded', (event) => {
     problem_display = document.getElementById("problem_display")
@@ -102,6 +105,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     test_opts_menu = document.querySelector("#test_opts")
     results_menu = document.querySelector("#Results")
     correct_button = document.querySelector("#correct_button")
+    q_ct_element = document.querySelector("#q_ct")
+    per_cat_element = document.querySelector("#per_cat")
 
     load_changelog()
 })
@@ -122,7 +127,6 @@ async function load_changelog(){
         }
     })
 }
-
 function select_box(index){
     elements = document.getElementsByClassName("topic")
 
@@ -140,8 +144,8 @@ function select_box(index){
     if(!elements[index].checked){
         elements[0].checked = false
     }
+    update_q_per_cat()
 }
-
 function select_menu(from_id, to_id){
     var from = document.getElementById(from_id)
     var to = document.getElementById(to_id)
@@ -317,6 +321,26 @@ function wrong_answer_button(){
     wrong_topics.push(problem_type)
     wrong_pressed = true
 }
+function gen_terms_eq_deriv(degree, deg_diff = 1){
+    var terms = []
+    for(i = degree; i >= 0; i--){
+        terms.push({
+            xpow:i,
+            coeff:Math.floor(Math.random() * ((degree + deg_diff)**2 / (i + 1)) + 1) * (Math.random() > .5 ? 1 : -1)
+        })
+    }
+    var deriv_terms = []
+    for(term of terms){
+        if(term.xpow != 0){
+            var new_term = {
+                xpow:term.xpow - 1,
+                coeff:term.coeff * term.xpow
+            }
+            deriv_terms.push(new_term)
+        }
+    }
+    return [terms, deriv_terms]
+}
 function generate_problem(){
     wrong_pressed = false
     problem_explanation.hidden = true
@@ -342,7 +366,8 @@ function generate_problem(){
         problems = problems_json_files[problem_type].Types
         index = Math.floor(Math.random() * problems.length)
         problem = problems[index]
-    } else if(test_type == "test"){
+    } 
+    else if(test_type == "test"){
         if(qs_left == 0){
             type_index++
             if(type_index >= problem_types_selected.length){
@@ -1828,35 +1853,96 @@ function generate_problem(){
         }
         else if(problem_type == "Derivative"){
             if(index == 0){
-                var degree = Math.floor(Math.random() * 4 + 2)
-                var terms = []
-                for(i = degree; i >= 0; i--){
-                    terms.push({
-                        xpow:i,
-                        coeff:Math.floor(Math.random() * ((degree + 1)**2 / (i + 1)) + 1) * (Math.random() > .5 ? 1 : -1)
-                    })
-                }
+                var gen = gen_terms_eq_deriv(Math.floor(Math.random() * 4 + 2))
+                terms = gen[0]
+                deriv_terms = gen[1]
+                
                 var eq = terms_to_string(terms)
-
                 var breakdown = ""
-                var deriv_terms = []
-                for(term of terms){
-                    breakdown += `\`${terms_to_string([term])}->`
-                    if(term.xpow != 0){
-                        var new_term = {
-                            xpow:term.xpow - 1,
-                            coeff:term.coeff * term.xpow
-                        }
-                        deriv_terms.push(new_term)
-                    }
-                    breakdown += `${term.xpow != 0 ? terms_to_string([new_term]) : "0"}\`<br>`
-                }
-
                 var deriv = terms_to_string(deriv_terms)
+                for(i = 0; i < terms.length; i++){
+                    breakdown += `\`d/dx[${terms_to_string([terms[i]])}]=${terms[i].xpow != 0 ? terms_to_string([deriv_terms[i]]) : "0"}\`<br>`
+                }
 
                 replacement_values["eq"] = eq
                 replacement_values["deriv"] = deriv
                 replacement_values["breakdown"] = breakdown
+            }
+            else if(index == 1 || index == 2){
+                var gen1 = gen_terms_eq_deriv(Math.floor(Math.random() * 2 + 1), 2)
+                var gen2 = gen_terms_eq_deriv(Math.floor(Math.random() * 2 + 1), 2)
+
+                var eq1 = terms_to_string(gen1[0])
+                var deriv1 = terms_to_string(gen1[1])
+                var eq2 = terms_to_string(gen2[0])
+                var deriv2 = terms_to_string(gen2[1])
+
+                var eq = index == 1 ? `(${eq1})(${eq2})` : `(${eq1})/(${eq2})`
+                var deriv = index == 1 ? `(${deriv1})(${eq2})+(${eq1})(${deriv2})` : `((${deriv1})(${eq2})-(${eq1})(${deriv2}))/(${eq2})^2`
+
+                replacement_values["eq"] = eq
+                replacement_values["deriv"] = deriv
+                replacement_values["eq1"] = eq1
+                replacement_values["eq2"] = eq2
+                replacement_values["deriv1"] = deriv1
+                replacement_values["deriv2"] = deriv2
+            }
+            else if(index >= 3 && index <= 5){
+                var gen = gen_terms_eq_deriv(Math.floor(Math.random() * 3 + 2))
+                terms = gen[0]
+                deriv_terms = gen[1]
+
+                var func_const = Math.floor(Math.random() * 9 + 1)
+                if(index == 3){
+                    var op = Math.floor(Math.random() * 6)
+                    switch(op){
+                        case 0:
+                            var func = `${func_const > 0 ? "+" : ""}${func_const}sin(x)`
+                            var d_func = `${func_const > 0 ? "+" : ""}${func_const}cos(x)`
+                            break;
+                        case 1:
+                            var func = `${func_const > 0 ? "+" : ""}${func_const}cos(x)`
+                            var d_func = `${func_const < 0 ? "+" : ""}${-func_const}sin(x)`
+                            break;
+                        case 2:
+                            var func = `${func_const > 0 ? "+" : ""}${func_const}tan(x)`
+                            var d_func = `${func_const > 0 ? "+" : ""}${func_const}sec^2(x)`
+                            break;
+                        case 3:
+                            var func = `${func_const > 0 ? "+" : ""}${func_const}csc(x)`
+                            var d_func = `${func_const < 0 ? "+" : ""}${-func_const}csc(x)cot(x)`
+                            break;
+                        case 4:
+                            var func = `${func_const > 0 ? "+" : ""}${func_const}sec(x)`
+                            var d_func = `${func_const > 0 ? "+" : ""}${func_const}sec(x)tan(x)`
+                            break;
+                        case 5:
+                            var func = `${func_const > 0 ? "+" : ""}${func_const}cot(x)`
+                            var d_func = `${func_const < 0 ? "+" : ""}${-func_const}csc^2(x)`
+                            break;
+                    }
+                }
+                if(index == 4){
+                    var func = `${func_const > 0 ? "+" : ""}${func_const}e^x`
+                    var d_func = `${func_const > 0 ? "+" : ""}${func_const}e^x`
+                }
+                if(index == 5){
+                    var func = `${func_const > 0 ? "+" : ""}${func_const}ln(x)`
+                    var d_func = `${func_const > 0 ? "+" : ""}${func_const}/x`
+                }
+                
+                var eq = terms_to_string(terms)+func
+                var breakdown = ""
+                var deriv = terms_to_string(deriv_terms)+d_func
+                for(i = 0; i < terms.length; i++){
+                    breakdown += `\`${terms_to_string([terms[i]])}->${terms[i].xpow != 0 ? terms_to_string([deriv_terms[i]]) : "0"}\`<br>`
+                }
+
+                replacement_values["eq"] = eq
+                replacement_values["deriv"] = deriv
+                replacement_values["breakdown"] = breakdown
+                replacement_values["func"] = func.startsWith("+") ? func.substring(1) : func
+                replacement_values["d_func"] = d_func.startsWith("+") ? d_func.substring(1) : d_func
             }
         }
     }
@@ -2428,7 +2514,6 @@ function generate_problem(){
 async function renderMath(){
     await MathJax.typesetPromise()
 }
-
 function change_test_type(){
     test_type = ordered_select.value
     test_opts_menu.hidden = test_type != "test"
@@ -2443,14 +2528,11 @@ function end_test(){
         results_menu.innerHTML += `${cat_to_readable_string[topic]}<br>`
     }
 }
-
-async function begin(){
-    select_menu("topicselect", "problems")
-
-    elements = document.getElementsByClassName("topic")
-    all = false
+async function update_q_per_cat(){
     problems_json_files = {}
     problem_types_selected = []
+    elements = document.getElementsByClassName("topic")
+    all = false
     for(el of elements){
         if(el.value == "All" && el.checked){
             all = true
@@ -2460,6 +2542,29 @@ async function begin(){
             problems_json_files[el.value] = await load_json(problem_set, el.value)
         }
     }
+
+    q_ct = q_ct_element.value
+    answered_right = q_ct
+    q_per_cat = Math.floor(q_ct / problem_types_selected.length)
+
+    var rem = q_ct % problem_types_selected.length
+
+    var sorted = problem_types_selected.sort((a, b) => problems_json_files[a].Types.length - problems_json_files[b].Types.length)
+
+    q_amts = {}
+    for(type of sorted){
+        var num = q_per_cat
+        if(rem > 0){
+            num++
+            rem--
+        }
+        q_amts[type] = num
+    }
+    per_cat_element.innerHTML = `(~${q_per_cat} questions per topic)`
+}
+async function begin(){
+    select_menu("topicselect", "problems")
+
     if(test_type == "ordered"){
         index = -1
         type_index = 0
@@ -2468,23 +2573,6 @@ async function begin(){
     }
     else if(test_type == "test"){
         wrong_topics = []
-        q_ct = document.getElementById("q_ct").value
-        answered_right = q_ct
-        var q_per_cat = Math.floor(q_ct / problem_types_selected.length)
-
-        var rem = q_ct % problem_types_selected.length
-
-        var sorted = problem_types_selected.sort((a, b) => problems_json_files[a].Types.length - problems_json_files[b].Types.length)
-
-        q_amts = {}
-        for(type of sorted){
-            var num = q_per_cat
-            if(rem > 0){
-                num++
-                rem--
-            }
-            q_amts[type] = num
-        }
         type_index = 0
         problem_type = problem_types_selected[0]
         qs_left = q_amts[problem_type]
@@ -2494,7 +2582,6 @@ async function begin(){
 
     generate_problem()
 }
-
 function draw_graph(id, xaxis, yaxis, funcs){
     data = []
     for(func of funcs){

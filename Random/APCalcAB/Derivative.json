@@ -11,6 +11,83 @@
                 "Because of the sum/difference rule, we can do each term individually. We can use power and constant rule on each term to solve.",
                 "%breakdown%"
             ]
+        },
+        {
+            "Problem": [
+                "`%eq%`"
+            ],
+            "Answer": [
+                "`%deriv%`"
+            ],
+            "Explanation": [
+                "To solve, we must use product rule.",
+                "Product rule: `u'v+uv'`",
+                "We must find the derivative of each factor",
+                "`(class(bold)(%eq1%))(%eq2%)`",
+                "`d/dx[%eq1%]=%deriv1%`",
+                "`(%eq1%)(class(bold)(%eq2%))`",
+                "`d/dx[%eq2%]=%deriv2%`",
+                "Putting it all together:",
+                "`%deriv%`"
+            ]
+        },
+        {
+            "Problem": [
+                "`%eq%`"
+            ],
+            "Answer": [
+                "`%deriv%`"
+            ],
+            "Explanation": [
+                "To solve, we must use quotient rule.",
+                "Quotient rule: `(u'v-uv')/v^2`",
+                "We must find the derivative of each factor",
+                "`(class(bold)(%eq1%))/(%eq2%)`",
+                "`d/dx[%eq1%]=%deriv1%`",
+                "`(%eq1%)/(class(bold)(%eq2%))`",
+                "`d/dx[%eq2%]=%deriv2%`",
+                "Putting it all together:",
+                "`%deriv%`"
+            ]
+        },
+        {
+            "Problem": [
+                "`%eq%`"
+            ],
+            "Answer": [
+                "`%deriv%`"
+            ],
+            "Explanation": [
+                "Because of the sum/difference rule, we can do each term individually. We can use power and constant rule on each term to solve.",
+                "%breakdown%For the final term, we must remember the derivative of trig functions",
+                "`d/dx[%func%]=%d_func%`"
+            ]
+        },
+        {
+            "Problem": [
+                "`%eq%`"
+            ],
+            "Answer": [
+                "`%deriv%`"
+            ],
+            "Explanation": [
+                "Because of the sum/difference rule, we can do each term individually. We can use power and constant rule on each term to solve.",
+                "%breakdown%For the final term, we must remember the derivative of `e^x`",
+                "`d/dx[%func%]=%d_func%`"
+            ]
+        },
+        {
+            "Problem": [
+                "`%eq%`"
+            ],
+            "Answer": [
+                "`%deriv%`"
+            ],
+            "Explanation": [
+                "Because of the sum/difference rule, we can do each term individually. We can use power and constant rule on each term to solve.",
+                "%breakdown%For the final term, we must remember the derivative of `ln(x)`",
+                "`d/dx[%func%]=%d_func%`"
+            ]
         }
     ]
 }
