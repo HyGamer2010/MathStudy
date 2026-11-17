@@ -1,0 +1,83 @@
+{
+    "Types": [
+        {
+            "Problem": [
+                "A a force of `%force% \"N\"` acts apon an object with a mass of `%mass% \"Kg\"` for `%time%s`. What is its change in velocity?"
+            ],
+            "Answer": [
+                "`%velo% m/s`"
+            ],
+            "Explanation": [
+                "Formula for momentum:",
+                "`F*t=m*Delta v`",
+                "`F = %force% \"N\"`",
+                "`m = %mass% \"Kg\"`",
+                "`t = %time%s`",
+                "Plugging it in:",
+                "`%force%*%time%=%mass%*Delta v`",
+                "`Delta v=(%force%*%time%)/%mass%`",
+                "`Delta v=%velo% m/s`"
+            ]
+        },
+        {
+            "Problem": [
+                "A a force of `%force% \"N\"` acts apon an object with a mass of `%mass% \"Kg\"` and it's velocity goes from `%v1% m/s` to `%v2% m/s` in the opposite direction. How long was the force acting upon the object?"
+            ],
+            "Answer": [
+                "`%time%s`"
+            ],
+            "Explanation": [
+                "Formula for momentum:",
+                "`F*t=m*Delta v`",
+                "`F = %force% \"N\"`",
+                "`m = %mass% \"Kg\"`",
+                "`Delta v = %v1% - (-%v2%)`",
+                "`Delta v = %velo%`",
+                "Plugging it in:",
+                "`%force%*t=%mass%*%velo%`",
+                "`t = (%mass%*%velo%)/%force%`",
+                "`t = %time%s`"
+            ]
+        },
+        {
+            "Problem": [
+                "A a force of `%force% \"N\"` acts apon an object for `%time%s` and it's velocity goes from `%v1% m/s` to `%v2% m/s` in the opposite direction. What is the mass of the object?"
+            ],
+            "Answer": [
+                "`%mass% \"Kg\"`"
+            ],
+            "Explanation": [
+                "Formula for momentum:",
+                "`F*t=m*Delta v`",
+                "`F = %force% \"N\"`",
+                "`t = %time%s`",
+                "`Delta v = %v1% - (-%v2%)`",
+                "`Delta v = %velo% m/s`",
+                "Plugging it in:",
+                "`%force%*%time%=m*%velo%`",
+                "`m=(%force%*%time%)/%velo%`",
+                "`m=%mass% \"Kg\"`"
+            ]
+        },
+        {
+            "Problem": [
+                "A a force acts apon an object with a mass of `%mass% \"Kg\"` for `%time%s` and it's velocity goes from `%v1% m/s` to `%v2% m/s` in the opposite direction. What is the force acting upon the object?"
+            ],
+            "Answer": [
+                "`%force% \"N\"`"
+            ],
+            "Explanation": [
+                "Formula for momentum:",
+                "`F*t=m*Delta v`",
+                "`m = %mass% \"Kg\"`",
+                "`t = %time%s`",
+                "`Delta v = %v1% - (-%v2%)`",
+                "`Delta v = %velo% m/s`",
+                "Plugging it in:",
+                "`F*%time%=%mass%*%velo%`",
+                "`F=(%mass%*%velo%)/%time%`",
+                "`F=%force% \"N\"`"
+            ]
+        }
+    ]
+}

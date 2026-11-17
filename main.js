@@ -33,6 +33,12 @@ problem_sets = {
             "Vectors",
             "Imaginary"
         ]
+    },
+    "Physics": {
+        rounding: 3,
+        "Unit9": [
+            "Momentum"
+        ]
     }
 }
 
@@ -54,6 +60,7 @@ var cat_to_readable_string = {
     "SlopeTangent": "Slope and Tangent Line",
     "Derivative": "Derivative",
     "Differentiability": "Differentiability",
+    "Momentum": "Momentum"
 }
 
 var cur_rounding = 0
@@ -2696,6 +2703,68 @@ function generate_problem(){
                 replacement_values["angle2"] = angle2
                 replacement_values["nangle1"] = nangle1
             }
+        }
+    }
+    else if(cur_selected_subject == "Physics"){
+        if(index == 0){
+            var force = Math.floor(Math.random() * 300 + 201)
+            var time = Math.floor(Math.random() * 90 + 10) / 10
+            var mass = Math.floor(Math.random() * 7000 + 100) / 100
+
+            var velo = (force * time) / mass
+
+            replacement_values["force"] = force
+            replacement_values["time"] = time
+            replacement_values["mass"] = mass
+            replacement_values["velo"] = velo
+        }
+        else if(index == 1){
+            var force = Math.floor(Math.random() * 300 + 201)
+            var mass = Math.floor(Math.random() * 7000 + 100) / 100
+            var v1 = Math.floor(Math.random() * 90 + 11)
+            var v2 = Math.floor(Math.random() * 90 + 11)
+            var velo = v1 + v2
+
+            var time = (mass*velo)/force
+
+            replacement_values["force"] = force
+            replacement_values["time"] = time
+            replacement_values["mass"] = mass
+            replacement_values["velo"] = velo
+            replacement_values["v1"] = v1
+            replacement_values["v2"] = v2
+        }
+        else if(index == 2){
+            var force = Math.floor(Math.random() * 300 + 201)
+            var v1 = Math.floor(Math.random() * 90 + 11)
+            var v2 = Math.floor(Math.random() * 90 + 11)
+            var velo = v1 + v2
+            var time = Math.floor(Math.random() * 90 + 10) / 10
+
+            var mass = (force*time)/velo
+
+            replacement_values["force"] = force
+            replacement_values["time"] = time
+            replacement_values["mass"] = mass
+            replacement_values["velo"] = velo
+            replacement_values["v1"] = v1
+            replacement_values["v2"] = v2
+        }
+        else if(index == 3){
+            var mass = Math.floor(Math.random() * 7000 + 100) / 100
+            var v1 = Math.floor(Math.random() * 90 + 11)
+            var v2 = Math.floor(Math.random() * 90 + 11)
+            var velo = v1 + v2
+            var time = Math.floor(Math.random() * 90 + 10) / 10
+
+            var force = (mass*velo)/time
+
+            replacement_values["force"] = force
+            replacement_values["time"] = time
+            replacement_values["mass"] = mass
+            replacement_values["velo"] = velo
+            replacement_values["v1"] = v1
+            replacement_values["v2"] = v2
         }
     }
     inner = ""
