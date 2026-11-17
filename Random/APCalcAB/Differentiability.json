@@ -2,13 +2,121 @@
     "Types": [
         {
             "Problem": [
-                ""
+                "`f(x)={(%eq1%, x>=%n%),(%eq2%, x<%n%):}`",
+                "Is `f(x)` differentiable at `x=%n%`?"
             ],
             "Answer": [
-                ""
+                "Yes"
             ],
             "Explanation": [
-                ""
+                "In order for a function to be differentiable at a point, it must meet 2 conditions:",
+                "1. It is continuous",
+                "2. It has the same derivative from both sides",
+                "To check if it is continuous, we can plug `%n%` to both functions",
+                "Top function:",
+                "`%nineq1%`",
+                "`=%match%`",
+                "Bottom function:",
+                "`%nineq2%`",
+                "`=%match%`",
+                "Since the equations converge at the same point, we now must check the derivative of both functions",
+                "`d/dx[%eq1%]=%deriv1%`",
+                "`%ninderiv1%`",
+                "`=%slope%`",
+                "`d/dx[%eq2%]=%deriv2%`",
+                "`%ninderiv2%`",
+                "`=%slope%`",
+                "Since the function also has the same derivative from both sides, then `f(x)` must be differentiable."
+            ]
+        },
+        {
+            "Problem": [
+                "Is `f(x)` differentiable at `x=%n%`?",
+                "<div id='graph' class='graph'></div>",
+                "<button onclick='draw_piecewise(`graph`, { domain: [-10, 10] }, { domain: [-10, 10] }, `%eq1%`, `%eq2%`, %n%)'>Show graph</button>"
+            ],
+            "Answer": [
+                "Yes"
+            ],
+            "Explanation": [
+                "If you look at `x=%n%` on the graph, you can see that it makes a continuous line that has the same slope at the point, so it is differentiable."
+            ]
+        },
+        {
+            "Problem": [
+                "`f(x)={(%eq1%, x>=%n%),(%eq2%, x<%n%):}`",
+                "Is `f(x)` differentiable at `x=%n%`?"
+            ],
+            "Answer": [
+                "No"
+            ],
+            "Explanation": [
+                "In order for a function to be differentiable at a point, it must meet 2 conditions:",
+                "1. It is continuous",
+                "2. It has the same derivative from both sides",
+                "To check if it is continuous, we can plug `%n%` to both functions",
+                "Top function:",
+                "`%nineq1%`",
+                "`=%p1%`",
+                "Bottom function:",
+                "`%nineq2%`",
+                "`=%p2%`",
+                "Since it does not converge at a single point, it is not differentiable."
+            ]
+        },
+        {
+            "Problem": [
+                "Is `f(x)` differentiable at `x=%n%`?",
+                "<div id='graph' class='graph'></div>",
+                "<button onclick='draw_piecewise(`graph`, { domain: [-10, 10] }, { domain: [-10, 10] }, `%eq1%`, `%eq2%`, %n%)'>Show graph</button>"
+            ],
+            "Answer": [
+                "No"
+            ],
+            "Explanation": [
+                "If you look at `x=%n%` on the graph, it does not converge at a point, so it is not differentiable."
+            ]
+        },
+        {
+            "Problem": [
+                "`f(x)={(%eq1%, x>=%n%),(%eq2%, x<%n%):}`",
+                "Is `f(x)` differentiable at `x=%n%`?"
+            ],
+            "Answer": [
+                "No"
+            ],
+            "Explanation": [
+                "In order for a function to be differentiable at a point, it must meet 2 conditions:",
+                "1. It is continuous",
+                "2. It has the same derivative from both sides",
+                "To check if it is continuous, we can plug `%n%` to both functions",
+                "Top function:",
+                "`%nineq1%`",
+                "`=%match%`",
+                "Bottom function:",
+                "`%nineq2%`",
+                "`=%match%`",
+                "Since the equations converge at the same point, we now must check the derivative of both functions",
+                "`d/dx[%eq1%]=%deriv1%`",
+                "`%ninderiv1%`",
+                "`=%slope1%`",
+                "`d/dx[%eq2%]=%deriv2%`",
+                "`%ninderiv2%`",
+                "`=%slope2%`",
+                "Since the function does not have the same derivative from both sides, it is not differentiable."
+            ]
+        },
+        {
+            "Problem": [
+                "Is `f(x)` differentiable at `x=%n%`?",
+                "<div id='graph' class='graph'></div>",
+                "<button onclick='draw_piecewise(`graph`, { domain: [-10, 10] }, { domain: [-10, 10] }, `%eq1%`, `%eq2%`, %n%)'>Show graph</button>"
+            ],
+            "Answer": [
+                "No"
+            ],
+            "Explanation": [
+                "If you look at `x=%n%` on the graph, both sides converge at the same point, but not with the same slope, so it is not differentiable."
             ]
         }
     ]

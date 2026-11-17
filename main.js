@@ -1948,46 +1948,92 @@ function generate_problem(){
             }
         }
         else if(problem_type == "Differentiability"){
-            if(index == 0){
-                var n = Math.floor(Math.random() * 6) * (Math.random() > .5 ? 1 : -1)
+            var n = Math.floor(Math.random() * 6) * (Math.random() > .5 ? 1 : -1)
+            if(index == 0 || index == 1){
                 var slope_num = Math.floor(Math.random() * 5 + 1) * (Math.random() > .5 ? 1 : -1)
+                var slopes = [slope_num, slope_num]
                 var matching_point = Math.floor(Math.random() * 6) * (Math.random() > .5 ? 1 : -1)
-
-                var eqs = []
-
-                for(ct = 0; ct < 2; ct++){
-                    var degree = Math.floor(Math.random() * 3 + 2)
-
-                    var eq = []
-                    var cur_val = 0
-                    var denom_cur_val = 0
-                    for(i = degree; i >= 2; i--){
-                        var coeff = Math.floor(Math.random() * 15 + 1) * (Math.random() > .5 ? 1 : -1)
-
-                        cur_val += coeff * n**i
-                        denom_cur_val += i * coeff * n**(i - 1)
-
-                        eq.push({
-                            coeff:coeff,
-                            xpow:i
-                        })
-                    }
-
-                    var offset = slope_num - denom_cur_val
-                    eq.push({
-                        coeff:offset,
-                        xpow:1
-                    })
-                    cur_val += offset * n
-
-                    var offset = matching_point - cur_val
-                    eq.push({
-                        coeff:offset,
-                        xpow:0
-                    })
-                    eqs.push(eq)
-                }
+                var matches = [matching_point, matching_point]
             }
+            else if(index == 2 || index == 3){
+                var slope_num = Math.floor(Math.random() * 5 + 1) * (Math.random() > .5 ? 1 : -1)
+                var slopes = [slope_num, slope_num]
+                var point_1 = Math.floor(Math.random() * 3) * (Math.random() > .5 ? 1 : -1)
+                var matches = [point_1, point_1 + Math.floor(Math.random() * 2 + 1) * (Math.random() > .5 ? 1 : -1)]
+            }
+            else if(index == 4 || index == 5){
+                var slope_1 = Math.floor(Math.random() * 3 + 1) * (Math.random() > .5 ? 1 : -1)
+                var slopes = [slope_1, slope_1 + Math.floor(Math.random() * 3 + 1) * (Math.random() > .5 ? 1 : -1)]
+                var matching_point = Math.floor(Math.random() * 6) * (Math.random() > .5 ? 1 : -1)
+                var matches = [matching_point, matching_point]
+            }
+            var eqs = []
+            var derivs = []
+            for(ct = 0; ct < 2; ct++){
+                var degree = Math.floor(Math.random() * 2 + 2)
+
+                var slope_num = slopes[ct]
+                var matching_point = matches[ct]
+                var eq = []
+                var deriv = []
+                var cur_val = 0
+                var denom_cur_val = 0
+                for(i = degree; i >= 2; i--){
+                    var coeff = Math.floor(Math.random() * (15 / i**1.8) + 1) * (Math.random() > .5 ? 1 : -1)
+
+                    cur_val += coeff * n**i
+                    denom_cur_val += i * coeff * n**(i - 1)
+
+                    eq.push({
+                        coeff:coeff,
+                        xpow:i
+                    })
+                    deriv.push({
+                        coeff:coeff*i,
+                        xpow:i-1
+                    })
+                }
+
+                var offset = slope_num - denom_cur_val
+                eq.push({
+                    coeff:offset,
+                    xpow:1
+                })
+                deriv.push({
+                    coeff:offset,
+                    xpow:0
+                })
+                cur_val += offset * n
+
+                var offset = matching_point - cur_val
+                eq.push({
+                    coeff:offset,
+                    xpow:0
+                })
+                eqs.push(eq)
+                derivs.push(deriv)
+            }
+
+            var eq1 = terms_to_string(eqs[0])
+            var eq2 = terms_to_string(eqs[1])
+            var deriv1 = terms_to_string(derivs[0])
+            var deriv2 = terms_to_string(derivs[1])
+
+            replacement_values["eq1"] = eq1
+            replacement_values["eq2"] = eq2
+            replacement_values["deriv1"] = deriv1
+            replacement_values["deriv2"] = deriv2
+            replacement_values["nineq1"] = eq1.replaceAll("x", `(${n})`)
+            replacement_values["nineq2"] = eq2.replaceAll("x", `(${n})`)
+            replacement_values["ninderiv1"] = deriv1.replaceAll("x", `(${n})`)
+            replacement_values["ninderiv2"] = deriv2.replaceAll("x", `(${n})`)
+            replacement_values["n"] = n
+            replacement_values["slope"] = slope_num
+            replacement_values["match"] = matching_point
+            replacement_values["p1"] = matches[0]
+            replacement_values["p2"] = matches[1]
+            replacement_values["slope1"] = slopes[0]
+            replacement_values["slope2"] = slopes[1]
         }
     }
     else if(cur_selected_subject == "AdvancedMath"){
@@ -2831,6 +2877,35 @@ function draw_triangle(id, A, B, C, a, b, c){
                 location: [1.4, -.2],
                 color: side_color,
                 text: c
+            }
+        ]
+    })
+}
+function draw_piecewise(id, xaxis, yaxis, left_hand, right_hand, n){
+    var container = document.querySelector("#" + id)
+
+    functionPlot({
+        target: "#" + id,
+        width: container.clientWidth,
+        height: container.clientWidth,
+        grid: false,
+        xAxis: xaxis,
+        yAxis: yaxis,
+        data: [{
+            fn: left_hand,
+            color: '#0071e3',
+            graphType: 'polyline',
+            range: [-100000, n]
+        },{
+            fn: right_hand,
+            color: '#0071e3',
+            graphType: 'polyline',
+            range: [n, 100000]
+        }],
+        annotations: [
+            {
+                x:n,
+                text:`x=${n}`
             }
         ]
     })
