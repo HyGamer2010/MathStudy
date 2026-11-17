@@ -53,7 +53,7 @@ var cat_to_readable_string = {
     "ExtendedFuncs": "Extended Functions",
     "SlopeTangent": "Slope and Tangent Line",
     "Derivative": "Derivative",
-    "Differentiability": "Differentiability"
+    "Differentiability": "Differentiability",
 }
 
 var cur_rounding = 0
@@ -308,12 +308,30 @@ function terms_to_string(terms){
         if(term.coeff == 0){
             continue
         }
-        out += `${term.coeff > 0 ? "+" : ""}${Math.abs(term.coeff) == 1 && term.xpow > 0 ? `${term.coeff}`.replace("1", "") : term.coeff}${term.xpow == 0 ? "" : `x${term.xpow == 1 ? "" : `^${term.xpow}`}`}`
+        if(term.coeff == Math.round(term.coeff)){
+            var coeff_str = `${term.coeff}`
+        }else {
+            for(i = 1; i <= 15; i++){
+                if(term.coeff * i == Math.round(term.coeff * i)){
+                    coeff_str = `${term.coeff * i}/${i}`
+                    break
+                }
+            }
+        }
+
+        out += `${term.coeff > 0 ? "+" : ""}${Math.abs(term.coeff) == 1 && term.xpow > 0 ? coeff_str.replace("1", "") : coeff_str}${term.xpow == 0 ? "" : `x${term.xpow == 1 ? "" : `^${term.xpow}`}`}`
     }
     if(out.startsWith("+")){
         out = out.substring(1)
     }
     return out
+}
+function eval_terms(terms, x){
+    var val = 0
+    for(var term of terms){
+        val += (term.coeff * x**term.xpow)
+    }
+    return val
 }
 function wrong_answer_button(){
     if(wrong_pressed || wrong_topics.includes(problem_type)){
@@ -1173,115 +1191,214 @@ function generate_problem(){
             replacement_values["explanation"] = explanation
         }
         else if(problem_type == "Extrema"){
-            var extrema_ct = Math.floor(Math.random() * 2 + 2)
-            var extrema = []
-            var range_per_extrema = 15/extrema_ct
-            for(i = 0; i < extrema_ct; i++){
-                extrema.push(Math.floor(Math.random() * (range_per_extrema - 2) + (range_per_extrema * i + 1)))
-            }
-            var max_first = Math.random() > .5
-            if(extrema_ct == 2){
-                var a = extrema[0]
-                var b = extrema[1]
-                var eq = `${max_first ? "1" : "-1"}*((1/96)*x**3-(${a + b}/64)*x**2+(${a * b}/32)*x)`
-            } else {
-                var a = extrema[0]
-                var b = extrema[1]
-                var c = extrema[2]
-                var eq = `${!max_first ? "1" : "-1"}*((1/128)*x**4-(${a + b + c}/96)*x**3+(${a*b + a*c + b*c}/64)*x**2-(${a*b*c}/32)*x)`
-            }
-            var points_to_check = [0, ...extrema, 15]
-            var min = 10000
-            var max = -10000
-            var local_mins = []
-            var local_maxes = []
-            var global_max = []
-            var global_min = []
-            points_to_check.forEach(pt => {
-                var val = Math.round(eval(eq.replaceAll("x", `(${pt})`)) * 100) / 100
-                if(val < min){
-                    min = val
+            if(index == 0){
+                var extrema_ct = Math.floor(Math.random() * 2 + 2)
+                var extrema = []
+                var range_per_extrema = 15/extrema_ct
+                for(i = 0; i < extrema_ct; i++){
+                    extrema.push(Math.floor(Math.random() * (range_per_extrema - 2) + (range_per_extrema * i + 1)))
                 }
-                if(val > max){
-                    max = val
+                var max_first = Math.random() > .5
+                if(extrema_ct == 2){
+                    var a = extrema[0]
+                    var b = extrema[1]
+                    var eq = `${max_first ? "1" : "-1"}*((1/96)*x**3-(${a + b}/64)*x**2+(${a * b}/32)*x)`
+                } else {
+                    var a = extrema[0]
+                    var b = extrema[1]
+                    var c = extrema[2]
+                    var eq = `${!max_first ? "1" : "-1"}*((1/128)*x**4-(${a + b + c}/96)*x**3+(${a*b + a*c + b*c}/64)*x**2-(${a*b*c}/32)*x)`
                 }
-            })
-            eq = eq + `-(${min})`
-            max -= min
-            points_to_check.forEach(pt => {
-                var val = Math.round(eval(eq.replaceAll("x", `(${pt})`)) * 100) / 100
-                if(pt > 0 && pt < 15){
-                    if(max_first){
-                        local_maxes.push([pt, val])
-                    }else {
-                        local_mins.push([pt, val])
+                var points_to_check = [0, ...extrema, 15]
+                var min = 10000
+                var max = -10000
+                var local_mins = []
+                var local_maxes = []
+                var global_max = []
+                var global_min = []
+                points_to_check.forEach(pt => {
+                    var val = Math.round(eval(eq.replaceAll("x", `(${pt})`)) * 100) / 100
+                    if(val < min){
+                        min = val
                     }
-                    max_first = !max_first
+                    if(val > max){
+                        max = val
+                    }
+                })
+                eq = eq + `-(${min})`
+                max -= min
+                points_to_check.forEach(pt => {
+                    var val = Math.round(eval(eq.replaceAll("x", `(${pt})`)) * 100) / 100
+                    if(pt > 0 && pt < 15){
+                        if(max_first){
+                            local_maxes.push([pt, val])
+                        }else {
+                            local_mins.push([pt, val])
+                        }
+                        max_first = !max_first
+                    }
+                    if(val == 0){
+                        global_min.push([pt, val])
+                    }
+                    if(val == max){
+                        global_max.push([pt, val])
+                    }
+    
+                })
+    
+                var gmaxes_str = ""
+                var gmins_str = ""
+                var lmaxes_str = ""
+                var lmins_str = ""
+    
+                var breakdown_lines = []
+    
+                var breakdown = ""
+    
+                global_max.forEach(val => {
+                    gmaxes_str += `, (${val[0]}, ${val[1]})`
+                })
+                global_min.forEach(val => {
+                    gmins_str += `, (${val[0]}, ${val[1]})`
+                })
+                local_maxes.forEach(val => {
+                    lmaxes_str += `, (${val[0]}, ${val[1]})`
+                })
+                local_mins.forEach(val => {
+                    lmins_str += `, (${val[0]}, ${val[1]})`
+                })
+                
+                points_to_check.forEach(pt => {
+                    var gmax = global_max.find(obj => obj[0] == pt)
+                    var gmin = global_min.find(obj => obj[0] == pt)
+                    var lmax = local_maxes.find(obj => obj[0] == pt)
+                    var lmin = local_mins.find(obj => obj[0] == pt)
+                    var isgmax = gmax != undefined
+                    var isgmin = gmin != undefined
+                    var islmax = lmax != undefined
+                    var islmin = lmin != undefined
+    
+                    if(isgmax && islmax){
+                        breakdown += `<br>\`(${gmax[0]}, ${gmax[1]})\` is both the highest point on the graph and appears to be the top of a hill, so it is both a global max and a local max.<br>`
+                    } else if(isgmax){
+                        breakdown += `<br>\`(${gmax[0]}, ${gmax[1]})\` is the highest point on the graph, so it is a global max.<br>`
+                    } else if(islmax){
+                        breakdown += `<br>\`(${lmax[0]}, ${lmax[1]})\` appears to be the top of a hill, so it is a local max.<br>`
+                    }
+                    else if(isgmin && islmin){
+                        breakdown += `<br>\`(${gmin[0]}, ${gmin[1]})\` is both the lowest point on the graph and appears to be the bottom of a valley, so it is both a global min and a local min.<br>`
+                    } else if(isgmin){
+                        breakdown += `<br>\`(${gmin[0]}, ${gmin[1]})\` is the lowest point on the graph, so it is a global min.<br>`
+                    } else if(islmin){
+                        breakdown += `<br>\`(${lmin[0]}, ${lmin[1]})\` appears to be the bottom of a valley, so it is a local min.<br>`
+                    }
+                })
+    
+                replacement_values["eq"] = eq.replaceAll("**", "^")
+                replacement_values["gmaxes"] = gmaxes_str.substring(2)
+                replacement_values["gmins"] = gmins_str.substring(2)
+                replacement_values["lmaxes"] = lmaxes_str.substring(2)
+                replacement_values["lmins"] = lmins_str.substring(2)
+                replacement_values["breakdown"] = breakdown.substring(4)
+                replacement_values["crit"] = points_to_check.toString().replaceAll("[", "").replaceAll("]", "")
+            }
+            else if(index == 1){
+                var deriv_degree = Math.floor(Math.random() * 3 + 2)
+                var critical_points = []
+                var factored_str = ""
+                var factors_str = ""
+                for(i = 0; i < deriv_degree; i++){
+                    var pt = Math.floor(Math.random() * 4) * (Math.random() > .5 ? 1 : -1)
+                    if(!critical_points.includes(pt)){
+                        factored_str += `(x${pt == 0 ? "" : `${pt > 0 ? "" : "+"}${-pt}`})`
+                        factors_str += `, ${pt}`
+                    } else {
+                        var amt = critical_points.filter(val => val == pt).length
+                        factored_str = factored_str.replace(`(x${pt == 0 ? "" : `${pt > 0 ? "" : "+"}${-pt}`})${amt == 1 ? "" : `^${amt}`}`, `(x${pt == 0 ? "" : `${pt > 0 ? "" : "+"}${-pt}`})^${amt + 1}`)
+                    }
+                    critical_points.push(pt)
                 }
-                if(val == 0){
-                    global_min.push([pt, val])
+                factors_str = factors_str.substring(2)
+                var deriv = multiply_factors(critical_points)
+
+                for(term of deriv){
+                    term.coeff *= (deriv_degree + 1)
                 }
-                if(val == max){
-                    global_max.push([pt, val])
+
+                var eq = []
+                for(var term of deriv){
+                    eq.push({
+                        xpow:term.xpow + 1,
+                        coeff:term.coeff / (term.xpow + 1)
+                    })
                 }
 
-            })
+                eq.push({
+                    coeff:Math.floor(Math.random() * 10 + 1) * (Math.random() > .5 ? 1 : -1),
+                    xpow:0
+                })
 
-            var gmaxes_str = ""
-            var gmins_str = ""
-            var lmaxes_str = ""
-            var lmins_str = ""
-
-            var breakdown_lines = []
-
-            var breakdown = ""
-
-            global_max.forEach(val => {
-                gmaxes_str += `, (${val[0]}, ${val[1]})`
-            })
-            global_min.forEach(val => {
-                gmins_str += `, (${val[0]}, ${val[1]})`
-            })
-            local_maxes.forEach(val => {
-                lmaxes_str += `, (${val[0]}, ${val[1]})`
-            })
-            local_mins.forEach(val => {
-                lmins_str += `, (${val[0]}, ${val[1]})`
-            })
-            
-            points_to_check.forEach(pt => {
-                var gmax = global_max.find(obj => obj[0] == pt)
-                var gmin = global_min.find(obj => obj[0] == pt)
-                var lmax = local_maxes.find(obj => obj[0] == pt)
-                var lmin = local_mins.find(obj => obj[0] == pt)
-                var isgmax = gmax != undefined
-                var isgmin = gmin != undefined
-                var islmax = lmax != undefined
-                var islmin = lmin != undefined
-
-                if(isgmax && islmax){
-                    breakdown += `<br>\`(${gmax[0]}, ${gmax[1]})\` is both the highest point on the graph and appears to be the top of a hill, so it is both a global max and a local max.<br>`
-                } else if(isgmax){
-                    breakdown += `<br>\`(${gmax[0]}, ${gmax[1]})\` is the highest point on the graph, so it is a global max.<br>`
-                } else if(islmax){
-                    breakdown += `<br>\`(${lmax[0]}, ${lmax[1]})\` appears to be the top of a hill, so it is a local max.<br>`
+                var old_c_pts = [...critical_points]
+                critical_points = []
+                for(var pt of old_c_pts){
+                    if(!critical_points.includes(pt)){
+                        critical_points.push(pt)
+                    }
                 }
-                else if(isgmin && islmin){
-                    breakdown += `<br>\`(${gmin[0]}, ${gmin[1]})\` is both the lowest point on the graph and appears to be the bottom of a valley, so it is both a global min and a local min.<br>`
-                } else if(isgmin){
-                    breakdown += `<br>\`(${gmin[0]}, ${gmin[1]})\` is the lowest point on the graph, so it is a global min.<br>`
-                } else if(islmin){
-                    breakdown += `<br>\`(${lmin[0]}, ${lmin[1]})\` appears to be the bottom of a valley, so it is a local min.<br>`
-                }
-            })
+                critical_points.sort((a, b) => a - b)
 
-            replacement_values["eq"] = eq.replaceAll("**", "^")
-            replacement_values["gmaxes"] = gmaxes_str.substring(2)
-            replacement_values["gmins"] = gmins_str.substring(2)
-            replacement_values["lmaxes"] = lmaxes_str.substring(2)
-            replacement_values["lmins"] = lmins_str.substring(2)
-            replacement_values["breakdown"] = breakdown.substring(4)
-            replacement_values["crit"] = points_to_check.toString().replaceAll("[", "").replaceAll("]", "")
+                var signs = [Math.sign(eval_terms(deriv, critical_points[0] - 1))]
+                var table = "{:(x,|,(-oo,"
+                var mins = []
+                var maxes = []
+                var breakdown = ""
+                for(pt of critical_points){
+                    table += `${pt}),|,${pt},|,(${pt},`
+                    console.log(Math.sign(eval_terms(deriv, pt + .5)))
+                    var prev_index = signs.length - 1
+                    var sign = Math.sign(eval_terms(deriv, pt + .5))
+                    if(signs[prev_index] == -1 && sign == 1){
+                        mins.push(pt)
+                        breakdown += `Since the sign changes from \`-\` to \`+\` at \`x=${pt}\`, it is a relative min.<br>`
+                    }
+                    else if(signs[prev_index] == 1 && sign == -1){
+                        maxes.push(pt)
+                        breakdown += `Since the sign changes from \`+\` to \`-\` at \`x=${pt}\`, it is a relative max.<br>`
+                    } else{
+                        breakdown += `Since the sign does not change at \`x=${pt}\`, it is neither a relative min or max.<br>`
+                    }
+                    signs.push(0, sign)
+                }
+                table += "oo)),(f'(x)"
+                for(var sign of signs){
+                    table += `,|,${sign == -1 ? "-" : (sign == 0 ? "0" : "+")}`
+                }
+                table += "):}"
+
+                var mins_str = ""
+                var maxes_str = ""
+
+                for(min of mins){
+                    mins_str += `, ${min}`
+                }
+                for(max of maxes){
+                    maxes_str += `, ${max}`
+                }
+
+                mins_str = mins_str.substring(2)
+                maxes_str = maxes_str.substring(2)
+
+                replacement_values["eq"] = terms_to_string(eq)
+                replacement_values["deriv"] = terms_to_string(deriv)
+                replacement_values["table"] = table
+                replacement_values["factored"] = factored_str
+                replacement_values["factors"] = factors_str
+                replacement_values["mins"] = mins
+                replacement_values["maxes"] = maxes
+                replacement_values["breakdown"] = breakdown
+
+                console.log(table)
+            }
         }
         else if(problem_type == "Limits"){
             if(index <= 2){

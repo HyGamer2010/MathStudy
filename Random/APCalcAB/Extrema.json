@@ -21,6 +21,27 @@
                 "Here, the critical points are at `t = %crit%`",
                 "%breakdown%"
             ]
+        },
+        {
+            "Problem": [
+                "`f(x)=%eq%`",
+                "Find the critical points of `f(x)` and identify which ones are relative mins and maxes"
+            ],
+            "Answer": [
+                "Critical points: `%factors%`",
+                "Maxes: `%maxes%`",
+                "Mins: `%mins%`"
+            ],
+            "Explanation": [
+                "To find the critical points of `f(x)`, we must find all points where `f'(x)=0,O/`",
+                "`d/dx[%eq%]=%deriv%`",
+                "Since there is no denominator, we already know there is no case where `f'(x)=O/`, so let's solve for where `f'(x)=0` by factoring",
+                "`%factored%`",
+                "`%factors%`",
+                "Now that we have out critial points, we need to see which ones are mins and which ones are maxes. We can do this by setting up a sign table:",
+                "`%table%`",
+                "%breakdown%"
+            ]
         }
     ]
 }

@@ -1,3 +1,5 @@
+|11/17/26
+-Added critical points to Unit 5 Extrema
 |11/16/2026
 -Added more derivative problems under unit 2
 -Finished all of calc units 1-4 (I think)
