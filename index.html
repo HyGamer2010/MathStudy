@@ -93,9 +93,10 @@
                     <p>Different answer? Check explanation</p>
                     <button onclick='set_element("problem_explanation", false)'>Check explanation</button>
                 </div>
-                <p id="problem_explanation" hidden="true"></p>
-                <button onclick='generate_problem()'>Next</button>
-                <button onclick='wrong_answer_button()' id="correct_button" hidden="true">Click if you got it wrong!</button>
+                <p id="problem_explanation" hidden="true"></p><br>
+                <button onclick='next_problem(1)'>Next</button><br>
+                <button id="previous_button" onclick='next_problem(-1)'>Previous Question</button><br>
+                <button onclick='wrong_answer_button()' id="correct_button" hidden="true">Click if you got it wrong!</button><br>
                 <button onclick='select_menu("problems", "topicselect")'>Back</button>
             </div>
         </main>

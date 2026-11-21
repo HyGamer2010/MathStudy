@@ -57,6 +57,9 @@ div.sect{
     padding-left: 20px;
     padding-right: 20px;
     align-content: center;
+    button{
+        margin: 2px;
+    }
 }
 div#problem_display {
     font-size: 1.3rem;

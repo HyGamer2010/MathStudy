@@ -100,6 +100,9 @@ var q_amts
 var q_ct
 var q_per_cat
 
+var generated_problems = []
+var current_problem_shown_index = 0
+
 document.addEventListener('DOMContentLoaded', (event) => {
     problem_display = document.getElementById("problem_display")
     problem_answer = document.getElementById("problem_answer")
@@ -368,11 +371,45 @@ function gen_terms_eq_deriv(degree, deg_diff = 1){
     }
     return [terms, deriv_terms]
 }
-function generate_problem(){
+function next_problem(d_index){
     wrong_pressed = false
     problem_explanation.hidden = true
     document.getElementById("answer_div").hidden = true 
 
+    current_problem_shown_index += d_index
+    document.getElementById("previous_button").hidden = current_problem_shown_index == 0
+    if(current_problem_shown_index >= generated_problems.length){
+        generated_problems.push(generate_problem())
+    }
+
+    cur_problem = generated_problems[current_problem_shown_index]
+    
+    problems = problems_json_files[cur_problem[1]].Types
+    problem = problems[cur_problem[0]]
+    var replacement_values = cur_problem[2]
+
+    inner = ""
+    for(var line of problem.Problem){
+        inner += `${line}<br>`
+    }
+    problem_display.innerHTML = replace_values(inner, replacement_values)
+
+    inner = ""
+    for(var line of problem.Answer){
+        inner += `${line}<br>`
+    }
+    problem_answer.innerHTML = replace_values(inner, replacement_values)
+
+    inner = ""
+    for(var line of problem.Explanation){
+        inner += `${line}<br>`
+    }
+    problem_explanation.innerHTML = replace_values(inner, replacement_values)
+
+    renderMath()
+
+}
+function generate_problem(){
     if(test_type == "ordered"){
         index++
         if(index > 0){
@@ -2767,25 +2804,8 @@ function generate_problem(){
             replacement_values["v2"] = v2
         }
     }
-    inner = ""
-    for(var line of problem.Problem){
-        inner += `${line}<br>`
-    }
-    problem_display.innerHTML = replace_values(inner, replacement_values)
-
-    inner = ""
-    for(var line of problem.Answer){
-        inner += `${line}<br>`
-    }
-    problem_answer.innerHTML = replace_values(inner, replacement_values)
-
-    inner = ""
-    for(var line of problem.Explanation){
-        inner += `${line}<br>`
-    }
-    problem_explanation.innerHTML = replace_values(inner, replacement_values)
-
-    renderMath()
+    
+    return [index, problem_type, replacement_values]
 }
 async function renderMath(){
     await MathJax.typesetPromise()
@@ -2856,7 +2876,10 @@ async function begin(){
         unused_indexes = []
     }   
 
-    generate_problem()
+    generated_problems = []
+    current_problem_shown_index = 0
+
+    next_problem(0)
 }
 function draw_graph(id, xaxis, yaxis, funcs){
     data = []
